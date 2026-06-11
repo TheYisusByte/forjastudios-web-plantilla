@@ -1,0 +1,125 @@
+{
+  "Nav": {
+    "home": "Inicio",
+    "work": "Trabajo",
+    "projects": "Proyectos",
+    "studio": "Estudio",
+    "ip": "IP",
+    "team": "Equipo",
+    "contact": "Contacto",
+    "ourIps": "Nuestras IP",
+    "ourTeam": "Nuestro equipo",
+    "contactUs": "Contáctanos",
+    "clients": "Clientes",
+    "about": "Estudio"
+  },
+  "ConceptE": {
+    "heroKicker": "Animación 2D/3D · VFX · Concept Art · Videojuegos",
+    "heroSub": "Somos los herreros del entretenimiento. Más de 12 años forjando mundos, personajes e historias que encienden al mundo.",
+    "heroCtaWork": "Ver proyectos",
+    "heroCtaContact": "Conoce el estudio",
+    "clientsTitle": "Nuestros clientes",
+    "projectsTitle": "Proyectos seleccionados",
+    "projectsHeading1": "Mundos que",
+    "projectsHeading2": "hemos forjado.",
+    "teamTitle": "El equipo",
+    "teamHeading1": "Los",
+    "teamHeading2": "blacksmiths.",
+    "aboutTitle": "El estudio",
+    "aboutHeading1": "Imaginamos",
+    "aboutHeading2": "lo inimaginable.",
+    "aboutBody": "Desde hace más de doce años somos un taller de herreros creativos que da forma a mundos, personajes e historias en el fuego de la animación. Producción de clase mundial para la industria del entretenimiento.",
+    "aboutCta": "Forjemos algo juntos →",
+    "aboutQuote": "\"El fuego no destruye. Transforma.\"",
+    "statYears": "Años",
+    "statBlacksmiths": "Blacksmiths",
+    "statProjects": "Proyectos"
+  },
+  "ConceptD": {
+    "intro": "Somos un estudio creativo con más de 12 años de experiencia produciendo contenido de clase mundial para la industria del entretenimiento, especializado en animación 2D/3D, ilustración, concept art, VFX, diseño de sonido y producción audiovisual.",
+    "navIp": "Nuestras IP",
+    "navContact": "Contáctanos",
+    "aboutHeading": "Imaginamos lo inimaginable, dando forma a mundos.",
+    "statBlacksmiths": "Blacksmiths",
+    "statBlacksmithsSub": "personas listas para dar vida a las ideas",
+    "statProjects": "Proyectos",
+    "statProjectsSub": "creados y forjados en creatividad",
+    "statYears": "Años",
+    "statYearsSub": "imaginando lo inimaginable, creando mundos",
+    "clientsTitle": "Nuestros clientes",
+    "seeMore": "Ver más",
+    "ipTitle": "Nuestras IP",
+    "ipSub": "Mundos y personajes propios, forjados en casa.",
+    "teamTitle": "Nuestro equipo",
+    "teamBody": "Somos un equipo de talentosos blacksmiths que dedicaron su vida a crear el mejor arte y animación posible, desde nuestra Forja hacia todo el mundo.",
+    "contactTitle": "Contáctanos",
+    "contactBody": "Forjemos algo juntos. Cuéntanos sobre tu proyecto.",
+    "contactRole": "CEO / Director de Arte",
+    "rights": "Todo el contenido mostrado en este sitio web y relacionado con Forja Studios tiene todos los derechos reservados © {year}."
+  },
+  "Hero": {
+    "kicker": "Desarrollo de entretenimiento audiovisual",
+    "lead": "Estudio creativo · animación · concept art · VFX · videojuegos",
+    "ctaWork": "Ver trabajo",
+    "ctaContact": "Contáctanos",
+    "ctaShowreel": "Ver showreel",
+    "ctaDiscover": "Descubre el estudio",
+    "scroll": "Desliza"
+  },
+  "Sections": {
+    "clients": "Nuestros clientes",
+    "projects": "Proyectos",
+    "projectsSub": "Una selección de mundos que hemos forjado.",
+    "ips": "Nuestras IP",
+    "ipsSub": "Mundos y personajes propios.",
+    "stats": "El estudio en cifras",
+    "story": "Nuestra historia",
+    "storyBody": "Desde hace más de doce años imaginamos lo inimaginable. Somos un taller de herreros creativos que da forma a mundos, personajes e historias en el fuego de la animación.",
+    "craft": "Lo que forjamos",
+    "craftSub": "Disciplinas que combinamos para dar vida a cada proyecto.",
+    "team": "Los blacksmiths",
+    "teamSub": "Más de 60 personas dando forma a las ideas.",
+    "contact": "Hablemos",
+    "contactSub": "Forja tu llama con nosotros."
+  },
+  "Showreel": {
+    "title": "Showreel",
+    "sub": "Una muestra del fuego: animación, VFX y mundos forjados en el estudio."
+  },
+  "Stats": {
+    "years": "Años de experiencia",
+    "blacksmiths": "Blacksmiths",
+    "projects": "Proyectos"
+  },
+  "Contact": {
+    "name": "Nombre",
+    "namePh": "Tu nombre",
+    "email": "Correo",
+    "emailPh": "tu@correo.com",
+    "message": "Mensaje",
+    "messagePh": "Cuéntanos sobre tu proyecto",
+    "send": "Enviar mensaje",
+    "sending": "Enviando…",
+    "success": "¡Gracias! Te responderemos pronto.",
+    "errorRequired": "Este campo es obligatorio.",
+    "errorEmail": "Introduce un correo válido."
+  },
+  "Footer": {
+    "rights": "Todos los derechos reservados.",
+    "tagline": "Forge your flame"
+  },
+  "Index": {
+    "title": "Forja Studios — Conceptos de diseño",
+    "subtitle": "Cuatro direcciones para la nueva web. Explora cada una y elige la que mejor cuente la historia de Forja.",
+    "view": "Ver concepto",
+    "backToConcepts": "Volver a los conceptos",
+    "conceptA": "Sobrio y directo. El trabajo habla. Listo para lanzar rápido y volar en móvil.",
+    "conceptB": "Audaz y kinético. Tendencias 2026: bento grid, tipografía cinética, scroll vivo.",
+    "conceptC": "Cálido y cinematográfico. Lenguaje de gran estudio de animación, con alma.",
+    "conceptD": "Réplica fiel de la web actual. Mismo contenido y arte; el menú pasa de lateral a superior.",
+    "conceptE": "Vanguardia absoluta. Cursor propio, partículas de brasa, scroll horizontal, tilt 3D con brillo caliente. Estudio a la vanguardia."
+  },
+  "Common": {
+    "language": "Idioma"
+  }
+}

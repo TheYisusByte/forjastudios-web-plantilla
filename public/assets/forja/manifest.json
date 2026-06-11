@@ -1,0 +1,316 @@
+{
+  "pages": [
+    "https://www.forjastudios.com/",
+    "https://www.forjastudios.com/copia-de-portfolio",
+    "https://www.forjastudios.com/copia-de-our-ip-s"
+  ],
+  "fonts_in_html": [
+    "Arial",
+    "Helvetica",
+    "Helvetica-bold",
+    "Wix Madefor Text",
+    "avenir-lt-w01_35-light1475496",
+    "didot-w01-italic",
+    "din-next-w01-light",
+    "helvetica-lt-w10-roman",
+    "helvetica-w01-roman",
+    "helvetica-w02-roman",
+    "hiragino kaku gothic pro",
+    "libre baskerville",
+    "lulo-clean-w01-one-bold",
+    "meiryo",
+    "orig_garet_book",
+    "orig_garet_heavy",
+    "orig_techna_sans_regular",
+    "poppins",
+    "poppins-semibold",
+    "roboto",
+    "roboto-thin",
+    "sans-serif",
+    "serif",
+    "wf_89a76a4a624745f091a915c9c",
+    "wf_c848322e7cb046f8945bedd0a",
+    "wf_d84aa485a3734784b8ae01b28",
+    "ヒラギノ角ゴ pro w3",
+    "メイリオ"
+  ],
+  "google_fonts_links": [],
+  "assets": [
+    {
+      "source": "https://static.wixstatic.com/media/11062b_5195e2d838ab4a2f805305f71ca49890~mv2.png",
+      "local": "/assets/forja/images/11062b_5195e2d838ab4a2f805305f71ca49890~mv2.png",
+      "category": "images",
+      "bytes": 4429
+    },
+    {
+      "source": "https://static.wixstatic.com/media/11062b_603340b7bcb14e7785c7b65b233cd9f9~mv2.png",
+      "local": "/assets/forja/images/11062b_603340b7bcb14e7785c7b65b233cd9f9~mv2.png",
+      "category": "images",
+      "bytes": 4446
+    },
+    {
+      "source": "https://static.wixstatic.com/media/11062b_66167d61316d4665841f3397360d54a9~mv2.png",
+      "local": "/assets/forja/images/11062b_66167d61316d4665841f3397360d54a9~mv2.png",
+      "category": "images",
+      "bytes": 4777
+    },
+    {
+      "source": "https://static.wixstatic.com/media/11062b_7dcffe5daf2944b7be0a46ac6d472634~mv2.png",
+      "local": "/assets/forja/images/11062b_7dcffe5daf2944b7be0a46ac6d472634~mv2.png",
+      "category": "images",
+      "bytes": 3163
+    },
+    {
+      "source": "https://static.wixstatic.com/media/11062b_c67939a99eaf442d95d3f851857ceedf~mv2.png",
+      "local": "/assets/forja/images/11062b_c67939a99eaf442d95d3f851857ceedf~mv2.png",
+      "category": "images",
+      "bytes": 3226
+    },
+    {
+      "source": "https://static.wixstatic.com/media/11062b_dc9641e157b2422b9f6a74d9b2b07f84~mv2.png",
+      "local": "/assets/forja/images/11062b_dc9641e157b2422b9f6a74d9b2b07f84~mv2.png",
+      "category": "images",
+      "bytes": 4574
+    },
+    {
+      "source": "https://static.wixstatic.com/media/11062b_f4e3e7f537ff4762a1914aa14e3e36b9~mv2.png",
+      "local": "/assets/forja/images/11062b_f4e3e7f537ff4762a1914aa14e3e36b9~mv2.png",
+      "category": "images",
+      "bytes": 3010
+    },
+    {
+      "source": "https://static.wixstatic.com/media/4057345bcf57474b96976284050c00df.png",
+      "local": "/assets/forja/social/4057345bcf57474b96976284050c00df.png",
+      "category": "social",
+      "bytes": 2312
+    },
+    {
+      "source": "https://static.wixstatic.com/media/45bce1d726f64f1999c49feae57f6298.png",
+      "local": "/assets/forja/social/45bce1d726f64f1999c49feae57f6298.png",
+      "category": "social",
+      "bytes": 2565
+    },
+    {
+      "source": "https://static.wixstatic.com/media/870f97661ed14a5bb2d96ecbddec0aed.png",
+      "local": "/assets/forja/social/870f97661ed14a5bb2d96ecbddec0aed.png",
+      "category": "social",
+      "bytes": 3066
+    },
+    {
+      "source": "https://static.wixstatic.com/media/aa0402eb9ba2430d9d0620b59556efca.png",
+      "local": "/assets/forja/social/aa0402eb9ba2430d9d0620b59556efca.png",
+      "category": "social",
+      "bytes": 2686
+    },
+    {
+      "source": "https://static.wixstatic.com/media/e1aa082f7c0747168d9cf43e77046142.png",
+      "local": "/assets/forja/social/e1aa082f7c0747168d9cf43e77046142.png",
+      "category": "social",
+      "bytes": 23072
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f2e08c1ae4fb5a1d24933a57f5e012d8.png",
+      "local": "/assets/forja/social/f2e08c1ae4fb5a1d24933a57f5e012d8.png",
+      "category": "social",
+      "bytes": 2733
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_001130ac380d4e689b78cd25ae32a4d2~mv2.gif",
+      "local": "/assets/forja/gifs/f40ce8_001130ac380d4e689b78cd25ae32a4d2~mv2.gif",
+      "category": "gifs",
+      "bytes": 23858242
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_06ce8f8811974527b879786bd5a49248~mv2.png",
+      "local": "/assets/forja/images/f40ce8_06ce8f8811974527b879786bd5a49248~mv2.png",
+      "category": "images",
+      "bytes": 73404
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_1e5edae9376d4035910038bff3914851~mv2.png",
+      "local": "/assets/forja/images/f40ce8_1e5edae9376d4035910038bff3914851~mv2.png",
+      "category": "images",
+      "bytes": 16706
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_274b7492a7e84fc19a87f04c9393cb41~mv2.png",
+      "local": "/assets/forja/images/f40ce8_274b7492a7e84fc19a87f04c9393cb41~mv2.png",
+      "category": "images",
+      "bytes": 460867
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_27c213f0c90d4cee9b998700ac2070de~mv2.jpg",
+      "local": "/assets/forja/images/f40ce8_27c213f0c90d4cee9b998700ac2070de~mv2.jpg",
+      "category": "images",
+      "bytes": 1200766
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_2a6ae8c91747484182209fde1ff15411f000.jpg",
+      "local": "/assets/forja/images/f40ce8_2a6ae8c91747484182209fde1ff15411f000.jpg",
+      "category": "images",
+      "bytes": 154037
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_30947597c09d4af2b2cc572163f1b4e6~mv2.png",
+      "local": "/assets/forja/images/f40ce8_30947597c09d4af2b2cc572163f1b4e6~mv2.png",
+      "category": "images",
+      "bytes": 1143822
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_388d7fa728724334b3196cf246761b63~mv2.png",
+      "local": "/assets/forja/images/f40ce8_388d7fa728724334b3196cf246761b63~mv2.png",
+      "category": "images",
+      "bytes": 459932
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_3a80b0e320454e7281ab52348f8e6ea1.png",
+      "local": "/assets/forja/images/f40ce8_3a80b0e320454e7281ab52348f8e6ea1.png",
+      "category": "images",
+      "bytes": 9263
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_50e108bbb08b40f6b3c2a3a64df98884.jpg",
+      "local": "/assets/forja/images/f40ce8_50e108bbb08b40f6b3c2a3a64df98884.jpg",
+      "category": "images",
+      "bytes": 14530
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_54c70335883e4115ab035396d8db0215~mv2.png",
+      "local": "/assets/forja/images/f40ce8_54c70335883e4115ab035396d8db0215~mv2.png",
+      "category": "images",
+      "bytes": 21900
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_5e89147b983d48129e77482ffd2ba5ba~mv2.jpg",
+      "local": "/assets/forja/images/f40ce8_5e89147b983d48129e77482ffd2ba5ba~mv2.jpg",
+      "category": "images",
+      "bytes": 76063
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_614df697b4e140d59796a2d96162a006~mv2.png",
+      "local": "/assets/forja/images/f40ce8_614df697b4e140d59796a2d96162a006~mv2.png",
+      "category": "images",
+      "bytes": 160150
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_6172fa97e78341ddada44f50c7849a9c~mv2.gif",
+      "local": "/assets/forja/gifs/f40ce8_6172fa97e78341ddada44f50c7849a9c~mv2.gif",
+      "category": "gifs",
+      "bytes": 15001100
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_6d3fd52b7859428f94f953886478e0d3~mv2.png",
+      "local": "/assets/forja/images/f40ce8_6d3fd52b7859428f94f953886478e0d3~mv2.png",
+      "category": "images",
+      "bytes": 1801
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_71709bfcaf2645b5b3394684b61eb463~mv2.webp",
+      "local": "/assets/forja/team/f40ce8_71709bfcaf2645b5b3394684b61eb463~mv2.webp",
+      "category": "team",
+      "bytes": 14720
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_793f7546298a4e41832107315d3e7061~mv2.webp",
+      "local": "/assets/forja/team/f40ce8_793f7546298a4e41832107315d3e7061~mv2.webp",
+      "category": "team",
+      "bytes": 10732
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_7c1d8fbff70644009e58dc0e26f7f0ca~mv2.gif",
+      "local": "/assets/forja/gifs/f40ce8_7c1d8fbff70644009e58dc0e26f7f0ca~mv2.gif",
+      "category": "gifs",
+      "bytes": 13399350
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_8c82fa00e6a64918a364a075dce9ed23~mv2.png",
+      "local": "/assets/forja/images/f40ce8_8c82fa00e6a64918a364a075dce9ed23~mv2.png",
+      "category": "images",
+      "bytes": 208322
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_8e6356af1cdd48478c31dc1841fa5003~mv2.gif",
+      "local": "/assets/forja/gifs/f40ce8_8e6356af1cdd48478c31dc1841fa5003~mv2.gif",
+      "category": "gifs",
+      "bytes": 8587956
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_947d3af9c4e54fa69a8e07fbf19fdede~mv2.webp",
+      "local": "/assets/forja/team/f40ce8_947d3af9c4e54fa69a8e07fbf19fdede~mv2.webp",
+      "category": "team",
+      "bytes": 11202
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_a57b34324bf449c9893b6f3d381cfc97~mv2.webp",
+      "local": "/assets/forja/team/f40ce8_a57b34324bf449c9893b6f3d381cfc97~mv2.webp",
+      "category": "team",
+      "bytes": 9960
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_aa3e66a59b794bfab888604adda1b45c~mv2.jpg",
+      "local": "/assets/forja/images/f40ce8_aa3e66a59b794bfab888604adda1b45c~mv2.jpg",
+      "category": "images",
+      "bytes": 26898
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_afe619e8890046e28edc3772dd7b12c0~mv2.png",
+      "local": "/assets/forja/images/f40ce8_afe619e8890046e28edc3772dd7b12c0~mv2.png",
+      "category": "images",
+      "bytes": 816695
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_b0d0cbf2ce8d49c09780153802382536f000.jpg",
+      "local": "/assets/forja/images/f40ce8_b0d0cbf2ce8d49c09780153802382536f000.jpg",
+      "category": "images",
+      "bytes": 11022
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_b5e817a54f8a4112a0af9d9aa53b37f0~mv2.webp",
+      "local": "/assets/forja/team/f40ce8_b5e817a54f8a4112a0af9d9aa53b37f0~mv2.webp",
+      "category": "team",
+      "bytes": 16328
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_cd7d956a1b2044d2a2e1463b856cbd97~mv2.webp",
+      "local": "/assets/forja/team/f40ce8_cd7d956a1b2044d2a2e1463b856cbd97~mv2.webp",
+      "category": "team",
+      "bytes": 9762
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_d1db0c0aa1ac4d2d8def12aec9530a49~mv2.webp",
+      "local": "/assets/forja/team/f40ce8_d1db0c0aa1ac4d2d8def12aec9530a49~mv2.webp",
+      "category": "team",
+      "bytes": 12482
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_d7f9b08172e045088bc97c1cd41ed11ff000.jpg",
+      "local": "/assets/forja/images/f40ce8_d7f9b08172e045088bc97c1cd41ed11ff000.jpg",
+      "category": "images",
+      "bytes": 1280687
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_dba9447c34d74d3997cdf6c0b2f52a41~mv2.webp",
+      "local": "/assets/forja/team/f40ce8_dba9447c34d74d3997cdf6c0b2f52a41~mv2.webp",
+      "category": "team",
+      "bytes": 8656
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_dce2b0cfc10848b7ad4c9ed226009b68~mv2.gif",
+      "local": "/assets/forja/gifs/f40ce8_dce2b0cfc10848b7ad4c9ed226009b68~mv2.gif",
+      "category": "gifs",
+      "bytes": 19954639
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_ee76ca0a23794ac1936f2eef3aea3c4ef000.jpg",
+      "local": "/assets/forja/images/f40ce8_ee76ca0a23794ac1936f2eef3aea3c4ef000.jpg",
+      "category": "images",
+      "bytes": 11021
+    },
+    {
+      "source": "https://static.wixstatic.com/media/f40ce8_f87fea6646bb4cf0a856bd8f633be658~mv2.png",
+      "local": "/assets/forja/images/f40ce8_f87fea6646bb4cf0a856bd8f633be658~mv2.png",
+      "category": "images",
+      "bytes": 386739
+    }
+  ]
+}

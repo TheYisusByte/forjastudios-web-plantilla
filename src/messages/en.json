@@ -1,0 +1,125 @@
+{
+  "Nav": {
+    "home": "Home",
+    "work": "Work",
+    "projects": "Projects",
+    "studio": "Studio",
+    "ip": "IP",
+    "team": "Team",
+    "contact": "Contact",
+    "ourIps": "Our IP's",
+    "ourTeam": "Our Team",
+    "contactUs": "Contact Us",
+    "clients": "Clients",
+    "about": "Studio"
+  },
+  "ConceptE": {
+    "heroKicker": "2D/3D Animation · VFX · Concept Art · Games",
+    "heroSub": "We are the blacksmiths of entertainment. Over 12 years forging worlds, characters and stories that set the world ablaze.",
+    "heroCtaWork": "See projects",
+    "heroCtaContact": "Know the studio",
+    "clientsTitle": "Our clients",
+    "projectsTitle": "Selected projects",
+    "projectsHeading1": "Worlds we",
+    "projectsHeading2": "have forged.",
+    "teamTitle": "The team",
+    "teamHeading1": "The",
+    "teamHeading2": "blacksmiths.",
+    "aboutTitle": "The studio",
+    "aboutHeading1": "We imagine",
+    "aboutHeading2": "the unimaginable.",
+    "aboutBody": "For over twelve years we've been a workshop of creative blacksmiths shaping worlds, characters and stories in the fire of animation. World-class production for the entertainment industry.",
+    "aboutCta": "Let's forge something together →",
+    "aboutQuote": "\"Fire doesn't destroy. It transforms.\"",
+    "statYears": "Years",
+    "statBlacksmiths": "Blacksmiths",
+    "statProjects": "Projects"
+  },
+  "ConceptD": {
+    "intro": "We are a creative studio with more than 12 years of experience producing world-class content for the entertainment industry, specializing in 2D/3D animation, illustration, concept art, VFX, sound design, and audiovisual production.",
+    "navIp": "Our IP's",
+    "navContact": "Contact us",
+    "aboutHeading": "We imagine the unimaginable, shaping worlds.",
+    "statBlacksmiths": "Blacksmiths",
+    "statBlacksmithsSub": "team members ready to bring ideas to life",
+    "statProjects": "Projects",
+    "statProjectsSub": "brought to life, forged in creativity",
+    "statYears": "Years",
+    "statYearsSub": "imagining the unimaginable, creating worlds",
+    "clientsTitle": "Our clients",
+    "seeMore": "See more",
+    "ipTitle": "Our IP's",
+    "ipSub": "Our own worlds and characters, forged in house.",
+    "teamTitle": "Our team",
+    "teamBody": "We are a team of talented blacksmiths who dedicated their lives to craft the best art and animation we can, from our Forge to all over the world.",
+    "contactTitle": "Contact us",
+    "contactBody": "Let's forge something together. Tell us about your project.",
+    "contactRole": "CEO / Art Director",
+    "rights": "All the content displayed in this website and related to Forja Studios have all rights reserved © {year}."
+  },
+  "Hero": {
+    "kicker": "Audiovisual Entertainment Development",
+    "lead": "Creative studio · animation · concept art · VFX · games",
+    "ctaWork": "See work",
+    "ctaContact": "Contact us",
+    "ctaShowreel": "Watch showreel",
+    "ctaDiscover": "Discover the studio",
+    "scroll": "Scroll"
+  },
+  "Sections": {
+    "clients": "Our clients",
+    "projects": "Projects",
+    "projectsSub": "A selection of worlds we have forged.",
+    "ips": "Our IP",
+    "ipsSub": "Our own worlds and characters.",
+    "stats": "The studio in numbers",
+    "story": "Our story",
+    "storyBody": "For over twelve years we've been imagining the unimaginable. We're a workshop of creative blacksmiths shaping worlds, characters and stories in the fire of animation.",
+    "craft": "What we craft",
+    "craftSub": "The disciplines we combine to bring every project to life.",
+    "team": "The blacksmiths",
+    "teamSub": "60+ people giving shape to ideas.",
+    "contact": "Let's talk",
+    "contactSub": "Forge your flame with us."
+  },
+  "Showreel": {
+    "title": "Showreel",
+    "sub": "A taste of the fire: animation, VFX and worlds forged in the studio."
+  },
+  "Stats": {
+    "years": "Years of experience",
+    "blacksmiths": "Blacksmiths",
+    "projects": "Projects"
+  },
+  "Contact": {
+    "name": "Name",
+    "namePh": "Your name",
+    "email": "Email",
+    "emailPh": "you@email.com",
+    "message": "Message",
+    "messagePh": "Tell us about your project",
+    "send": "Send message",
+    "sending": "Sending…",
+    "success": "Thanks! We'll get back to you soon.",
+    "errorRequired": "This field is required.",
+    "errorEmail": "Enter a valid email."
+  },
+  "Footer": {
+    "rights": "All rights reserved.",
+    "tagline": "Forge your flame"
+  },
+  "Index": {
+    "title": "Forja Studios — Design concepts",
+    "subtitle": "Four directions for the new site. Explore each one and choose the one that best tells Forja's story.",
+    "view": "View concept",
+    "backToConcepts": "Back to concepts",
+    "conceptA": "Sober and direct. The work speaks. Built to launch fast and fly on mobile.",
+    "conceptB": "Bold and kinetic. 2026 trends: bento grid, kinetic type, living scroll.",
+    "conceptC": "Warm and cinematic. The language of a great animation studio, with soul.",
+    "conceptD": "Faithful replica of the current site. Same content and art; the menu moves from the side to the top.",
+    "conceptE": "Full vanguard. Custom cursor, ember particles, horizontal scroll, 3D tilt with hot-metal shine. A studio ahead of its time."
+  },
+  "Common": {
+    "language": "Language"
+  }
+}
