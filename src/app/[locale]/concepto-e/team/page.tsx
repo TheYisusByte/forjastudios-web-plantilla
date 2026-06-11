@@ -4,17 +4,13 @@ import { getSiteContent } from "@/lib/wp/client";
 import type { Locale } from "@/i18n/routing";
 import { NavE } from "@/components/sections/e/NavE";
 import { CursorE } from "@/components/sections/e/CursorE";
-import { HeroE } from "@/components/sections/e/HeroE";
-import { ClientsE } from "@/components/sections/e/ClientsE";
-import { ProjectsE } from "@/components/sections/e/ProjectsE";
-import { IPsE } from "@/components/sections/e/IPsE";
-import { AboutE } from "@/components/sections/e/AboutE";
+import { TeamE } from "@/components/sections/e/TeamE";
 
 interface PageProps {
   params: Promise<{ locale: Locale }>;
 }
 
-export default async function ConceptoEPage({ params }: PageProps) {
+export default async function ConceptoETeamPage({ params }: PageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
   const content = await getSiteContent(locale);
@@ -23,17 +19,28 @@ export default async function ConceptoEPage({ params }: PageProps) {
     <div data-concept="e" className="min-h-screen bg-bg text-fg">
       <CursorE />
       <NavE />
-      <HeroE />
-      <ClientsE clients={content.clients} />
-      <ProjectsE projects={content.projects} />
-      <IPsE ips={content.ips} />
-      <AboutE />
+
+      {/* Page header */}
+      <div className="mx-auto max-w-7xl px-6 pb-4 pt-36">
+        <p className="text-xs uppercase tracking-[0.35em] text-forja-muted">
+          Forja Studios
+        </p>
+        <h1
+          className="mt-3 font-display font-black uppercase leading-none"
+          style={{ fontSize: "clamp(3rem, 8vw, 7rem)" }}
+        >
+          <span className="block text-forja-bone">The</span>
+          <span className="fire-text block">Blacksmiths.</span>
+        </h1>
+      </div>
+
+      <TeamE team={content.team} />
 
       {/* Footer */}
       <footer className="border-t border-border py-10">
         <div className="mx-auto max-w-7xl px-6">
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-            <a href="#top">
+            <a href="/concepto-e">
               <Image
                 src="/assets/forja/images/f40ce8_54c70335883e4115ab035396d8db0215~mv2.png"
                 alt="Forja Studios"

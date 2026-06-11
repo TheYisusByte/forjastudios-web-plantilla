@@ -4,14 +4,16 @@ import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 import { LangSwitch } from "@/components/ui/LangSwitch";
 import { cn } from "@/lib/utils";
 
+// href starting with "#" = anchor on same page; otherwise = locale-aware page link
 const NAV_ITEMS = [
-  { id: "top",     key: "home"      },
-  { id: "work",    key: "projects"  },
-  { id: "team",    key: "ourTeam"   },
-  { id: "contact", key: "contactUs" },
+  { key: "home",      href: "#top"             },
+  { key: "projects",  href: "#work"            },
+  { key: "ourTeam",   href: "/concepto-e/team" },
+  { key: "contactUs", href: "#contact"         },
 ] as const;
 
 export function NavE() {
@@ -68,13 +70,16 @@ export function NavE() {
           <div className="hidden items-center gap-8 lg:flex">
             <ul className="flex items-center gap-8 text-sm uppercase tracking-[0.12em]">
               {NAV_ITEMS.map((item) => (
-                <li key={item.id}>
-                  <a
-                    href={`#${item.id}`}
-                    className="text-forja-bone/60 transition-colors duration-200 hover:text-accent"
-                  >
-                    {t(item.key as Parameters<typeof t>[0])}
-                  </a>
+                <li key={item.key}>
+                  {item.href.startsWith("#") ? (
+                    <a href={item.href} className="text-forja-bone/60 transition-colors duration-200 hover:text-accent">
+                      {t(item.key as Parameters<typeof t>[0])}
+                    </a>
+                  ) : (
+                    <Link href={item.href as "/concepto-e/team"} className="text-forja-bone/60 transition-colors duration-200 hover:text-accent">
+                      {t(item.key as Parameters<typeof t>[0])}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -134,26 +139,33 @@ export function NavE() {
 
         {/* Nav links — stagger in when drawer opens */}
         <nav className="flex flex-1 flex-col justify-center px-8">
-          {NAV_ITEMS.map((item, i) => (
-            <a
-              key={item.id}
-              href={`#${item.id}`}
-              onClick={() => setOpen(false)}
-              className="group flex items-baseline gap-4 border-b border-border/50 py-5 font-display font-black uppercase leading-none transition-colors hover:text-accent"
-              style={{
-                fontSize: "clamp(1.6rem, 6vw, 2rem)",
-                opacity:    open ? 1 : 0,
-                transform:  open ? "translateX(0)" : "translateX(1.5rem)",
-                transition: "opacity 0.4s ease, transform 0.4s ease, color 0.2s ease",
-                transitionDelay: open ? `${i * 60 + 80}ms` : "0ms",
-              }}
-            >
-              <span className="font-mono text-[10px] text-fg-muted/50 transition-colors group-hover:text-accent/50">
-                0{i + 1}
-              </span>
-              {t(item.key as Parameters<typeof t>[0])}
-            </a>
-          ))}
+          {NAV_ITEMS.map((item, i) => {
+            const linkClass = "group flex items-baseline gap-4 border-b border-border/50 py-5 font-display font-black uppercase leading-none transition-colors hover:text-accent";
+            const linkStyle = {
+              fontSize: "clamp(1.6rem, 6vw, 2rem)",
+              opacity:    open ? 1 : 0,
+              transform:  open ? "translateX(0)" : "translateX(1.5rem)",
+              transition: "opacity 0.4s ease, transform 0.4s ease, color 0.2s ease",
+              transitionDelay: open ? `${i * 60 + 80}ms` : "0ms",
+            };
+            const inner = (
+              <>
+                <span className="font-mono text-[10px] text-fg-muted/50 transition-colors group-hover:text-accent/50">
+                  0{i + 1}
+                </span>
+                {t(item.key as Parameters<typeof t>[0])}
+              </>
+            );
+            return item.href.startsWith("#") ? (
+              <a key={item.key} href={item.href} onClick={() => setOpen(false)} className={linkClass} style={linkStyle}>
+                {inner}
+              </a>
+            ) : (
+              <Link key={item.key} href={item.href as "/concepto-e/team"} onClick={() => setOpen(false)} className={linkClass} style={linkStyle}>
+                {inner}
+              </Link>
+            );
+          })}
         </nav>
 
         {/* Drawer footer */}
