@@ -1,4 +1,5 @@
 import { setRequestLocale } from "next-intl/server";
+import Image from "next/image";
 import { getSiteContent } from "@/lib/wp/client";
 import type { Locale } from "@/i18n/routing";
 import { NavE } from "@/components/sections/e/NavE";
@@ -34,11 +35,18 @@ export default async function ConceptoEPage({ params }: PageProps) {
       {/* Footer */}
       <footer className="border-t border-border py-10">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 sm:flex-row">
-          <p className="font-display text-sm font-bold uppercase tracking-widest">
-            FORJA <span className="fire-text">STUDIOS</span>
-          </p>
+          <a href="#top">
+            <Image
+              src="/assets/forja/images/f40ce8_54c70335883e4115ab035396d8db0215~mv2.png"
+              alt="Forja Studios"
+              height={40}
+              width={160}
+              style={{ height: "1.75rem", width: "auto" }}
+              className="object-contain"
+            />
+          </a>
           <p className="text-xs text-forja-muted">
-            © {new Date().getFullYear()} Forja Studios. Todos los derechos reservados.
+            © {new Date().getFullYear()} Forja Studios. All rights reserved.
           </p>
         </div>
       </footer>
