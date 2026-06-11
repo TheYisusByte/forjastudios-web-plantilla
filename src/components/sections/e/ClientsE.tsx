@@ -88,7 +88,7 @@ export function ClientsE({ clients }: ClientsEProps) {
   );
 
   return (
-    <section ref={sectionRef} id="clients" className="py-24">
+    <section ref={sectionRef} id="clients" className="py-36">
       {/* Heading */}
       <div className="clients-e-heading mx-auto mb-12 max-w-7xl px-6">
         <p className="mb-3 text-xs uppercase tracking-[0.3em] text-forja-muted">

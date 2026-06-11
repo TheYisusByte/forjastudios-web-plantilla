@@ -149,7 +149,7 @@ export function AboutE() {
             <div className="about-e-heading mb-8">
               <h2
                 className="font-display font-black uppercase leading-[0.88]"
-                style={{ fontSize: "clamp(2.8rem, 6vw, 5rem)" }}
+                style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)" }}
               >
                 <span className="block text-forja-bone">{t("aboutHeading1")}</span>
                 <span className="fire-text block">{t("aboutHeading2")}</span>
@@ -186,8 +186,6 @@ export function AboutE() {
                 alt=""
                 className="h-full w-full object-cover"
               />
-              {/* Subtle vignette so edges blend with dark bg */}
-              <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/5" />
             </div>
 
             {/* Contact form — hidden until CTA click */}

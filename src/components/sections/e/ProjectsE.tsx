@@ -146,7 +146,7 @@ export function ProjectsE({ projects }: ProjectsEProps) {
   return (
     <section ref={sectionRef} id="work" className="relative bg-forja-coal">
       {/* Heading */}
-      <div className="projects-e-heading mx-auto max-w-7xl px-6 pb-10 pt-24">
+      <div className="projects-e-heading mx-auto max-w-7xl px-6 pb-10 pt-36">
         <p className="mb-3 text-xs uppercase tracking-[0.3em] text-forja-muted">
           {t("projectsTitle")}
         </p>

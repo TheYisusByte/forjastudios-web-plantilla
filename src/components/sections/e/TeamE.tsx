@@ -49,7 +49,7 @@ function MemberCard({
   return (
     <TiltCard intensity={12}>
       <div
-        className="group relative aspect-[3/4] overflow-hidden rounded-2xl bg-forja-coal"
+        className="group relative aspect-[3/4] overflow-hidden rounded-2xl bg-forja-coal ring-1 ring-inset ring-white/10"
         onMouseMove={handleMouseMove}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -160,19 +160,6 @@ export function TeamE({ team }: TeamEProps) {
   return (
     <section ref={sectionRef} id="team" className="py-24">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="team-e-heading mb-16">
-          <p className="mb-3 text-xs uppercase tracking-[0.3em] text-forja-muted">
-            {t("teamTitle")}
-          </p>
-          <h2
-            className="font-display font-black uppercase leading-none"
-            style={{ fontSize: "clamp(2.8rem, 7vw, 6rem)" }}
-          >
-            <span className="block text-forja-bone">{t("teamHeading1")}</span>
-            <span className="fire-text block">{t("teamHeading2")}</span>
-          </h2>
-        </div>
-
         <div className="team-e-grid grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {team.map((member, i) => (
             <div key={member.name} className="team-e-card">

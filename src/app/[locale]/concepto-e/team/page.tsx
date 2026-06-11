@@ -21,17 +21,39 @@ export default async function ConceptoETeamPage({ params }: PageProps) {
       <NavE />
 
       {/* Page header */}
-      <div className="mx-auto max-w-7xl px-6 pb-4 pt-36">
-        <p className="text-xs uppercase tracking-[0.35em] text-forja-muted">
-          Forja Studios
-        </p>
-        <h1
-          className="mt-3 font-display font-black uppercase leading-none"
-          style={{ fontSize: "clamp(3rem, 8vw, 7rem)" }}
-        >
-          <span className="block text-forja-bone">The</span>
-          <span className="fire-text block">Blacksmiths.</span>
+      <div className="mx-auto max-w-7xl px-6 pb-12 pt-44">
+        <h1 className="font-display font-black leading-[0.88] tracking-tight">
+          <span
+            className="block text-forja-bone"
+            style={{ fontSize: "clamp(3.2rem, 7vw, 6rem)", letterSpacing: "-0.02em" }}
+          >
+            our
+          </span>
+          <span
+            className="block text-forja-bone"
+            style={{ fontSize: "clamp(7rem, 18vw, 14rem)", letterSpacing: "-0.03em" }}
+          >
+            TEAM
+          </span>
         </h1>
+
+        <div className="mt-8 flex items-start gap-3">
+          <div className="shrink-0 pt-0.5">
+            <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-forja-bone">
+              Forja<sup className="text-[0.65em]">®</sup>
+            </p>
+            <p className="text-[11px] uppercase tracking-[0.28em] text-forja-muted">
+              Studios
+            </p>
+          </div>
+          <div className="h-8 w-px self-center bg-border/60" />
+          <p className="max-w-md text-sm leading-relaxed text-forja-muted">
+            We have a multidisciplinary team of over 70 artists, animators, designers,
+            developers, 3D specialists, SFX experts, directors, and producers with more
+            than 15 years of experience creating content for video games, animated series,
+            advertising, Web3, audiovisual marketing, and digital products.
+          </p>
+        </div>
       </div>
 
       <TeamE team={content.team} />
