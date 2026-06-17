@@ -10,21 +10,20 @@ Rediseño de [forjastudios.com](https://www.forjastudios.com/) (estudio creativo
 
 ## Python en este proyecto
 
-Python **no** está en el `PATH` (el `python` del shell es el stub de Microsoft Store). Usa SIEMPRE la ruta completa al intérprete:
+Entorno **macOS**. `python3` está en el `PATH` (vía pyenv, Python 3.11.9); invócalo directamente:
 
+```bash
+python3 <script.py> [args]
 ```
-c:\users\diego\appdata\local\programs\python\python311\python.exe <script.py> [args]
-```
 
-Python 3.11.9. Ejemplo (búsqueda de la skill de diseño):
+Ejemplo (búsqueda de la skill de diseño):
 
-```powershell
-& "c:\users\diego\appdata\local\programs\python\python311\python.exe" `
-  "D:\CODE\forja\.claude\skills\ui-ux-pro-max\scripts\search.py" `
+```bash
+python3 .claude/skills/ui-ux-pro-max/scripts/search.py \
   "dark portfolio animation studio" --domain style -n 3
 ```
 
-> La config de entornos/venv de Python se definirá más adelante; por ahora invocar con la ruta completa.
+> Lo usan las skills basadas en Python (`ui-ux-pro-max`, `design`, `design-system`). La config de venv se definirá más adelante si hace falta aislar dependencias.
 
 ## Stack y arquitectura (decisiones confirmadas)
 
@@ -81,9 +80,15 @@ Vault en `C:\Users\DIEGO\AI-BRAIN\Forja-Studios\Forja Studios\` (Obsidian). **Co
 - `10 - Roadmap y Próximos Pasos.md` — fases del proyecto
 - `Diagrama - *.excalidraw` — arquitectura y wireframes de cada concepto
 
-## Skills de diseño instaladas
+## Skills instaladas (`.claude/skills/`, versionadas en el repo)
 
-En `.claude/skills/`: `ui-ux-pro-max` (principal, requiere Python — ver arriba), `design`, `design-system`, `ui-styling`, `brand`, `banner-design`, `slides`. Usar para decisiones de estilo, paletas, tipografía, componentes y QA de UI.
+**Diseño / branding** — para estilo, paletas, tipografía, componentes y QA de UI:
+`ui-ux-pro-max` (principal, requiere Python — ver arriba), `design` (logos/CIP/banners/iconos/slides, requiere Python), `design-system` (tokens primitive→semantic→component, requiere Python), `ui-styling` (shadcn/ui + Radix + Tailwind, dark mode), `brand` (voz e identidad de marca), `banner-design`, `slides`.
+
+**Animación — suite GSAP oficial** (8 skills, doc por tema) — para animaciones del front:
+`gsap-core` (API base: tweens, easing, stagger, matchMedia), `gsap-timeline`, `gsap-scrolltrigger` (scroll/parallax/pinning), `gsap-plugins`, `gsap-react` (`useGSAP` para Next/React), `gsap-frameworks`, `gsap-performance`, `gsap-utils`.
+
+> Índice de skills en `.claude/skills/llms.txt`. La animación del sitio usa Framer Motion + CSS scroll-driven (ver stack); GSAP es opción/refuerzo para interacciones scroll-driven más complejas.
 
 ## Comandos
 

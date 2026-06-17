@@ -1,47 +1,70 @@
-// GraphQL queries for the future WordPress headless backend (doc 03).
-// Kept here so the CMS integration is a drop-in once cms.forjastudios.com is up.
-// Not used yet — lib/wp/client.ts currently returns typed mock data.
+// GraphQL para el backend WordPress headless (doc 03 · ver wordpress/README.md).
+// El esquema lo define el plugin `forja-headless` (CPTs + ACF + WPGraphQL).
+// Una sola query trae todo el contenido editorial del sitio por idioma; meta y
+// services siguen siendo constantes de marca locales (no son CPTs).
+//
+// `language` requiere Polylang + WPGraphQL Polylang. El valor es el enum
+// LanguageCodeFilterEnum (EN / ES) — ver mapLocaleToLanguage en client.ts.
 
-export const FEATURED_PROJECTS = /* GraphQL */ `
-  query FeaturedProjects($locale: LanguageCodeFilterEnum!) {
+const MEDIA = "node { sourceUrl altText }";
+
+export const SITE_CONTENT_QUERY = /* GraphQL */ `
+  query SiteContent($locale: LanguageCodeFilterEnum!) {
     proyectos(
-      first: 8
-      where: {
-        language: $locale
-        metaQuery: { metaArray: [{ key: "destacado", value: "1" }] }
-      }
+      first: 100
+      where: { language: $locale, orderby: [{ field: MENU_ORDER, order: ASC }] }
     ) {
       nodes {
+        slug
         title
+        excerpt
         camposProyecto {
           cliente
           anio
           videoUrl
-          cover { node { sourceUrl altText } }
+          destacado
+          cover { ${MEDIA} }
         }
-        categorias { nodes { name } }
+        categorias { nodes { name slug } }
       }
     }
-  }
-`;
-
-export const IPS = /* GraphQL */ `
-  query Ips($locale: LanguageCodeFilterEnum!) {
-    ips(first: 12, where: { language: $locale }) {
+    ips(
+      first: 50
+      where: { language: $locale, orderby: [{ field: MENU_ORDER, order: ASC }] }
+    ) {
       nodes {
+        slug
         title
-        camposIp { descripcion enlace logo { node { sourceUrl altText } } }
+        camposIp {
+          descripcion
+          enlace
+          logo { ${MEDIA} }
+        }
       }
     }
-  }
-`;
-
-export const TEAM = /* GraphQL */ `
-  query Team($locale: LanguageCodeFilterEnum!) {
-    miembros(first: 100, where: { language: $locale }) {
+    miembros(
+      first: 100
+      where: { language: $locale, orderby: [{ field: MENU_ORDER, order: ASC }] }
+    ) {
       nodes {
         title
-        camposMiembro { rol foto { node { sourceUrl altText } } redes }
+        camposMiembro {
+          rol
+          redes
+          foto { ${MEDIA} }
+        }
+      }
+    }
+    clientes(
+      first: 100
+      where: { language: $locale, orderby: [{ field: MENU_ORDER, order: ASC }] }
+    ) {
+      nodes {
+        title
+        camposCliente {
+          sitioWeb
+          logo { ${MEDIA} }
+        }
       }
     }
   }

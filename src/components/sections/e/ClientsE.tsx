@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -13,33 +14,31 @@ interface ClientsEProps {
   clients: Client[];
 }
 
-function MarqueeRow({
-  items,
-  direction,
-}: {
-  items: string[];
-  direction: "left" | "right";
-}) {
+function MarqueeRow({ items }: { items: Client[] }) {
   // Double for seamless loop — animate -50% translateX
   const row = [...items, ...items];
 
   return (
     <div className="overflow-hidden py-5">
       <div
-        className={`flex w-max items-center ${
-          direction === "left" ? "animate-marquee-left" : "animate-marquee-right"
-        }`}
+        className="flex w-max items-center animate-marquee-left"
         aria-hidden="true"
       >
-        {row.map((name, i) => (
-          <span key={i} className="flex items-center gap-8 px-4">
-            <span
-              className={`whitespace-nowrap font-display text-xl font-black uppercase tracking-[0.1em] ${
-                i % 5 === 2 ? "fire-text" : "text-forja-bone/60"
-              }`}
-            >
-              {name}
-            </span>
+        {row.map((client, i) => (
+          <span key={i} className="flex items-center gap-10 px-6">
+            {client.logo ? (
+              <Image
+                src={client.logo}
+                alt={client.name}
+                width={640}
+                height={240}
+                className="h-32 w-auto object-contain opacity-70 transition-opacity duration-300 hover:opacity-100 sm:h-40 lg:h-48"
+              />
+            ) : (
+              <span className="whitespace-nowrap font-display text-xl font-black uppercase tracking-[0.1em] text-forja-bone/60">
+                {client.name}
+              </span>
+            )}
             <span className="fire-text text-sm" aria-hidden="true">
               ✦
             </span>
@@ -88,9 +87,9 @@ export function ClientsE({ clients }: ClientsEProps) {
   );
 
   return (
-    <section ref={sectionRef} id="clients" className="py-36">
+    <section ref={sectionRef} id="clients" className="py-24">
       {/* Heading */}
-      <div className="clients-e-heading mx-auto mb-12 max-w-7xl px-6">
+      <div className="clients-e-heading mx-auto mb-20 max-w-7xl px-6">
         <p className="mb-3 text-xs uppercase tracking-[0.3em] text-forja-muted">
           {t("clientsTitle")}
         </p>
@@ -104,19 +103,12 @@ export function ClientsE({ clients }: ClientsEProps) {
       </div>
 
       {/* Dual-direction marquee band */}
-      <div
-        className="clients-e-band relative overflow-hidden border-y border-border py-1"
-        style={{
-          background:
-            "linear-gradient(180deg, rgba(255,106,44,0.04) 0%, transparent 40%, transparent 60%, rgba(255,106,44,0.04) 100%)",
-        }}
-      >
+      <div className="clients-e-band relative overflow-hidden border-y border-border py-1">
         {/* Edge fades */}
         <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r from-bg to-transparent" />
         <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l from-bg to-transparent" />
 
-        <MarqueeRow items={names} direction="left" />
-        <MarqueeRow items={[...names].reverse()} direction="right" />
+        <MarqueeRow items={clients} />
 
         <p className="sr-only">{names.join(", ")}</p>
       </div>

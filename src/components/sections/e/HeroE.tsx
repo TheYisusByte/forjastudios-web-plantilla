@@ -217,7 +217,6 @@ export function HeroE() {
   const contentRef = useRef<HTMLDivElement>(null);
   const canvasRef  = useRef<HTMLCanvasElement>(null);
   const mouseRef   = useRef({ x: -999, y: -999, inside: false });
-
   useForgeCanvas(canvasRef, mouseRef);
 
   useGSAP(
@@ -263,7 +262,7 @@ export function HeroE() {
         className="pointer-events-none absolute inset-0 z-[1]"
         style={{
           background:
-            "linear-gradient(180deg, rgba(10,10,11,0.72) 0%, rgba(10,10,11,0.28) 42%, rgba(10,10,11,0.88) 100%)",
+            "linear-gradient(180deg, rgba(10, 10, 11, 0.2) 0%, rgba(10, 10, 11, 0.16) 30%, rgba(10, 10, 11, 0.6) 100%)",
         }}
       />
 
@@ -293,7 +292,7 @@ export function HeroE() {
 
       {/* ── Hero content ─────────────────────────────────────────────── */}
       <div ref={contentRef} className="relative z-[4] mx-auto w-full max-w-7xl px-6">
-        <p className="hero-e-fade mb-8 text-xs uppercase tracking-[0.35em] text-forja-muted">
+        <p className="hero-e-fade mb-8 text-xs uppercase tracking-[0.35em] text-forja-bone">
           {t("heroKicker")}
         </p>
 

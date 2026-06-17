@@ -72,11 +72,11 @@ export function NavE() {
               {NAV_ITEMS.map((item) => (
                 <li key={item.key}>
                   {item.href.startsWith("#") ? (
-                    <a href={item.href} className="text-forja-bone/60 transition-colors duration-200 hover:text-accent">
+                    <a href={item.href} className="text-forja-bone/90 transition-colors duration-200 hover:text-accent">
                       {t(item.key as Parameters<typeof t>[0])}
                     </a>
                   ) : (
-                    <Link href={item.href as "/concepto-e/team"} className="text-forja-bone/60 transition-colors duration-200 hover:text-accent">
+                    <Link href={item.href as "/concepto-e/team"} className="text-forja-bone/90 transition-colors duration-200 hover:text-accent">
                       {t(item.key as Parameters<typeof t>[0])}
                     </Link>
                   )}

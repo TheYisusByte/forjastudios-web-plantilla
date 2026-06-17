@@ -3,7 +3,7 @@ import Image from "next/image";
 import { getSiteContent } from "@/lib/wp/client";
 import type { Locale } from "@/i18n/routing";
 import { NavE } from "@/components/sections/e/NavE";
-import { CursorE } from "@/components/sections/e/CursorE";
+// import { CursorE } from "@/components/sections/e/CursorE";
 import { HeroE } from "@/components/sections/e/HeroE";
 import { ClientsE } from "@/components/sections/e/ClientsE";
 import { ProjectsE } from "@/components/sections/e/ProjectsE";
@@ -21,12 +21,12 @@ export default async function ConceptoEPage({ params }: PageProps) {
 
   return (
     <div data-concept="e" className="min-h-screen bg-bg text-fg">
-      <CursorE />
+      {/* <CursorE /> */}
       <NavE />
       <HeroE />
       <ClientsE clients={content.clients} />
       <ProjectsE projects={content.projects} />
-      <IPsE ips={content.ips} />
+      <IPsE ips={content.ips} projects={content.projects} />
       <AboutE />
 
       {/* Footer */}

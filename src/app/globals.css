@@ -210,11 +210,11 @@
 }
 
 @utility animate-marquee-left {
-  animation: marquee-left 34s linear infinite;
+  animation: marquee-left 70s linear infinite;
 }
 
 @utility animate-marquee-right {
-  animation: marquee-right 34s linear infinite;
+  animation: marquee-right 70s linear infinite;
 }
 
 /* Candle / torch flicker — irregular warm-glow pulse per card. */

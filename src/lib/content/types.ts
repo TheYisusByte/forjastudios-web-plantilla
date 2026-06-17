@@ -14,6 +14,18 @@ export type ProjectCategory =
 /** Two-stop gradient seed used for placeholder art until real assets arrive. */
 export type Accent = readonly [string, string];
 
+/** Un elemento de la galería de un proyecto (imagen o video). */
+export type MediaType = "image" | "video";
+export interface MediaItem {
+  type: MediaType;
+  src: string;
+  /** Poster del video (frame de portada). Opcional. */
+  poster?: string;
+  /** Dimensiones reales (para mantener el aspecto sin layout shift). */
+  width?: number;
+  height?: number;
+}
+
 // ── Resolved shapes (strings already in the active locale) ───────────────
 // Components consume these. They mirror the future WPGraphQL response so the
 // swap from mock to CMS only touches lib/wp/client.ts.
@@ -31,6 +43,8 @@ export interface Project {
   videoUrl?: string;
   /** Real thumbnail extracted from the legacy site. Falls back to accent gradient. */
   coverUrl?: string;
+  /** Galería de la página interna (imágenes y/o videos). */
+  gallery?: MediaItem[];
 }
 
 export interface IP {
@@ -38,6 +52,8 @@ export interface IP {
   name: string;
   description: string;
   accent: Accent;
+  /** Video de YouTube de fondo en la sección de IPs (concepto E). */
+  videoId: string;
 }
 
 export interface TeamMember {
@@ -49,6 +65,8 @@ export interface TeamMember {
 
 export interface Client {
   name: string;
+  /** Logo (blanco/transparente sobre oscuro). Si falta, se muestra el nombre. */
+  logo?: string;
 }
 
 export interface Service {

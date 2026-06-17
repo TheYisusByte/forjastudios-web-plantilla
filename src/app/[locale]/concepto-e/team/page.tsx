@@ -3,7 +3,7 @@ import Image from "next/image";
 import { getSiteContent } from "@/lib/wp/client";
 import type { Locale } from "@/i18n/routing";
 import { NavE } from "@/components/sections/e/NavE";
-import { CursorE } from "@/components/sections/e/CursorE";
+// import { CursorE } from "@/components/sections/e/CursorE";
 import { TeamE } from "@/components/sections/e/TeamE";
 
 interface PageProps {
@@ -17,7 +17,7 @@ export default async function ConceptoETeamPage({ params }: PageProps) {
 
   return (
     <div data-concept="e" className="min-h-screen bg-bg text-fg">
-      <CursorE />
+      {/* <CursorE /> */}
       <NavE />
 
       {/* Page header */}

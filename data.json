@@ -1,0 +1,1364 @@
+{
+  "meta": {
+    "tagline": "Forge your flame",
+    "descriptor": {
+      "es": "Desarrollo de entretenimiento audiovisual",
+      "en": "Audiovisual Entertainment Development"
+    },
+    "showreelId": "6nN0LBIOH0c",
+    "stats": {
+      "years": 12,
+      "blacksmiths": 60,
+      "projects": 1300
+    },
+    "contact": {
+      "email": "admin@forjastudios.com",
+      "whatsapp": "+57 301 242 2976"
+    },
+    "socials": [
+      {
+        "label": "Instagram",
+        "href": "https://instagram.com/forja_studios"
+      },
+      {
+        "label": "Facebook",
+        "href": "https://facebook.com/ForjaStudios"
+      },
+      {
+        "label": "X",
+        "href": "https://x.com/StudiosForja"
+      },
+      {
+        "label": "YouTube",
+        "href": "https://youtube.com/@ForjaCollective"
+      },
+      {
+        "label": "LinkedIn",
+        "href": "https://linkedin.com/company/86712225"
+      }
+    ]
+  },
+  "categoryLabels": {
+    "animation-2d": {
+      "es": "Animación 2D",
+      "en": "2D Animation"
+    },
+    "animation-3d": {
+      "es": "Animación 3D",
+      "en": "3D Animation"
+    },
+    "vfx": {
+      "es": "VFX",
+      "en": "VFX"
+    },
+    "concept-art": {
+      "es": "Concept Art",
+      "en": "Concept Art"
+    },
+    "game": {
+      "es": "Videojuego",
+      "en": "Game"
+    },
+    "illustration": {
+      "es": "Ilustración",
+      "en": "Illustration"
+    }
+  },
+  "services": [
+    {
+      "key": "animation",
+      "label": {
+        "es": "Animación 2D / 3D",
+        "en": "2D / 3D Animation"
+      }
+    },
+    {
+      "key": "illustration",
+      "label": {
+        "es": "Ilustración",
+        "en": "Illustration"
+      }
+    },
+    {
+      "key": "concept-art",
+      "label": {
+        "es": "Concept Art",
+        "en": "Concept Art"
+      }
+    },
+    {
+      "key": "vfx",
+      "label": {
+        "es": "VFX",
+        "en": "VFX"
+      }
+    },
+    {
+      "key": "sound",
+      "label": {
+        "es": "Diseño de Sonido",
+        "en": "Sound Design"
+      }
+    },
+    {
+      "key": "audiovisual",
+      "label": {
+        "es": "Producción Audiovisual",
+        "en": "Audiovisual Production"
+      }
+    },
+    {
+      "key": "games",
+      "label": {
+        "es": "Videojuegos",
+        "en": "Games"
+      }
+    }
+  ],
+  "projects": [
+    {
+      "slug": "kango-fast-lane",
+      "title": "Kango Fast Lane",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FFB23E",
+        "#FF6A2C"
+      ],
+      "cover": "/assets/forja/projects/kango-fast-lane.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/kango-fast-lane.png",
+          "width": 1456,
+          "height": 816
+        },
+        {
+          "type": "video",
+          "src": "/assets/forja/projects/reel-forja-2023.mp4",
+          "poster": "/assets/forja/projects/kango-fast-lane.png"
+        }
+      ]
+    },
+    {
+      "slug": "character-design",
+      "title": "Character Design",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FF6A2C",
+        "#E03A2E"
+      ],
+      "cover": "/assets/forja/projects/character-design.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/character-design.png",
+          "width": 2551,
+          "height": 1379
+        }
+      ]
+    },
+    {
+      "slug": "stitch",
+      "title": "Stitch",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FF6A2C",
+        "#7A1E12"
+      ],
+      "cover": "/assets/forja/projects/stitch.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/stitch.png",
+          "width": 3000,
+          "height": 3000
+        }
+      ]
+    },
+    {
+      "slug": "aquaman",
+      "title": "Aquaman",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FFB23E",
+        "#FF6A2C"
+      ],
+      "cover": "/assets/forja/projects/aquaman.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/aquaman.png",
+          "width": 1080,
+          "height": 1080
+        }
+      ]
+    },
+    {
+      "slug": "penny-proud",
+      "title": "Penny Proud",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FF6A2C",
+        "#E03A2E"
+      ],
+      "cover": "/assets/forja/projects/penny-proud.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/penny-proud.png",
+          "width": 1920,
+          "height": 1080
+        }
+      ]
+    },
+    {
+      "slug": "dmm-key-art",
+      "title": "Key Art",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FF6A2C",
+        "#7A1E12"
+      ],
+      "cover": "/assets/forja/projects/dmm-key-art.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/dmm-key-art.png",
+          "width": 1024,
+          "height": 500
+        }
+      ]
+    },
+    {
+      "slug": "dragons-berk",
+      "title": "Dragons: Berk",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FFB23E",
+        "#FF6A2C"
+      ],
+      "cover": "/assets/forja/projects/dragons-berk.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/dragons-berk.png",
+          "width": 2048,
+          "height": 2732
+        }
+      ]
+    },
+    {
+      "slug": "katapix",
+      "title": "Katapix",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FF6A2C",
+        "#E03A2E"
+      ],
+      "cover": "/assets/forja/projects/katapix.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/katapix.png",
+          "width": 2500,
+          "height": 863
+        }
+      ]
+    },
+    {
+      "slug": "gabvano",
+      "title": "Gabvano",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FF6A2C",
+        "#7A1E12"
+      ],
+      "cover": "/assets/forja/projects/gabvano.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/gabvano.png",
+          "width": 4000,
+          "height": 2250
+        }
+      ]
+    },
+    {
+      "slug": "harry-potter",
+      "title": "Harry Potter",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FFB23E",
+        "#FF6A2C"
+      ],
+      "cover": "/assets/forja/projects/harry-potter.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/harry-potter.png",
+          "width": 4320,
+          "height": 1080
+        }
+      ]
+    },
+    {
+      "slug": "hard-west-2",
+      "title": "Hard West 2",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FF6A2C",
+        "#E03A2E"
+      ],
+      "cover": "/assets/forja/projects/hard-west-2.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/hard-west-2.png",
+          "width": 3500,
+          "height": 2334
+        }
+      ]
+    },
+    {
+      "slug": "jogo",
+      "title": "Jogo",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FF6A2C",
+        "#7A1E12"
+      ],
+      "cover": "/assets/forja/projects/jogo.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/jogo.png",
+          "width": 1024,
+          "height": 1024
+        }
+      ]
+    },
+    {
+      "slug": "jurassic-world-alive",
+      "title": "Jurassic World Alive",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FFB23E",
+        "#FF6A2C"
+      ],
+      "cover": "/assets/forja/projects/jurassic-world-alive.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/jurassic-world-alive.png",
+          "width": 1200,
+          "height": 628
+        }
+      ]
+    },
+    {
+      "slug": "jurassic-world-the-game",
+      "title": "Jurassic World: The Game",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FF6A2C",
+        "#E03A2E"
+      ],
+      "cover": "/assets/forja/projects/jurassic-world-the-game.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/jurassic-world-the-game.png",
+          "width": 4320,
+          "height": 1080
+        }
+      ]
+    },
+    {
+      "slug": "killer-klowns",
+      "title": "Killer Klowns",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FF6A2C",
+        "#7A1E12"
+      ],
+      "cover": "/assets/forja/projects/killer-klowns.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/killer-klowns.png",
+          "width": 4000,
+          "height": 3450
+        }
+      ]
+    },
+    {
+      "slug": "kingmaker",
+      "title": "KingMaker",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FFB23E",
+        "#FF6A2C"
+      ],
+      "cover": "/assets/forja/projects/kingmaker.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/kingmaker.png",
+          "width": 3000,
+          "height": 1036
+        }
+      ]
+    },
+    {
+      "slug": "the-experimenters",
+      "title": "The Experimenters",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FF6A2C",
+        "#E03A2E"
+      ],
+      "cover": "/assets/forja/projects/the-experimenters.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/the-experimenters.png",
+          "width": 2300,
+          "height": 1294
+        }
+      ]
+    },
+    {
+      "slug": "luffy",
+      "title": "Luffy",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FF6A2C",
+        "#7A1E12"
+      ],
+      "cover": "/assets/forja/projects/luffy.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/luffy.png",
+          "width": 1200,
+          "height": 628
+        }
+      ]
+    },
+    {
+      "slug": "otaku",
+      "title": "Otaku",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FFB23E",
+        "#FF6A2C"
+      ],
+      "cover": "/assets/forja/projects/otaku.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/otaku.png",
+          "width": 2500,
+          "height": 1667
+        }
+      ]
+    },
+    {
+      "slug": "pixel-art-day",
+      "title": "Pixel Art Day",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FF6A2C",
+        "#E03A2E"
+      ],
+      "cover": "/assets/forja/projects/pixel-art-day.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/pixel-art-day.png",
+          "width": 3840,
+          "height": 2160
+        }
+      ]
+    },
+    {
+      "slug": "panda-guardians",
+      "title": "Panda Guardians",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FF6A2C",
+        "#7A1E12"
+      ],
+      "cover": "/assets/forja/projects/panda-guardians.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/panda-guardians.png",
+          "width": 4000,
+          "height": 1000
+        }
+      ]
+    },
+    {
+      "slug": "qb-cover",
+      "title": "QB",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FFB23E",
+        "#FF6A2C"
+      ],
+      "cover": "/assets/forja/projects/qb-cover.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/qb-cover.png",
+          "width": 4096,
+          "height": 2304
+        }
+      ]
+    },
+    {
+      "slug": "concept-art-1",
+      "title": "Concept Art",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FF6A2C",
+        "#E03A2E"
+      ],
+      "cover": "/assets/forja/projects/concept-art-1.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/concept-art-1.png",
+          "width": 1446,
+          "height": 810
+        }
+      ]
+    },
+    {
+      "slug": "illustration-1",
+      "title": "Illustration",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FF6A2C",
+        "#7A1E12"
+      ],
+      "cover": "/assets/forja/projects/illustration-1.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/illustration-1.png",
+          "width": 416,
+          "height": 519
+        }
+      ]
+    },
+    {
+      "slug": "thalias-mixtape",
+      "title": "Thalia's Mixtape",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FFB23E",
+        "#FF6A2C"
+      ],
+      "cover": "/assets/forja/projects/thalias-mixtape.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/thalias-mixtape.png",
+          "width": 1024,
+          "height": 1024
+        }
+      ]
+    },
+    {
+      "slug": "tomb-sword",
+      "title": "Tomb Sword",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FF6A2C",
+        "#E03A2E"
+      ],
+      "cover": "/assets/forja/projects/tomb-sword.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/tomb-sword.png",
+          "width": 5000,
+          "height": 4000
+        }
+      ]
+    },
+    {
+      "slug": "toralyn",
+      "title": "Toralyn",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FF6A2C",
+        "#7A1E12"
+      ],
+      "cover": "/assets/forja/projects/toralyn.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/toralyn.png",
+          "width": 2625,
+          "height": 3500
+        }
+      ]
+    },
+    {
+      "slug": "donut-break",
+      "title": "Donut Break",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FFB23E",
+        "#FF6A2C"
+      ],
+      "cover": "/assets/forja/projects/donut-break.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/donut-break.png",
+          "width": 1920,
+          "height": 1080
+        }
+      ]
+    },
+    {
+      "slug": "artwork-1",
+      "title": "Artwork",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FF6A2C",
+        "#E03A2E"
+      ],
+      "cover": "/assets/forja/projects/artwork-1.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/artwork-1.png",
+          "width": 2912,
+          "height": 1632
+        }
+      ]
+    },
+    {
+      "slug": "azra",
+      "title": "Azra",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FF6A2C",
+        "#7A1E12"
+      ],
+      "cover": "/assets/forja/projects/azra.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/azra.png",
+          "width": 3061,
+          "height": 1807
+        }
+      ]
+    },
+    {
+      "slug": "egosoft-borons",
+      "title": "Egosoft: Borons",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FFB23E",
+        "#FF6A2C"
+      ],
+      "cover": "/assets/forja/projects/egosoft-borons.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/egosoft-borons.png",
+          "width": 4096,
+          "height": 2304
+        }
+      ]
+    },
+    {
+      "slug": "empires-and-puzzles",
+      "title": "Empires & Puzzles",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FF6A2C",
+        "#E03A2E"
+      ],
+      "cover": "/assets/forja/projects/empires-and-puzzles.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/empires-and-puzzles.png",
+          "width": 1920,
+          "height": 1500
+        }
+      ]
+    },
+    {
+      "slug": "artwork-2",
+      "title": "Artwork",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FF6A2C",
+        "#7A1E12"
+      ],
+      "cover": "/assets/forja/projects/artwork-2.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/artwork-2.png",
+          "width": 1023,
+          "height": 581
+        }
+      ]
+    },
+    {
+      "slug": "jam-city",
+      "title": "Jam City",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FFB23E",
+        "#FF6A2C"
+      ],
+      "cover": "/assets/forja/projects/jam-city.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/jam-city.png",
+          "width": 4096,
+          "height": 2304
+        }
+      ]
+    },
+    {
+      "slug": "legion",
+      "title": "Legion",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FF6A2C",
+        "#E03A2E"
+      ],
+      "cover": "/assets/forja/projects/legion.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/legion.png",
+          "width": 4096,
+          "height": 2304
+        }
+      ]
+    },
+    {
+      "slug": "ophelia",
+      "title": "Ophelia",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FF6A2C",
+        "#7A1E12"
+      ],
+      "cover": "/assets/forja/projects/ophelia.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/ophelia.png",
+          "width": 1350,
+          "height": 677
+        }
+      ]
+    },
+    {
+      "slug": "key-art",
+      "title": "Key Art",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FFB23E",
+        "#FF6A2C"
+      ],
+      "cover": "/assets/forja/projects/key-art.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/key-art.png",
+          "width": 1716,
+          "height": 621
+        }
+      ]
+    },
+    {
+      "slug": "cursed-mansion",
+      "title": "Cursed Mansion",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FF6A2C",
+        "#E03A2E"
+      ],
+      "cover": "/assets/forja/projects/cursed-mansion.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/cursed-mansion.png",
+          "width": 1080,
+          "height": 1080
+        }
+      ]
+    },
+    {
+      "slug": "ciudadano-360",
+      "title": "Ciudadano 360",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FF6A2C",
+        "#7A1E12"
+      ],
+      "cover": "/assets/forja/projects/ciudadano-360.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/ciudadano-360.png",
+          "width": 3000,
+          "height": 1683
+        }
+      ]
+    },
+    {
+      "slug": "cats-choose-a-side",
+      "title": "Cats: Choose a Side",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FFB23E",
+        "#FF6A2C"
+      ],
+      "cover": "/assets/forja/projects/cats-choose-a-side.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/cats-choose-a-side.png",
+          "width": 1024,
+          "height": 500
+        }
+      ]
+    },
+    {
+      "slug": "cats-caught-stealing",
+      "title": "Cats: Caught Stealing",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FF6A2C",
+        "#E03A2E"
+      ],
+      "cover": "/assets/forja/projects/cats-caught-stealing.png",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/cats-caught-stealing.png",
+          "width": 1024,
+          "height": 500
+        }
+      ]
+    },
+    {
+      "slug": "tiefling",
+      "title": "Tiefling",
+      "client": "Forja Studios",
+      "category": "illustration",
+      "year": 2023,
+      "description": {
+        "es": "Pieza del portafolio de Forja Studios.",
+        "en": "A piece from the Forja Studios portfolio."
+      },
+      "featured": true,
+      "accent": [
+        "#FF6A2C",
+        "#7A1E12"
+      ],
+      "cover": "/assets/forja/projects/tiefling.jpg",
+      "gallery": [
+        {
+          "type": "image",
+          "src": "/assets/forja/projects/tiefling.jpg",
+          "width": 2464,
+          "height": 3020
+        }
+      ]
+    }
+  ],
+  "ips": [
+    {
+      "slug": "carameloki",
+      "name": "Carameloki",
+      "description": {
+        "es": "IP propia de personajes lúdicos y coloridos, lista para animación y merchandising.",
+        "en": "Our own IP of playful, colorful characters, ready for animation and merchandising."
+      },
+      "accent": [
+        "#FFB23E",
+        "#FF6A2C"
+      ],
+      "videoId": "GSNSx03jBfE"
+    },
+    {
+      "slug": "india-catalina",
+      "name": "India Catalina",
+      "description": {
+        "es": "Un mundo épico inspirado en la leyenda, base de cortos y desarrollo audiovisual.",
+        "en": "An epic world inspired by the legend, a base for shorts and audiovisual development."
+      },
+      "accent": [
+        "#FF6A2C",
+        "#E03A2E"
+      ],
+      "videoId": "3928o9AZEzY"
+    },
+    {
+      "slug": "inkborn",
+      "name": "Inkborn",
+      "description": {
+        "es": "Universo de novela gráfica con estética de tinta y acuarela, listo para animación y publishing.",
+        "en": "Graphic novel universe with ink and watercolor aesthetics, ready for animation and publishing."
+      },
+      "accent": [
+        "#FF6A2C",
+        "#7A1E12"
+      ],
+      "videoId": "DMPvO-uK29I"
+    }
+  ],
+  "team": [
+    {
+      "name": "Oscar D. Saldarriaga",
+      "role": {
+        "es": "CEO / Director de Arte",
+        "en": "CEO / Art Director"
+      },
+      "initials": "OS",
+      "accent": [
+        "#FF6A2C",
+        "#E03A2E"
+      ]
+    },
+    {
+      "name": "Valentina Ríos",
+      "role": {
+        "es": "Directora de Animación",
+        "en": "Animation Director"
+      },
+      "initials": "VR",
+      "accent": [
+        "#FFB23E",
+        "#FF6A2C"
+      ]
+    },
+    {
+      "name": "Mateo Herrera",
+      "role": {
+        "es": "Supervisor de VFX",
+        "en": "VFX Supervisor"
+      },
+      "initials": "MH",
+      "accent": [
+        "#FF6A2C",
+        "#7A1E12"
+      ]
+    },
+    {
+      "name": "Camila Ardila",
+      "role": {
+        "es": "Lead Concept Artist",
+        "en": "Lead Concept Artist"
+      },
+      "initials": "CA",
+      "accent": [
+        "#FFB23E",
+        "#FF6A2C"
+      ]
+    },
+    {
+      "name": "Diego Marín",
+      "role": {
+        "es": "Diseño de Sonido",
+        "en": "Sound Design"
+      },
+      "initials": "DM",
+      "accent": [
+        "#FF6A2C",
+        "#E03A2E"
+      ]
+    },
+    {
+      "name": "Sara Quintero",
+      "role": {
+        "es": "Productora Ejecutiva",
+        "en": "Executive Producer"
+      },
+      "initials": "SQ",
+      "accent": [
+        "#FF6A2C",
+        "#7A1E12"
+      ]
+    }
+  ],
+  "clients": [
+    {
+      "name": "DC Comics",
+      "logo": "/assets/forja/logos/dc-comics.png"
+    },
+    {
+      "name": "DDB°",
+      "logo": "/assets/forja/logos/ddb.png"
+    },
+    {
+      "name": "DeNA",
+      "logo": "/assets/forja/logos/dena.png"
+    },
+    {
+      "name": "Egosoft",
+      "logo": "/assets/forja/logos/egosoft.png"
+    },
+    {
+      "name": "Empires & Puzzles",
+      "logo": "/assets/forja/logos/empires.png"
+    },
+    {
+      "name": "Parque Explora",
+      "logo": "/assets/forja/logos/explora.png"
+    },
+    {
+      "name": "Frecuencia Gamer",
+      "logo": "/assets/forja/logos/frecuencia.png"
+    },
+    {
+      "name": "Hard West",
+      "logo": "/assets/forja/logos/hardwest.png"
+    },
+    {
+      "name": "Harry Potter",
+      "logo": "/assets/forja/logos/harry.png"
+    },
+    {
+      "name": "Jam City",
+      "logo": "/assets/forja/logos/jamcity.png"
+    },
+    {
+      "name": "Jogo",
+      "logo": "/assets/forja/logos/jogo.png"
+    },
+    {
+      "name": "Jurassic World",
+      "logo": "/assets/forja/logos/jurassic1.png"
+    },
+    {
+      "name": "Jurassic World Alive",
+      "logo": "/assets/forja/logos/jurassic2.png"
+    },
+    {
+      "name": "Katapix",
+      "logo": "/assets/forja/logos/katapix.png"
+    },
+    {
+      "name": "Killer Instinct",
+      "logo": "/assets/forja/logos/killer.png"
+    },
+    {
+      "name": "King",
+      "logo": "/assets/forja/logos/king.png"
+    },
+    {
+      "name": "Legion",
+      "logo": "/assets/forja/logos/legion.png"
+    },
+    {
+      "name": "Ludia",
+      "logo": "/assets/forja/logos/ludia.png"
+    }
+  ]
+}
