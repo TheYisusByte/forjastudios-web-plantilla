@@ -123,6 +123,7 @@
     "conceptE": "Full vanguard. Custom cursor, ember particles, horizontal scroll, 3D tilt with hot-metal shine. A studio ahead of its time."
   },
   "Common": {
-    "language": "Language"
+    "language": "Language",
+    "back": "Back"
   }
 }

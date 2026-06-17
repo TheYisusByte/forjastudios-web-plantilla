@@ -123,6 +123,7 @@
     "conceptE": "Vanguardia absoluta. Cursor propio, partículas de brasa, scroll horizontal, tilt 3D con brillo caliente. Estudio a la vanguardia."
   },
   "Common": {
-    "language": "Idioma"
+    "language": "Idioma",
+    "back": "Regresar"
   }
 }

@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
-import { ArrowLeft, ChevronUp, ChevronDown, Play } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { ArrowLeft, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, Play } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import type { MediaItem, Project } from "@/lib/content/types";
 
@@ -16,6 +17,7 @@ import type { MediaItem, Project } from "@/lib/content/types";
  * solos (controles manuales).
  */
 export function ProjectDetailE({ project }: { project: Project }) {
+  const t = useTranslations("Common");
   const media: MediaItem[] =
     project.gallery && project.gallery.length > 0
       ? project.gallery
@@ -46,7 +48,7 @@ export function ProjectDetailE({ project }: { project: Project }) {
 
   // Desplaza la miniatura activa para mantenerla visible y reinicia el play.
   useEffect(() => {
-    thumbRefs.current[active]?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    thumbRefs.current[active]?.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" });
     /* eslint-disable-next-line react-hooks/set-state-in-effect */
     setShowPlay(true);
   }, [active]);
@@ -114,11 +116,11 @@ export function ProjectDetailE({ project }: { project: Project }) {
       {/* ── Volver ──────────────────────────────────────────────────────────── */}
       <Link
         href="/#work"
-        aria-label="Volver"
+        aria-label={t("back")}
         className="fixed left-5 top-5 z-40 flex items-center gap-2 rounded-full border border-white/20 bg-black/50 px-4 py-2 text-sm uppercase tracking-widest text-white/80 backdrop-blur-sm transition-colors hover:bg-black/80 hover:text-white"
       >
         <ArrowLeft className="size-4" />
-        <span className="hidden sm:inline">Proyectos</span>
+        <span>{t("back")}</span>
       </Link>
 
       {/* ── Título ──────────────────────────────────────────────────────────── */}
@@ -136,18 +138,19 @@ export function ProjectDetailE({ project }: { project: Project }) {
         )}
       </div>
 
-      {/* ── Riel vertical de miniaturas (abajo derecha) ─────────────────────── */}
+      {/* ── Riel de miniaturas: horizontal en móvil, vertical en desktop ────── */}
       {total > 1 && (
-        <div className="fixed bottom-6 right-6 z-40 flex flex-col items-center gap-2">
+        <div className="fixed inset-x-3 bottom-4 z-40 flex flex-row items-center gap-2 sm:inset-x-auto sm:bottom-6 sm:right-6 sm:flex-col">
           <button
             onClick={() => go(-1)}
             aria-label="Anterior"
-            className="flex size-9 items-center justify-center rounded-full border border-white/20 bg-black/50 text-white/80 backdrop-blur-sm transition-colors hover:bg-black/80 hover:text-white"
+            className="flex size-9 shrink-0 items-center justify-center rounded-full border border-white/20 bg-black/50 text-white/80 backdrop-blur-sm transition-colors hover:bg-black/80 hover:text-white"
           >
-            <ChevronUp className="size-4" />
+            <ChevronLeft className="size-4 sm:hidden" />
+            <ChevronUp className="hidden size-4 sm:block" />
           </button>
 
-          <div className="flex max-h-[58vh] w-24 flex-col gap-2 overflow-y-auto [-ms-overflow-style:none] [scrollbar-width:none] sm:w-28 [&::-webkit-scrollbar]:hidden">
+          <div className="flex flex-1 flex-row gap-2 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] sm:max-h-[66vh] sm:w-36 sm:flex-none sm:flex-col sm:overflow-x-hidden sm:overflow-y-auto [&::-webkit-scrollbar]:hidden">
             {media.map((m, i) => (
               <button
                 key={i}
@@ -157,13 +160,13 @@ export function ProjectDetailE({ project }: { project: Project }) {
                 onClick={() => setActive(i)}
                 aria-label={`Ver elemento ${i + 1}`}
                 aria-current={i === active}
-                className={`group relative aspect-video w-full shrink-0 overflow-hidden rounded-md border transition-all ${
+                className={`group relative aspect-video w-24 shrink-0 overflow-hidden rounded-md border transition-all sm:w-full ${
                   i === active
                     ? "border-forja-amber ring-2 ring-forja-amber"
                     : "border-white/15 opacity-60 hover:opacity-100"
                 }`}
               >
-                <Image src={thumbSrc(m)} alt="" fill sizes="120px" className="object-cover" />
+                <Image src={thumbSrc(m)} alt="" fill sizes="160px" className="object-cover" />
                 {m.type === "video" && (
                   <span className="absolute inset-0 flex items-center justify-center bg-black/30">
                     <Play className="size-4 fill-white text-white" />
@@ -176,9 +179,10 @@ export function ProjectDetailE({ project }: { project: Project }) {
           <button
             onClick={() => go(1)}
             aria-label="Siguiente"
-            className="flex size-9 items-center justify-center rounded-full border border-white/20 bg-black/50 text-white/80 backdrop-blur-sm transition-colors hover:bg-black/80 hover:text-white"
+            className="flex size-9 shrink-0 items-center justify-center rounded-full border border-white/20 bg-black/50 text-white/80 backdrop-blur-sm transition-colors hover:bg-black/80 hover:text-white"
           >
-            <ChevronDown className="size-4" />
+            <ChevronRight className="size-4 sm:hidden" />
+            <ChevronDown className="hidden size-4 sm:block" />
           </button>
         </div>
       )}

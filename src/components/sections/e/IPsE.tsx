@@ -270,15 +270,6 @@ export function IPsE({ ips, projects }: { ips: IP[]; projects: Project[] }) {
         ))}
       </div>
 
-      {/* Dark overlay */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0"
-        style={{
-          zIndex: 1,
-          background: "linear-gradient(180deg, rgba(10,10,11,0.6) 0%, rgba(10,10,11,0.55) 50%, rgba(10,10,11,0.85) 100%)",
-        }}
-      />
       {/* Bottom fade */}
       <div
         aria-hidden="true"
