@@ -21,6 +21,9 @@ const EMBERS = Array.from({ length: 14 }, (_, i) => ({
 }));
 const SPARKS = Array.from({ length: 12 }, (_, i) => i);
 
+// Segunda línea del título — rota con la misma animación que la opción C.
+const ROTATE = ["next project.", "next story.", "next world.", "next legend."];
+
 interface FieldProps {
   id: string;
   label: string;
@@ -86,7 +89,9 @@ export function ContactForgeMeter({ content }: { content: SiteContent }) {
   const sectionRef = useRef<HTMLElement>(null);
   const emberRef   = useRef<HTMLDivElement>(null);
   const sparkRef   = useRef<HTMLDivElement>(null);
+  const rotWrapRef = useRef<HTMLSpanElement>(null);
 
+  const [rotIdx,    setRotIdx]    = useState(0);
   const [submitted, setSubmitted] = useState(false);
   const [sending,   setSending]   = useState(false);
   const [name,    setName]    = useState("");
@@ -118,6 +123,23 @@ export function ContactForgeMeter({ content }: { content: SiteContent }) {
       });
     });
     return () => mm.revert();
+  }, []);
+
+  // Título rotativo (animación tomada de la opción C).
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const interval = setInterval(() => {
+      const el = rotWrapRef.current;
+      if (!el) return;
+      gsap.to(el, {
+        yPercent: -100, opacity: 0, duration: 0.32, ease: "power2.in",
+        onComplete: () => {
+          setRotIdx((i) => (i + 1) % ROTATE.length);
+          gsap.fromTo(el, { yPercent: 60, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.4, ease: "power3.out" });
+        },
+      });
+    }, 2600);
+    return () => clearInterval(interval);
   }, []);
 
   useGSAP(() => {
@@ -158,14 +180,16 @@ export function ContactForgeMeter({ content }: { content: SiteContent }) {
   };
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden py-24">
+    <section ref={sectionRef} id="contact" className="relative overflow-hidden py-24">
       <div className="mx-auto grid max-w-7xl gap-16 px-6 lg:grid-cols-2 lg:gap-24">
         {/* Left — pitch + info */}
         <div className="flex flex-col justify-center">
           <p className="forge-reveal mb-6 text-xs uppercase tracking-[0.3em] text-forja-muted">Contact</p>
           <h2 className="forge-reveal font-display font-black uppercase leading-[0.9]" style={{ fontSize: "clamp(2rem, 4vw, 3.4rem)" }}>
             <span className="block text-forja-bone">Forge your</span>
-            <span className="fire-text block">next project</span>
+            <span className="block overflow-hidden">
+              <span ref={rotWrapRef} className="fire-text block">{ROTATE[rotIdx]}</span>
+            </span>
           </h2>
           <p className="forge-reveal mt-6 max-w-md text-pretty leading-relaxed text-forja-muted">
             Tell us what you want to build. Fill the form and watch the forge heat up.

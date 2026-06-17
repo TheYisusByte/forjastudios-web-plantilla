@@ -8,7 +8,7 @@ import { HeroE } from "@/components/sections/e/HeroE";
 import { ClientsE } from "@/components/sections/e/ClientsE";
 import { ProjectsE } from "@/components/sections/e/ProjectsE";
 import { IPsE } from "@/components/sections/e/IPsE";
-import { ContactForgeBento } from "@/components/sections/e/contact/ForgeBento";
+import { ContactForgeMeter } from "@/components/sections/e/contact/ForgeMeter";
 
 interface PageProps {
   params: Promise<{ locale: Locale }>;
@@ -27,7 +27,7 @@ export default async function ConceptoEPage({ params }: PageProps) {
       <ClientsE clients={content.clients} />
       <ProjectsE projects={content.projects} />
       <IPsE ips={content.ips} projects={content.projects} />
-      <ContactForgeBento content={content} />
+      <ContactForgeMeter content={content} />
 
       {/* Footer */}
       <footer className="border-t border-border py-10">
