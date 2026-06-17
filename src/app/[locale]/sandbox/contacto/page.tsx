@@ -4,6 +4,7 @@ import type { Locale } from "@/i18n/routing";
 import { ContactForgeMeter } from "@/components/sections/e/contact/ForgeMeter";
 import { ContactConversational } from "@/components/sections/e/contact/Conversational";
 import { ContactBentoMagnetic } from "@/components/sections/e/contact/BentoMagnetic";
+import { ContactForgeBento } from "@/components/sections/e/contact/ForgeBento";
 
 interface PageProps {
   params: Promise<{ locale: Locale }>;
@@ -31,7 +32,7 @@ export default async function ContactPreviewPage({ params }: PageProps) {
       <header className="mx-auto max-w-7xl px-6 pt-24">
         <p className="text-xs uppercase tracking-[0.3em] text-forja-muted">Concepto E · Demo</p>
         <h1 className="mt-3 font-display font-black uppercase leading-[0.9] text-forja-bone" style={{ fontSize: "clamp(2.2rem, 6vw, 4rem)" }}>
-          3 opciones de <span className="fire-text">contacto</span>
+          4 opciones de <span className="fire-text">contacto</span>
         </h1>
         <p className="mt-4 max-w-xl text-forja-muted">
           Prueba cada formulario (escribe, enfoca campos, envía) y elige cuál llevamos a la página final.
@@ -46,6 +47,9 @@ export default async function ContactPreviewPage({ params }: PageProps) {
 
       <OptionLabel tag="C" title="Bento glass · Magnetic" note="glassmorphism, floating labels, botón magnético, tilt 3D, palabra rotativa" />
       <ContactBentoMagnetic content={content} />
+
+      <OptionLabel tag="D" title="Forge Bento (A + C)" note="título animado + heat meter, sin tilt 3D — glass, floating labels y botón magnético" />
+      <ContactForgeBento content={content} />
 
       <div className="h-24" />
     </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -209,7 +209,10 @@ function useForgeCanvas(
 
 // ── Component ─────────────────────────────────────────────────────────────
 
-const LINES = ["Forge", "your", "flame."];
+// Hero title: "Forge your ___" — la última palabra rota (misma animación que
+// el formulario de contacto). Editable: cambia/añade palabras aquí.
+const STATIC_LINES = ["Forge", "your"];
+const ROTATE_WORDS = ["flame.", "world.", "story.", "legend."];
 
 export function HeroE() {
   const t = useTranslations("ConceptE");
@@ -217,7 +220,29 @@ export function HeroE() {
   const contentRef = useRef<HTMLDivElement>(null);
   const canvasRef  = useRef<HTMLCanvasElement>(null);
   const mouseRef   = useRef({ x: -999, y: -999, inside: false });
+  const rotWrapRef = useRef<HTMLSpanElement>(null);
+  const [rotIdx, setRotIdx] = useState(0);
   useForgeCanvas(canvasRef, mouseRef);
+
+  // Rota la última palabra del título tras la animación de entrada.
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let interval: ReturnType<typeof setInterval>;
+    const start = setTimeout(() => {
+      interval = setInterval(() => {
+        const el = rotWrapRef.current;
+        if (!el) return;
+        gsap.to(el, {
+          yPercent: -100, opacity: 0, duration: 0.32, ease: "power2.in",
+          onComplete: () => {
+            setRotIdx((i) => (i + 1) % ROTATE_WORDS.length);
+            gsap.fromTo(el, { yPercent: 60, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.4, ease: "power3.out" });
+          },
+        });
+      }, 2600);
+    }, 2200);
+    return () => { clearTimeout(start); clearInterval(interval); };
+  }, []);
 
   useGSAP(
     () => {
@@ -300,13 +325,16 @@ export function HeroE() {
           className="font-display font-black uppercase leading-[0.86]"
           style={{ fontSize: "clamp(2.8rem, 8.5vw, 7.5rem)" }}
         >
-          {LINES.map((word, i) => (
+          {STATIC_LINES.map((word) => (
             <span key={word} className="block overflow-hidden">
-              <span className={`hero-e-line block${i === 2 ? " fire-text" : ""}`}>
-                {word}
-              </span>
+              <span className="hero-e-line block">{word}</span>
             </span>
           ))}
+          <span className="block overflow-hidden">
+            <span ref={rotWrapRef} className="hero-e-line fire-text block">
+              {ROTATE_WORDS[rotIdx]}
+            </span>
+          </span>
         </h1>
 
         <div className="hero-e-fade mt-8 flex max-w-2xl items-stretch gap-8">
