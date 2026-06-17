@@ -6,7 +6,7 @@
 // `language` requiere Polylang + WPGraphQL Polylang. El valor es el enum
 // LanguageCodeFilterEnum (EN / ES) — ver mapLocaleToLanguage en client.ts.
 
-const MEDIA = "node { sourceUrl altText }";
+const MEDIA = "node { sourceUrl altText mediaDetails { width height } }";
 
 export const SITE_CONTENT_QUERY = /* GraphQL */ `
   query SiteContent($locale: LanguageCodeFilterEnum!) {
@@ -25,6 +25,9 @@ export const SITE_CONTENT_QUERY = /* GraphQL */ `
           destacado
           cover { ${MEDIA} }
         }
+        # Galería de la página interna: medios ADJUNTOS al proyecto (imágenes y
+        # videos con dimensiones reales). Campo custom (ver wordpress graphql.php).
+        galeria { sourceUrl mimeType width height poster }
         categorias { nodes { name slug } }
       }
     }
@@ -37,6 +40,7 @@ export const SITE_CONTENT_QUERY = /* GraphQL */ `
         title
         camposIp {
           descripcion
+          videoId
           enlace
           logo { ${MEDIA} }
         }

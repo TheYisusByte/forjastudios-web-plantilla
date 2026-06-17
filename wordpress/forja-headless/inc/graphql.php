@@ -32,6 +32,78 @@ add_filter('graphql_connection_max_query_amount', function (int $max): int {
 });
 
 /**
+ * Galería de proyecto (página interna) = MEDIOS ADJUNTOS al post.
+ * ----------------------------------------------------------------
+ * El front (ProjectDetailGalleryE / ProjectsE) muestra una galería masonry con
+ * imágenes y videos, usando las dimensiones reales para conservar el aspecto.
+ * Como el campo Gallery de ACF es PRO, exponemos en su lugar los archivos
+ * ADJUNTOS al proyecto (Subir/Adjuntar al post) vía un campo GraphQL propio
+ * `galeria` en el tipo `Proyecto`. Imágenes y videos, en orden de menú.
+ *
+ * Edición en WP: en el proyecto, "Subir/insertar" imágenes y .mp4 y dejarlos
+ * adjuntos al post; ordénalos con el "orden" del adjunto. El poster del video
+ * es la imagen destacada del propio adjunto de video (si se asigna).
+ */
+add_action('graphql_register_types', function (): void {
+    register_graphql_object_type('ForjaGaleriaItem', [
+        'description' => 'Item de galería de un proyecto (imagen o video adjunto).',
+        'fields'      => [
+            'sourceUrl' => ['type' => 'String', 'description' => 'URL del archivo.'],
+            'mimeType'  => ['type' => 'String', 'description' => 'MIME type (image/* o video/*).'],
+            'width'     => ['type' => 'Int',    'description' => 'Ancho real (imágenes).'],
+            'height'    => ['type' => 'Int',    'description' => 'Alto real (imágenes).'],
+            'poster'    => ['type' => 'String', 'description' => 'Poster del video (imagen destacada del adjunto).'],
+        ],
+    ]);
+
+    register_graphql_field('Proyecto', 'galeria', [
+        'type'        => ['list_of' => 'ForjaGaleriaItem'],
+        'description' => 'Medios adjuntos al proyecto (imágenes y videos), en orden de menú.',
+        'resolve'     => function ($post): array {
+            $parent_id = $post->databaseId ?? ($post->ID ?? 0);
+            if (! $parent_id) {
+                return [];
+            }
+            $atts = get_posts([
+                'post_parent'    => $parent_id,
+                'post_type'      => 'attachment',
+                'post_mime_type' => ['image', 'video'],
+                'post_status'    => 'inherit',
+                'orderby'        => 'menu_order',
+                'order'          => 'ASC',
+                'numberposts'    => 50,
+            ]);
+
+            $out = [];
+            foreach ($atts as $att) {
+                $mime = get_post_mime_type($att->ID) ?: '';
+                $item = [
+                    'sourceUrl' => wp_get_attachment_url($att->ID) ?: null,
+                    'mimeType'  => $mime,
+                    'width'     => null,
+                    'height'    => null,
+                    'poster'    => null,
+                ];
+                if (strpos($mime, 'image/') === 0) {
+                    $meta = wp_get_attachment_metadata($att->ID);
+                    if (is_array($meta)) {
+                        $item['width']  = isset($meta['width'])  ? (int) $meta['width']  : null;
+                        $item['height'] = isset($meta['height']) ? (int) $meta['height'] : null;
+                    }
+                } else {
+                    $thumb_id = get_post_thumbnail_id($att->ID);
+                    if ($thumb_id) {
+                        $item['poster'] = wp_get_attachment_url($thumb_id) ?: null;
+                    }
+                }
+                $out[] = $item;
+            }
+            return $out;
+        },
+    ]);
+});
+
+/**
  * (Opcional) CORS para el endpoint /graphql cuando el front consume desde
  * Vercel / localhost. WPGraphQL ya envía cabeceras básicas; descomenta y
  * ajusta los orígenes permitidos si necesitas afinarlo.

@@ -160,7 +160,24 @@ async function getWpContent(locale: Locale): Promise<SiteContent> {
 function mapProject(node: WpProyecto, i: number): Project {
   const cat = node.categorias?.nodes?.[0];
   const category = (cat?.slug ?? "animation-3d") as ProjectCategory;
-  const cover = node.camposProyecto?.cover?.node?.sourceUrl || undefined;
+  const coverNode = node.camposProyecto?.cover?.node;
+  const cover = coverNode?.sourceUrl || undefined;
+  const coverWH = {
+    width: coverNode?.mediaDetails?.width,
+    height: coverNode?.mediaDetails?.height,
+  };
+
+  // Galería real desde los medios adjuntos al proyecto (imágenes y videos, con
+  // dimensiones para el masonry). Detecta video por mimeType; poster del video
+  // o, en su defecto, el cover.
+  const wpGallery: MediaItem[] = (node.galeria ?? [])
+    .filter((g): g is WpGaleriaItem & { sourceUrl: string } => Boolean(g.sourceUrl))
+    .map((g): MediaItem =>
+      (g.mimeType ?? "").startsWith("video/")
+        ? { type: "video", src: g.sourceUrl, poster: g.poster ?? cover, width: g.width, height: g.height }
+        : { type: "image", src: g.sourceUrl, width: g.width, height: g.height },
+    );
+
   return {
     slug: node.slug,
     title: decode(node.title),
@@ -173,8 +190,8 @@ function mapProject(node: WpProyecto, i: number): Project {
     accent: accentAt(i),
     videoUrl: node.camposProyecto?.videoUrl || undefined,
     coverUrl: cover,
-    // Hasta modelar una galería en WP, usa el fallback (cover + otras + reel).
-    gallery: ensureGallery(undefined, cover, {}, i),
+    // Galería real si hay adjuntos; si no, fallback (cover + otras + reel).
+    gallery: wpGallery.length ? wpGallery : ensureGallery(undefined, cover, coverWH, i),
   };
 }
 
@@ -184,8 +201,8 @@ function mapIp(node: WpIp, i: number): IP {
     name: decode(node.title),
     description: clean(node.camposIp?.descripcion),
     accent: accentAt(i),
-    // WP aún no modela el videoId → fallback al de data.json por slug.
-    videoId: ips.find((x) => x.slug === node.slug)?.videoId ?? "",
+    // videoId de fondo desde WP; si falta, cae al de data.json por slug.
+    videoId: node.camposIp?.videoId || ips.find((x) => x.slug === node.slug)?.videoId || "",
   };
 }
 
@@ -265,7 +282,18 @@ function decode(text: string): string {
 // ── Tipos de la respuesta WPGraphQL ──────────────────────────────────────────
 
 interface WpMedia {
-  node?: { sourceUrl?: string; altText?: string };
+  node?: {
+    sourceUrl?: string;
+    altText?: string;
+    mediaDetails?: { width?: number; height?: number };
+  };
+}
+interface WpGaleriaItem {
+  sourceUrl?: string;
+  mimeType?: string;
+  width?: number;
+  height?: number;
+  poster?: string;
 }
 interface WpProyecto {
   slug: string;
@@ -278,12 +306,13 @@ interface WpProyecto {
     destacado?: boolean;
     cover?: WpMedia;
   };
+  galeria?: WpGaleriaItem[];
   categorias?: { nodes?: { name?: string; slug?: string }[] };
 }
 interface WpIp {
   slug: string;
   title: string;
-  camposIp?: { descripcion?: string; enlace?: string; logo?: WpMedia };
+  camposIp?: { descripcion?: string; videoId?: string; enlace?: string; logo?: WpMedia };
 }
 interface WpMiembro {
   title: string;

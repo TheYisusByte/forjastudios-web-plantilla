@@ -7,7 +7,11 @@
  * front (src/lib/wp/queries.ts). No renombrar sin actualizar el front:
  *
  *   camposProyecto { cliente, anio, videoUrl, cover, destacado }
- *   camposIp       { descripcion, enlace, logo }
+ *   camposIp       { descripcion, videoId, enlace, logo }
+ *
+ * La GALERÍA de cada proyecto (imágenes y videos de la página interna) NO es un
+ * campo ACF (Gallery es ACF PRO): se resuelve desde los MEDIOS ADJUNTOS al post
+ * vía el campo GraphQL `galeria` registrado en inc/graphql.php.
  *   camposMiembro  { rol, foto, redes }
  *   camposCliente  { sitioWeb, logo }   (uso futuro)
  *
@@ -97,6 +101,16 @@ function forja_register_acf_fields(): void {
                 'type'          => 'textarea',
                 'rows'          => 4,
                 'new_lines'     => 'br',
+                'show_in_graphql' => 1,
+            ],
+            [
+                // Video de fondo de la sección IPs (concepto E). Solo el ID de
+                // YouTube (p. ej. dQw4w9WgXcQ), no la URL completa.
+                'key'           => 'field_ip_videoId',
+                'label'         => 'Video de fondo (YouTube ID)',
+                'name'          => 'videoId',
+                'type'          => 'text',
+                'instructions'  => 'Solo el ID del video de YouTube (ej. dQw4w9WgXcQ).',
                 'show_in_graphql' => 1,
             ],
             [

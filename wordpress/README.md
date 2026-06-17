@@ -51,11 +51,12 @@ query Smoke {
   proyectos(first: 5) {
     nodes {
       title
-      camposProyecto { cliente anio videoUrl destacado cover { node { sourceUrl } } }
+      camposProyecto { cliente anio videoUrl destacado cover { node { sourceUrl mediaDetails { width height } } } }
+      galeria { sourceUrl mimeType width height poster }
       categorias { nodes { name slug } }
     }
   }
-  ips(first: 5)     { nodes { title camposIp { descripcion enlace } } }
+  ips(first: 5)     { nodes { title camposIp { descripcion videoId enlace } } }
   miembros(first: 5){ nodes { title camposMiembro { rol redes } } }
   clientes(first: 5){ nodes { title camposCliente { sitioWeb } } }
 }
@@ -72,8 +73,8 @@ Los nombres GraphQL están calcados de `src/lib/wp/queries.ts` y
 
 | CPT | GraphQL (singular / plural) | Grupo ACF | Campos |
 |---|---|---|---|
-| `proyecto` | `proyecto` / `proyectos` | `camposProyecto` | `cliente`, `anio`, `videoUrl`, `cover` (imagen), `destacado` (bool) + taxonomía `categorias` |
-| `ip` | `ip` / `ips` | `camposIp` | `descripcion`, `enlace`, `logo` (imagen) |
+| `proyecto` | `proyecto` / `proyectos` | `camposProyecto` | `cliente`, `anio`, `videoUrl`, `cover` (imagen), `destacado` (bool) + `galeria` (medios adjuntos, ver abajo) + taxonomía `categorias` |
+| `ip` | `ip` / `ips` | `camposIp` | `descripcion`, `videoId` (YouTube ID, fondo IPs), `enlace`, `logo` (imagen) |
 | `miembro` | `miembro` / `miembros` | `camposMiembro` | `rol`, `foto` (imagen), `redes` (textarea, 1 URL/línea) |
 | `cliente` | `cliente` / `clientes` | `camposCliente` | `sitioWeb`, `logo` (imagen) — uso futuro |
 
@@ -98,6 +99,16 @@ entorno: `WP_GRAPHQL_URL` (= `https://<dominio>/forja/graphql`), `NEXT_PUBLIC_WP
   en los `where`, hay un filtro alternativo listo (comentado) en `inc/graphql.php`
   que añade `where: { destacado: true }`.
 - **Imágenes ACF:** se devuelven como conexión a `MediaItem`
-  (`cover { node { sourceUrl altText } }`), por eso el campo usa `return_format: array`.
+  (`cover { node { sourceUrl altText mediaDetails { width height } } }`), por eso el
+  campo usa `return_format: array`. Se piden `mediaDetails` para conservar el aspecto
+  (cover/imágenes) sin layout shift en el masonry del front.
+- **Galería de proyecto (`galeria`):** la página interna muestra una galería masonry
+  (imágenes + videos). Como el campo Gallery de ACF es PRO, se exponen los archivos
+  **adjuntos al proyecto** vía el campo GraphQL `galeria` (registrado en `inc/graphql.php`),
+  con `width/height` (imágenes) y `poster` (videos). En el editor: sube/adjunta imágenes
+  y `.mp4` al proyecto y ordénalos con el "orden" del adjunto. Si un proyecto no tiene
+  adjuntos, el front usa una galería de fallback (cover + otras portadas + reel).
+- **IPs `videoId`:** fondo de la sección IPs (concepto E). Es el **ID** de YouTube
+  (no la URL). Si falta, el front cae al `videoId` de `data.json` por slug.
 - **i18n:** marca los 4 CPT como traducibles en Polylang (el plugin ya lo fuerza
   vía `pll_get_post_types`).
