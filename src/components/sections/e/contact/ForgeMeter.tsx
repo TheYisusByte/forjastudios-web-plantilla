@@ -21,8 +21,8 @@ const EMBERS = Array.from({ length: 14 }, (_, i) => ({
 }));
 const SPARKS = Array.from({ length: 12 }, (_, i) => i);
 
-// Segunda línea del título — rota con la misma animación que la opción C.
-const ROTATE = ["next project.", "next story.", "next world.", "next legend."];
+// Verbo rotativo del título — estilo "Let's ___ something." (opción C).
+const ROTATE = ["forge", "animate", "build", "imagine", "create", "craft", "illustrate", "render", "design", "dream"];
 
 interface FieldProps {
   id: string;
@@ -132,10 +132,10 @@ export function ContactForgeMeter({ content }: { content: SiteContent }) {
       const el = rotWrapRef.current;
       if (!el) return;
       gsap.to(el, {
-        yPercent: -100, opacity: 0, duration: 0.32, ease: "power2.in",
+        y: -14, opacity: 0, duration: 0.3, ease: "power2.in",
         onComplete: () => {
           setRotIdx((i) => (i + 1) % ROTATE.length);
-          gsap.fromTo(el, { yPercent: 60, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.4, ease: "power3.out" });
+          gsap.fromTo(el, { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power2.out" });
         },
       });
     }, 2600);
@@ -185,11 +185,10 @@ export function ContactForgeMeter({ content }: { content: SiteContent }) {
         {/* Left — pitch + info */}
         <div className="flex flex-col justify-center">
           <p className="forge-reveal mb-6 text-xs uppercase tracking-[0.3em] text-forja-muted">Contact</p>
-          <h2 className="forge-reveal font-display font-black uppercase leading-[0.9]" style={{ fontSize: "clamp(2rem, 4vw, 3.4rem)" }}>
-            <span className="block text-forja-bone">Forge your</span>
-            <span className="block overflow-hidden">
-              <span ref={rotWrapRef} className="fire-text block">{ROTATE[rotIdx]}</span>
-            </span>
+          <h2 className="forge-reveal font-display font-black uppercase leading-[0.95]" style={{ fontSize: "clamp(2rem, 4vw, 3.4rem)" }}>
+            Let&apos;s{" "}
+            <span ref={rotWrapRef} className="fire-text inline-block">{ROTATE[rotIdx]}</span>
+            <br />something.
           </h2>
           <p className="forge-reveal mt-6 max-w-md text-pretty leading-relaxed text-forja-muted">
             Tell us what you want to build. Fill the form and watch the forge heat up.

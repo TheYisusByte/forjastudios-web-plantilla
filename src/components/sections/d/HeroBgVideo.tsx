@@ -15,12 +15,31 @@ declare global {
   }
 }
 
-export function HeroBgVideo({ videoId }: { videoId: string }) {
+export function HeroBgVideo({
+  videoId,
+  mobileAnchorRight = false,
+}: {
+  videoId: string;
+  /** En móvil ancla el video a la derecha (se corre a la izquierda) para que
+   *  el borde derecho quede visible en lugar de recortar ambos lados. */
+  mobileAnchorRight?: boolean;
+}) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<YTPlayer | null>(null);
   // Stays false until the video is confirmed playing — keeps a solid cover
   // over the iframe so the YT loading UI / pause indicator never shows.
   const [playing, setPlaying] = useState(false);
+  const [anchorRight, setAnchorRight] = useState(false);
+
+  // Activa el anclaje a la derecha solo en viewports móviles (<640px).
+  useEffect(() => {
+    if (!mobileAnchorRight) return;
+    const mq = window.matchMedia("(max-width: 639px)");
+    const update = () => setAnchorRight(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, [mobileAnchorRight]);
 
   useEffect(() => {
     let active = true;
@@ -89,9 +108,13 @@ export function HeroBgVideo({ videoId }: { videoId: string }) {
         ref={wrapRef}
         className="absolute [&>iframe]:border-none [&>iframe]:pointer-events-none"
         style={{
-          left: "50%",
           top: "50%",
-          transform: "translate(-50%, -50%)",
+          // `right` negativo corre el encuadre hacia la izquierda (muestra
+          // contenido más central) sin dejar hueco. Ajustable: más negativo
+          // = más a la izquierda.
+          ...(anchorRight
+            ? { right: "-38vw", transform: "translateY(-50%)" }
+            : { left: "50%", transform: "translate(-50%, -50%)" }),
           width: "max(100%, calc(100vh * 16 / 9))",
           height: "max(100%, calc(100vw * 9 / 16))",
         }}

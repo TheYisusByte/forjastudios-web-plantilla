@@ -13,8 +13,9 @@ const concepts = [
 
 // Demos de componentes (pruebas A/B/C) para integrar al sitio live.
 const demos = [
-  { href: "/sandbox/contacto", label: "Contacto · 3 opciones" },
+  { href: "/sandbox/contacto", label: "Contacto · 4 opciones" },
   { href: "/sandbox/team-demo", label: "Team · 3 opciones" },
+  { href: "/sandbox/proyecto/kango-fast-lane", label: "Detalle proyecto · visor (legacy)" },
 ] as const;
 
 export default async function IndexPage({

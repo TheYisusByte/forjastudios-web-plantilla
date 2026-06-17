@@ -3,13 +3,17 @@ import { setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { getSiteContent } from "@/lib/wp/client";
 import { routing, type Locale } from "@/i18n/routing";
-import { ProjectDetailGalleryE } from "@/components/sections/e/ProjectDetailGalleryE";
+import { ProjectDetailE } from "@/components/sections/e/ProjectDetailE";
+
+// Sandbox: conserva el VISOR a pantalla completa (riel de miniaturas) del
+// detalle de proyecto. El sitio live usa la galería masonry (ver
+// /[locale]/proyecto/[slug]).
 
 interface PageProps {
   params: Promise<{ locale: Locale; slug: string }>;
 }
 
-export default async function ProjectDetailPage({ params }: PageProps) {
+export default async function SandboxProjectViewerPage({ params }: PageProps) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
 
@@ -19,7 +23,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
 
   return (
     <div data-concept="e" className="min-h-screen bg-bg text-fg">
-      <ProjectDetailGalleryE project={project} />
+      <ProjectDetailE project={project} />
     </div>
   );
 }
@@ -28,7 +32,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { locale, slug } = await params;
   const content = await getSiteContent(locale);
   const project = content.projects.find((p) => p.slug === slug);
-  return { title: project ? `${project.title} · Forja Studios` : "Forja Studios" };
+  return { title: project ? `${project.title} · Forja Studios (viewer)` : "Forja Studios" };
 }
 
 export async function generateStaticParams() {

@@ -279,7 +279,7 @@ export function HeroE() {
       onMouseLeave={() => { mouseRef.current.inside = false; }}
     >
       {/* ── Showreel video background ─────────────────────────────────── */}
-      <HeroBgVideo videoId={meta.showreelId} />
+      <HeroBgVideo videoId={meta.showreelId} mobileAnchorRight />
 
       {/* ── Overlay: heavier at top & bottom for nav/text readability ─── */}
       <div
@@ -299,6 +299,16 @@ export function HeroE() {
         style={{ width: "100%", height: "100%" }}
       />
 
+      {/* ── Top gradient — contraste para el nav fijo + logo ──────────── */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 z-[3] h-40"
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(10,10,11,0.78) 0%, rgba(10,10,11,0.45) 45%, transparent 100%)",
+        }}
+      />
+
       {/* ── Section-transition blur-fade (video + smoke blur into next section) */}
       <div
         aria-hidden="true"
@@ -316,8 +326,15 @@ export function HeroE() {
       />
 
       {/* ── Hero content ─────────────────────────────────────────────── */}
-      <div ref={contentRef} className="relative z-[4] mx-auto w-full max-w-7xl px-6">
-        <p className="hero-e-fade mb-8 text-xs uppercase tracking-[0.35em] text-forja-bone">
+      <div
+        ref={contentRef}
+        className="relative z-[4] mx-auto w-full max-w-7xl px-6"
+        style={{ textShadow: "0 2px 16px rgba(0,0,0,0.55)" }}
+      >
+        <p
+          className="hero-e-fade mb-8 text-xs font-semibold uppercase tracking-[0.35em] text-forja-bone sm:text-sm"
+          style={{ textShadow: "0 2px 10px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.9)" }}
+        >
           {t("heroKicker")}
         </p>
 
@@ -331,7 +348,7 @@ export function HeroE() {
             </span>
           ))}
           <span className="block overflow-hidden">
-            <span ref={rotWrapRef} className="hero-e-line fire-text block">
+            <span ref={rotWrapRef} className="hero-e-line block text-forja-bone">
               {ROTATE_WORDS[rotIdx]}
             </span>
           </span>
@@ -346,7 +363,7 @@ export function HeroE() {
               className="object-contain object-center"
             />
           </div>
-          <p className="flex-1 text-pretty text-base text-forja-muted sm:text-lg">
+          <p className="flex-1 text-pretty text-base text-forja-bone sm:text-lg">
             {t("heroSub")}
           </p>          
         </div>
