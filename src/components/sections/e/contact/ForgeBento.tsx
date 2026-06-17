@@ -167,14 +167,6 @@ export function ContactForgeBento({ content }: { content: SiteContent }) {
               <p className="mt-5 max-w-xs text-sm leading-relaxed text-forja-muted">
                 Drop us a line — we read every message and reply within a day.
               </p>
-              <div className="mt-6 h-20 w-20 overflow-hidden rounded-xl ring-1 ring-inset ring-white/10 sm:h-24 sm:w-24">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/assets/forja/gifs/f40ce8_7c1d8fbff70644009e58dc0e26f7f0ca~mv2.gif"
-                  alt=""
-                  className="h-full w-full object-cover"
-                />
-              </div>
             </div>
 
             <div className="flex flex-col gap-3">
