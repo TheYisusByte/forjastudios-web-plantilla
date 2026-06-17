@@ -38,9 +38,11 @@ python3 .claude/skills/ui-ux-pro-max/scripts/search.py \
 
 ## Estructura del frontend (implementada)
 
-Se construyeron los **3 conceptos one-page** para que el cliente elija (decisión "Fase 0"):
+**Decisión tomada:** el sitio live es el **concepto E (Vanguardia)**. Es la home y sus subrutas están al nivel principal. Los demás conceptos (A/B/C/D) y las pruebas de componentes viven bajo `/sandbox` (no indexado: `robots.ts` los bloquea y quedan fuera del `sitemap.ts`).
 
-- Rutas: `/[locale]` (índice selector A/B/C), `/[locale]/concepto-a|b|c`. Idiomas `/es` (default) y `/en`.
+- Rutas **live**: `/[locale]` (home = concepto E), `/[locale]/team`, `/[locale]/proyecto/[slug]`. Idiomas `/es` y `/en` (default EN).
+- Rutas **sandbox** (pruebas): `/[locale]/sandbox` (selector), `/[locale]/sandbox/concepto-a|b|c|d`, `/[locale]/sandbox/contacto` (3 opciones de formulario), `/[locale]/sandbox/team-demo` (3 opciones de team).
+- Componentes del live en `src/components/sections/e/`; alternativas en `e/contact/` y `e/team/` (consumidas por las demos de sandbox).
 - `src/i18n/` (routing, request, navigation), `src/proxy.ts`, `src/messages/{es,en}.json`.
 - `src/lib/fonts.ts` (next/font: Inter + Barlow Condensed [A] / Archivo [B] / Playfair [C]), `src/lib/utils.ts` (`cn`).
 - `src/lib/content/` (modelo + **mock bilingüe tipado**) y `src/lib/wp/` (cliente stub que resuelve por locale; `getSiteContent(locale)` — único punto a cambiar cuando WP esté vivo).

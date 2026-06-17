@@ -73,6 +73,9 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    /* Compensa el header fijo (NavE) para que las secciones ancladas
+       (#top, #work, #contact…) no queden ocultas bajo la barra. */
+    scroll-padding-top: 5rem;
   }
   body {
     background-color: var(--bg);

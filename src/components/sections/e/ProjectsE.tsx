@@ -54,7 +54,7 @@ function Masonry({ projects }: { projects: Project[] }) {
         return (
           <Link
             key={p.slug}
-            href={`/concepto-e/proyecto/${p.slug}`}
+            href={`/proyecto/${p.slug}`}
             className="project-e-cell group relative mb-2 block break-inside-avoid overflow-hidden"
           >
             {c.src ? (
@@ -139,7 +139,7 @@ function Justified({ projects }: { projects: Project[] }) {
           {row.map((cell) => (
             <Link
               key={cell.project.slug}
-              href={`/concepto-e/proyecto/${cell.project.slug}`}
+              href={`/proyecto/${cell.project.slug}`}
               className="project-e-cell group relative block shrink-0 overflow-hidden"
               style={{ width: cell.w, height: cell.h }}
             >

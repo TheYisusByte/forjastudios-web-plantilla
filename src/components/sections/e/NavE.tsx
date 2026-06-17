@@ -8,13 +8,21 @@ import { Link } from "@/i18n/navigation";
 import { LangSwitch } from "@/components/ui/LangSwitch";
 import { cn } from "@/lib/utils";
 
-// href starting with "#" = anchor on same page; otherwise = locale-aware page link
+// Enlaces locale-aware. Las secciones del home viven en `/` (hero=top, work,
+// contact); apuntar a { pathname:"/", hash } hace que funcionen desde CUALQUIER
+// página (p. ej. desde /team se navega al home y se hace scroll a la sección).
 const NAV_ITEMS = [
-  { key: "home",      href: "#top"             },
-  { key: "projects",  href: "#work"            },
-  { key: "ourTeam",   href: "/concepto-e/team" },
-  { key: "contactUs", href: "#contact"         },
+  { key: "home",      pathname: "/",     hash: "top"     },
+  { key: "projects",  pathname: "/",     hash: "work"    },
+  { key: "ourTeam",   pathname: "/team"                  },
+  { key: "contactUs", pathname: "/",     hash: "contact" },
 ] as const;
+
+type NavItem = (typeof NAV_ITEMS)[number];
+const hrefOf = (item: NavItem) => ({
+  pathname: item.pathname,
+  hash: "hash" in item ? item.hash : undefined,
+});
 
 export function NavE() {
   const t = useTranslations("Nav");
@@ -55,7 +63,7 @@ export function NavE() {
         />
 
         <nav className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-4">
-          <a href="#top" className="flex items-center">
+          <Link href={{ pathname: "/", hash: "top" }} className="flex items-center">
             <Image
               src="/assets/forja/images/f40ce8_54c70335883e4115ab035396d8db0215~mv2.png"
               alt="Forja Studios"
@@ -64,22 +72,16 @@ export function NavE() {
               style={{ height: "2.3rem", width: "auto" }}
               className="object-contain"
             />
-          </a>
+          </Link>
 
           {/* Desktop links */}
           <div className="hidden items-center gap-8 lg:flex">
             <ul className="flex items-center gap-8 text-sm uppercase tracking-[0.12em]">
               {NAV_ITEMS.map((item) => (
                 <li key={item.key}>
-                  {item.href.startsWith("#") ? (
-                    <a href={item.href} className="text-forja-bone/90 transition-colors duration-200 hover:text-accent">
-                      {t(item.key as Parameters<typeof t>[0])}
-                    </a>
-                  ) : (
-                    <Link href={item.href as "/concepto-e/team"} className="text-forja-bone/90 transition-colors duration-200 hover:text-accent">
-                      {t(item.key as Parameters<typeof t>[0])}
-                    </Link>
-                  )}
+                  <Link href={hrefOf(item)} className="text-forja-bone/90 transition-colors duration-200 hover:text-accent">
+                    {t(item.key as Parameters<typeof t>[0])}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -156,12 +158,8 @@ export function NavE() {
                 {t(item.key as Parameters<typeof t>[0])}
               </>
             );
-            return item.href.startsWith("#") ? (
-              <a key={item.key} href={item.href} onClick={() => setOpen(false)} className={linkClass} style={linkStyle}>
-                {inner}
-              </a>
-            ) : (
-              <Link key={item.key} href={item.href as "/concepto-e/team"} onClick={() => setOpen(false)} className={linkClass} style={linkStyle}>
+            return (
+              <Link key={item.key} href={hrefOf(item)} onClick={() => setOpen(false)} className={linkClass} style={linkStyle}>
                 {inner}
               </Link>
             );

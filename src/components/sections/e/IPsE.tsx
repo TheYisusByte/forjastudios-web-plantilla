@@ -29,7 +29,10 @@ function IPCard({ ip, image, offset, isActive, onClick }: IPCardProps) {
   const tiltRef = useRef<HTMLDivElement>(null);
   const absOff  = Math.abs(offset);
   const visible  = absOff <= VISIBLE + 1;
-  const scale    = Math.max(0.65, 1 - absOff * 0.11);
+  // La profundidad la da translateZ (no el zIndex): al interpolarse junto al
+  // resto del transform, cada card pasa SIEMPRE por detrás de las demás
+  // mientras viaja a su posición, sin solaparse por el frente.
+  const depth    = -absOff * 230;
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -64,12 +67,13 @@ function IPCard({ ip, image, offset, isActive, onClick }: IPCardProps) {
         top: "50%",
         marginLeft: -CARD_W / 2,
         marginTop: -CARD_H / 2,
-        zIndex: visible ? VISIBLE + 2 - absOff : 0,
-        transform: `translateX(${offset * GAP_X}px) rotateY(${offset * -ROT_Y}deg) scale(${scale})`,
-        opacity: !visible ? 0 : Math.max(0, 1 - absOff * 0.25),
-        transition: "transform 0.62s cubic-bezier(0.25,0.46,0.45,0.94), opacity 0.45s ease",
+        transformStyle: "preserve-3d",
+        transform: `translateX(${offset * GAP_X}px) translateZ(${depth}px) rotateY(${offset * -ROT_Y}deg)`,
+        opacity: !visible ? 0 : Math.max(0, 1 - absOff * 0.22),
+        transition: "transform 0.7s cubic-bezier(0.22,0.61,0.36,1), opacity 0.5s ease",
         cursor: isActive ? "default" : "pointer",
         pointerEvents: visible ? "auto" : "none",
+        willChange: "transform, opacity",
       }}
       onClick={!isActive ? onClick : undefined}
       onMouseMove={handleMouseMove}

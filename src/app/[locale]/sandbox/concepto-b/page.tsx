@@ -21,7 +21,7 @@ const navItems: NavItem[] = [
 
 export default async function ConceptBPage({
   params,
-}: PageProps<"/[locale]/concepto-b">) {
+}: PageProps<"/[locale]/sandbox/concepto-b">) {
   const { locale } = await params;
   setRequestLocale(locale);
   const content = await getSiteContent(locale as Locale);

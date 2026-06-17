@@ -1,10 +1,10 @@
 import { setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import { Nav, type NavItem } from "@/components/ui/Nav";
-import { HeroA } from "@/components/sections/a/HeroA";
-import { ShowreelA } from "@/components/sections/a/ShowreelA";
-import { Clients } from "@/components/sections/Clients";
-import { ProjectsA } from "@/components/sections/a/ProjectsA";
+import { HeroC } from "@/components/sections/c/HeroC";
+import { StoryC } from "@/components/sections/c/StoryC";
+import { CraftC } from "@/components/sections/c/CraftC";
+import { ProjectsC } from "@/components/sections/c/ProjectsC";
 import { IPs } from "@/components/sections/IPs";
 import { Stats } from "@/components/sections/Stats";
 import { Team } from "@/components/sections/Team";
@@ -13,27 +13,28 @@ import { Footer } from "@/components/sections/Footer";
 import { getSiteContent } from "@/lib/wp/client";
 
 const navItems: NavItem[] = [
+  { id: "studio", label: "studio" },
   { id: "work", label: "work" },
   { id: "ip", label: "ip" },
   { id: "team", label: "team" },
   { id: "contact", label: "contact" },
 ];
 
-export default async function ConceptAPage({
+export default async function ConceptCPage({
   params,
-}: PageProps<"/[locale]/concepto-a">) {
+}: PageProps<"/[locale]/sandbox/concepto-c">) {
   const { locale } = await params;
   setRequestLocale(locale);
   const content = await getSiteContent(locale as Locale);
 
   return (
-    <div data-concept="a" className="bg-bg text-fg">
-      <Nav items={navItems} variant="a" />
+    <div data-concept="c" className="bg-bg text-fg">
+      <Nav items={navItems} variant="c" />
       <main>
-        <HeroA content={content} />
-        <ShowreelA content={content} />
-        <Clients content={content} />
-        <ProjectsA content={content} />
+        <HeroC content={content} />
+        <StoryC />
+        <CraftC content={content} />
+        <ProjectsC content={content} />
         <IPs content={content} />
         <Stats content={content} />
         <Team content={content} />

@@ -14,7 +14,7 @@ import { getSiteContent } from "@/lib/wp/client";
 
 export default async function ConceptDPage({
   params,
-}: PageProps<"/[locale]/concepto-d">) {
+}: PageProps<"/[locale]/sandbox/concepto-d">) {
   const { locale } = await params;
   setRequestLocale(locale);
   const content = await getSiteContent(locale as Locale);

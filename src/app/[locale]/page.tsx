@@ -1,71 +1,65 @@
-import { getTranslations, setRequestLocale } from "next-intl/server";
-import { ArrowRight } from "lucide-react";
-import { Link } from "@/i18n/navigation";
-import { LangSwitch } from "@/components/ui/LangSwitch";
+import { setRequestLocale } from "next-intl/server";
+import Image from "next/image";
+import { getSiteContent } from "@/lib/wp/client";
+import type { Locale } from "@/i18n/routing";
+import { NavE } from "@/components/sections/e/NavE";
+// import { CursorE } from "@/components/sections/e/CursorE";
+import { HeroE } from "@/components/sections/e/HeroE";
+import { ClientsE } from "@/components/sections/e/ClientsE";
+import { ProjectsE } from "@/components/sections/e/ProjectsE";
+import { IPsE } from "@/components/sections/e/IPsE";
+import { AboutE } from "@/components/sections/e/AboutE";
 
-const concepts = [
-  { id: "a", href: "/concepto-a", name: "Minimalista", key: "conceptA" },
-  { id: "e", href: "/concepto-e", name: "Vanguardia", key: "conceptE" },
-  { id: "c", href: "/concepto-c", name: "Cálido", key: "conceptC" },
-  { id: "d", href: "/concepto-d", name: "Réplica", key: "conceptD" },
-] as const;
+interface PageProps {
+  params: Promise<{ locale: Locale }>;
+}
 
-export default async function IndexPage({
-  params,
-}: PageProps<"/[locale]">) {
+export default async function ConceptoEPage({ params }: PageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = await getTranslations("Index");
+  const content = await getSiteContent(locale);
 
   return (
-    <main className="mx-auto flex min-h-dvh max-w-6xl flex-col px-6 py-10">
-      <header className="flex items-center justify-between">
-        <span className="font-display text-2xl font-bold tracking-tight">
-          FORJA<span className="fire-text"> STUDIOS</span>
-        </span>
-        <LangSwitch />
-      </header>
+    <div data-concept="e" className="min-h-screen bg-bg text-fg">
+      {/* <CursorE /> */}
+      <NavE />
+      <HeroE />
+      <ClientsE clients={content.clients} />
+      <ProjectsE projects={content.projects} />
+      <IPsE ips={content.ips} projects={content.projects} />
+      <AboutE />
 
-      <div className="flex flex-1 flex-col justify-center py-16">
-        <h1 className="font-display max-w-3xl text-balance text-4xl font-bold leading-[1.05] sm:text-6xl">
-          {t("title")}
-        </h1>
-        <p className="mt-6 max-w-xl text-pretty text-lg text-fg-muted">
-          {t("subtitle")}
-        </p>
-
-        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {concepts.map((c) => (
-            <Link
-              key={c.id}
-              href={c.href}
-              data-concept={c.id}
-              className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-border bg-surface/60 p-6 transition-colors duration-300 hover:border-accent focus-visible:border-accent focus-visible:outline-none"
-            >
-              <div className="fire-bg absolute inset-x-0 top-0 h-1 opacity-70" />
-              <div>
-                <span className="text-sm font-medium uppercase tracking-widest text-fg-muted">
-                  {t("view")} {c.id.toUpperCase()}
-                </span>
-                <h2 className="font-display mt-3 text-2xl font-semibold">
-                  {c.name}
-                </h2>
-                <p className="mt-3 text-sm leading-relaxed text-fg-muted">
-                  {t(c.key)}
-                </p>
-              </div>
-              <span className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-accent">
-                {t("view")}
-                <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
-              </span>
-            </Link>
-          ))}
+      {/* Footer */}
+      <footer className="border-t border-border py-10">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
+            <a href="#top">
+              <Image
+                src="/assets/forja/images/f40ce8_54c70335883e4115ab035396d8db0215~mv2.png"
+                alt="Forja Studios"
+                height={40}
+                width={160}
+                style={{ height: "1.75rem", width: "auto" }}
+                className="object-contain"
+              />
+            </a>
+            <p className="text-xs text-forja-muted">
+              © {new Date().getFullYear()} Forja Studios. All rights reserved.
+            </p>
+          </div>
+          <p className="mt-6 text-center text-[11px] leading-relaxed text-forja-muted/50">
+            All the content displayed in this website and related to Forja Studios have all rights
+            reserved © 2025. All audio, artwork and animations was developed by FORJA Studios
+            and/or their team and have been authorized by them to be published in this website.
+            If any content published infringes any copyright laws please contact us via email or
+            contact section above.
+          </p>
         </div>
-      </div>
-
-      <footer className="border-t border-border pt-6 text-sm text-fg-muted">
-        © {new Date().getFullYear()} Forja Studios — {t("subtitle").split(".")[0]}.
       </footer>
-    </main>
+    </div>
   );
+}
+
+export async function generateStaticParams() {
+  return [{ locale: "en" }, { locale: "es" }];
 }
