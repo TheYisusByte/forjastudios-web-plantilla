@@ -15,6 +15,7 @@ const concepts = [
 const demos = [
   { href: "/sandbox/contacto", label: "Contacto · 4 opciones" },
   { href: "/sandbox/team-demo", label: "Team · 3 opciones" },
+  { href: "/sandbox/about-demo", label: "About · 3 opciones" },
   { href: "/sandbox/proyecto/kango-fast-lane", label: "Detalle proyecto · visor (legacy)" },
 ] as const;
 

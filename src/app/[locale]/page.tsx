@@ -1,4 +1,4 @@
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import Image from "next/image";
 import { getSiteContent } from "@/lib/wp/client";
 import type { Locale } from "@/i18n/routing";
@@ -8,6 +8,7 @@ import { HeroE } from "@/components/sections/e/HeroE";
 import { ClientsE } from "@/components/sections/e/ClientsE";
 import { ProjectsE } from "@/components/sections/e/ProjectsE";
 import { IPsE } from "@/components/sections/e/IPsE";
+import { StatsInterleaved } from "@/components/sections/e/about/StatsInterleaved";
 import { ContactForgeMeter } from "@/components/sections/e/contact/ForgeMeter";
 
 interface PageProps {
@@ -18,6 +19,7 @@ export default async function ConceptoEPage({ params }: PageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
   const content = await getSiteContent(locale);
+  const tf = await getTranslations("Footer");
 
   return (
     <div data-concept="e" className="min-h-screen bg-bg text-fg">
@@ -27,6 +29,7 @@ export default async function ConceptoEPage({ params }: PageProps) {
       <ClientsE clients={content.clients} />
       <ProjectsE projects={content.projects} />
       <IPsE ips={content.ips} projects={content.projects} />
+      <StatsInterleaved stats={content.meta.stats} />
       <ContactForgeMeter content={content} />
 
       {/* Footer */}
@@ -44,15 +47,11 @@ export default async function ConceptoEPage({ params }: PageProps) {
               />
             </a>
             <p className="text-xs text-forja-muted">
-              © {new Date().getFullYear()} Forja Studios. All rights reserved.
+              © {new Date().getFullYear()} Forja Studios. {tf("rights")}
             </p>
           </div>
           <p className="mt-6 text-center text-[11px] leading-relaxed text-forja-muted/50">
-            All the content displayed in this website and related to Forja Studios have all rights
-            reserved © 2025. All audio, artwork and animations was developed by FORJA Studios
-            and/or their team and have been authorized by them to be published in this website.
-            If any content published infringes any copyright laws please contact us via email or
-            contact section above.
+            {tf("disclaimer")}
           </p>
         </div>
       </footer>

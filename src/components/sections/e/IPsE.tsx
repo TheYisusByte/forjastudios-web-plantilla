@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect, useCallback } from "react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -26,6 +27,7 @@ interface IPCardProps {
 }
 
 function IPCard({ ip, image, offset, isActive, onClick }: IPCardProps) {
+  const t = useTranslations("ConceptE");
   const tiltRef = useRef<HTMLDivElement>(null);
   const absOff  = Math.abs(offset);
   const visible  = absOff <= VISIBLE + 1;
@@ -121,7 +123,7 @@ function IPCard({ ip, image, offset, isActive, onClick }: IPCardProps) {
         {/* Tag */}
         <div className="absolute left-4 top-4 z-10">
           <span className="rounded-full bg-black/60 px-3 py-1 text-[10px] uppercase tracking-widest text-white/60 backdrop-blur-sm">
-            Original IP
+            {t("ipsTag")}
           </span>
         </div>
 
@@ -139,6 +141,7 @@ function IPCard({ ip, image, offset, isActive, onClick }: IPCardProps) {
 // ── Section ───────────────────────────────────────────────────────────────────
 
 export function IPsE({ ips, projects }: { ips: IP[]; projects: Project[] }) {
+  const t = useTranslations("ConceptE");
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
   const stageRef   = useRef<HTMLDivElement>(null);
@@ -283,17 +286,17 @@ export function IPsE({ ips, projects }: { ips: IP[]; projects: Project[] }) {
         {/* Heading */}
         <div ref={headingRef} className="mx-auto w-full max-w-7xl px-6 pb-20">
           <p className="mb-3 text-xs uppercase tracking-[0.3em] text-forja-muted">
-            Original IP
+            {t("ipsTitle")}
           </p>
           <h2
             className="font-display font-black uppercase leading-none"
             style={{ fontSize: "clamp(2.8rem, 7vw, 6rem)" }}
           >
-            <span className="block text-forja-bone">Worlds</span>
-            <span className="fire-text block">of our own.</span>
+            <span className="block text-forja-bone">{t("ipsHeading1")}</span>
+            <span className="fire-text block">{t("ipsHeading2")}</span>
           </h2>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-forja-muted">
-            Stories born entirely inside the forge — concept, production, and soul all in‑house.
+            {t("ipsBody")}
           </p>
         </div>
 

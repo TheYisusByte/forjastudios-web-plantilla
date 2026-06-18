@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { fontVariables } from "@/lib/fonts";
 import { meta as siteMeta } from "@/lib/content/data";
@@ -11,19 +11,25 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-export const metadata: Metadata = {
-  metadataBase: new URL("https://forjastudios.com"),
-  title: { default: "Forja Studios", template: "%s · Forja Studios" },
-  description:
-    "Forge your flame — estudio creativo: animación, concept art, VFX y videojuegos.",
-  openGraph: {
-    siteName: "Forja Studios",
-    title: "Forja Studios — Forge your flame",
-    description:
-      "Estudio creativo: animación 2D/3D, concept art, VFX y videojuegos.",
-    type: "website",
-  },
-};
+export async function generateMetadata({
+  params,
+}: LayoutProps<"/[locale]">): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Meta" });
+
+  return {
+    metadataBase: new URL("https://forjastudios.com"),
+    title: { default: "Forja Studios", template: "%s · Forja Studios" },
+    description: t("description"),
+    openGraph: {
+      siteName: "Forja Studios",
+      title: t("ogTitle"),
+      description: t("ogDescription"),
+      type: "website",
+      locale,
+    },
+  };
+}
 
 // Organization structured data (doc 09 — SEO).
 const orgJsonLd = {

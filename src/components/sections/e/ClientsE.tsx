@@ -97,8 +97,8 @@ export function ClientsE({ clients }: ClientsEProps) {
           className="font-display font-black uppercase leading-none"
           style={{ fontSize: "clamp(2.8rem, 7vw, 6rem)" }}
         >
-          <span className="block">Trusted</span>
-          <span className="fire-text block">by the best.</span>
+          <span className="block">{t("clientsHeading1")}</span>
+          <span className="fire-text block">{t("clientsHeading2")}</span>
         </h2>
       </div>
 

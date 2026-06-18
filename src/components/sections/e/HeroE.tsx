@@ -391,7 +391,7 @@ export function HeroE() {
       >
         <div className="h-10 w-px bg-gradient-to-b from-forja-bone/60 to-transparent" />
         <span className="text-[10px] uppercase tracking-[0.3em] text-forja-muted">
-          Scroll
+          {t("scroll")}
         </span>
       </div>
     </section>

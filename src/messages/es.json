@@ -11,7 +11,8 @@
     "ourTeam": "Nuestro equipo",
     "contactUs": "Contáctanos",
     "clients": "Clientes",
-    "about": "Estudio"
+    "about": "Estudio",
+    "menu": "Menú"
   },
   "ConceptE": {
     "heroKicker": "Animación 2D/3D · VFX · Concept Art · Videojuegos",
@@ -36,7 +37,12 @@
     "aboutQuote": "\"El fuego no destruye. Transforma.\"",
     "statYears": "Años",
     "statBlacksmiths": "Blacksmiths",
-    "statProjects": "Proyectos"
+    "statProjects": "Proyectos",
+    "clientsHeading1": "La confianza",
+    "clientsHeading2": "de los mejores.",
+    "ipsBody": "Historias nacidas por completo dentro de la forja: concepto, producción y alma, todo hecho en casa.",
+    "ipsTag": "IP Original",
+    "scroll": "Desliza"
   },
   "ConceptD": {
     "intro": "Somos un estudio creativo con más de 12 años de experiencia produciendo contenido de clase mundial para la industria del entretenimiento, especializado en animación 2D/3D, ilustración, concept art, VFX, diseño de sonido y producción audiovisual.",
@@ -92,7 +98,16 @@
   "Stats": {
     "years": "Años de experiencia",
     "blacksmiths": "Blacksmiths",
-    "projects": "Proyectos"
+    "projects": "Proyectos",
+    "sectionEyebrow": "La forja en cifras",
+    "sectionHeading1": "Forjado en el",
+    "sectionHeading2": "fuego de la creatividad.",
+    "yearsLabel": "Años",
+    "yearsBody": "imaginando lo inimaginable, creando mundos extravagantes y disfrutando del camino.",
+    "blacksmithsLabel": "Blacksmiths",
+    "blacksmithsBody": "siempre listos para dar vida a tus ideas y convertir tu visión en realidad.",
+    "projectsLabel": "Proyectos",
+    "projectsBody": "creados, forjados y probados en el fuego de la creatividad y la dedicación."
   },
   "Contact": {
     "name": "Nombre",
@@ -105,11 +120,32 @@
     "sending": "Enviando…",
     "success": "¡Gracias! Te responderemos pronto.",
     "errorRequired": "Este campo es obligatorio.",
-    "errorEmail": "Introduce un correo válido."
+    "errorEmail": "Introduce un correo válido.",
+    "eyebrow": "Contacto",
+    "headLead": "Hagamos algo",
+    "headTail": ".",
+    "body": "Cuéntanos qué quieres construir. Llena el formulario y mira cómo se enciende la forja.",
+    "heatCold": "FRÍO",
+    "heatEmber": "BRASA",
+    "heatHot": "AL ROJO",
+    "heatMolten": "FUNDIDO",
+    "rotate": [
+      "épico",
+      "increíble",
+      "mágico",
+      "salvaje",
+      "único",
+      "brutal",
+      "memorable",
+      "legendario",
+      "inolvidable",
+      "vivo"
+    ]
   },
   "Footer": {
     "rights": "Todos los derechos reservados.",
-    "tagline": "Forge your flame"
+    "tagline": "Forge your flame",
+    "disclaimer": "Todo el contenido mostrado en este sitio web y relacionado con Forja Studios tiene todos los derechos reservados © 2025. Todo el audio, las ilustraciones y las animaciones fueron desarrollados por FORJA Studios y/o su equipo, y han sido autorizados por ellos para publicarse en este sitio. Si algún contenido publicado infringe alguna ley de derechos de autor, contáctanos por correo o en la sección de contacto de arriba."
   },
   "Index": {
     "title": "Forja Studios — Conceptos de diseño",
@@ -125,5 +161,10 @@
   "Common": {
     "language": "Idioma",
     "back": "Regresar"
+  },
+  "Meta": {
+    "description": "Forge your flame — estudio creativo: animación, concept art, VFX y videojuegos.",
+    "ogTitle": "Forja Studios — Forge your flame",
+    "ogDescription": "Estudio creativo: animación 2D/3D, concept art, VFX y videojuegos."
   }
 }

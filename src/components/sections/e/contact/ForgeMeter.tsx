@@ -22,7 +22,6 @@ const EMBERS = Array.from({ length: 14 }, (_, i) => ({
 const SPARKS = Array.from({ length: 12 }, (_, i) => i);
 
 // Verbo rotativo del título — estilo "Let's ___ something." (opción C).
-const ROTATE = ["forge", "animate", "build", "imagine", "create", "craft", "illustrate", "render", "design", "dream"];
 
 interface FieldProps {
   id: string;
@@ -85,6 +84,8 @@ function Field({ id, label, type = "text", placeholder, rows, value, onChange, e
 
 export function ContactForgeMeter({ content }: { content: SiteContent }) {
   const tf = useTranslations("Contact");
+  const ROTATE = tf.raw("rotate") as string[];
+  const rotateLen = ROTATE.length;
 
   const sectionRef = useRef<HTMLElement>(null);
   const emberRef   = useRef<HTMLDivElement>(null);
@@ -104,10 +105,10 @@ export function ContactForgeMeter({ content }: { content: SiteContent }) {
     (name.trim().length > 1 ? 1 : 0) + (emailOk ? 1 : 0) + (message.trim().length > 3 ? 1 : 0);
   const progress = filled / 3;
   const heat =
-    progress === 0 ? { label: "COLD",   color: "#9A9A9E" } :
-    progress < 0.5 ? { label: "EMBER",  color: "#FFB23E" } :
-    progress < 1   ? { label: "HOT",    color: "#FF6A2C" } :
-                     { label: "MOLTEN", color: "#E03A2E" };
+    progress === 0 ? { label: tf("heatCold"),   color: "#9A9A9E" } :
+    progress < 0.5 ? { label: tf("heatEmber"),  color: "#FFB23E" } :
+    progress < 1   ? { label: tf("heatHot"),    color: "#FF6A2C" } :
+                     { label: tf("heatMolten"), color: "#E03A2E" };
 
   useEffect(() => {
     const mm = gsap.matchMedia();
@@ -134,13 +135,13 @@ export function ContactForgeMeter({ content }: { content: SiteContent }) {
       gsap.to(el, {
         y: -14, opacity: 0, duration: 0.3, ease: "power2.in",
         onComplete: () => {
-          setRotIdx((i) => (i + 1) % ROTATE.length);
+          setRotIdx((i) => (i + 1) % rotateLen);
           gsap.fromTo(el, { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power2.out" });
         },
       });
     }, 2600);
     return () => clearInterval(interval);
-  }, []);
+  }, [rotateLen]);
 
   useGSAP(() => {
     const mm = gsap.matchMedia();
@@ -184,14 +185,14 @@ export function ContactForgeMeter({ content }: { content: SiteContent }) {
       <div className="mx-auto grid max-w-7xl gap-16 px-6 lg:grid-cols-2 lg:gap-24">
         {/* Left — pitch + info */}
         <div className="flex flex-col justify-center">
-          <p className="forge-reveal mb-6 text-xs uppercase tracking-[0.3em] text-forja-muted">Contact</p>
+          <p className="forge-reveal mb-6 text-xs uppercase tracking-[0.3em] text-forja-muted">{tf("eyebrow")}</p>
           <h2 className="forge-reveal font-display font-black uppercase leading-[0.95]" style={{ fontSize: "clamp(2rem, 4vw, 3.4rem)" }}>
-            Let&apos;s{" "}
+            {tf("headLead")}{" "}
             <span ref={rotWrapRef} className="fire-text inline-block">{ROTATE[rotIdx]}</span>
-            <br />something.
+            {tf("headTail")}
           </h2>
           <p className="forge-reveal mt-6 max-w-md text-pretty leading-relaxed text-forja-muted">
-            Tell us what you want to build. Fill the form and watch the forge heat up.
+            {tf("body")}
           </p>
           <div className="forge-reveal mt-8 flex flex-col gap-3 text-sm">
             <a href={`mailto:${content.meta.contact.email}`} className="text-forja-muted transition-colors hover:text-forja-amber">

@@ -127,7 +127,7 @@ export function NavE() {
         {/* Drawer header */}
         <div className="flex items-center justify-between border-b border-border px-6 py-5">
           <span className="font-display text-xs font-bold uppercase tracking-[0.3em] text-fg-muted">
-            Menu
+            {t("menu")}
           </span>
           <button
             type="button"
