@@ -293,7 +293,7 @@ export function IPsE({ ips, projects }: { ips: IP[]; projects: Project[] }) {
             style={{ fontSize: "clamp(2.8rem, 7vw, 6rem)" }}
           >
             <span className="block text-forja-bone">{t("ipsHeading1")}</span>
-            <span className="fire-text block">{t("ipsHeading2")}</span>
+            <span className="flame-text block">{t("ipsHeading2")}</span>
           </h2>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-forja-muted">
             {t("ipsBody")}
