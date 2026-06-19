@@ -98,7 +98,7 @@ export function ClientsE({ clients }: ClientsEProps) {
           style={{ fontSize: "clamp(2.8rem, 7vw, 6rem)" }}
         >
           <span className="block">{t("clientsHeading1")}</span>
-          <span className="fire-text block">{t("clientsHeading2")}</span>
+          <span className="flame-text block">{t("clientsHeading2")}</span>
         </h2>
       </div>
 

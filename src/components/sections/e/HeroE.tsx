@@ -356,7 +356,7 @@ export function HeroE() {
             </span>
           ))}
           <span className="block overflow-hidden">
-            <span ref={rotWrapRef} className="hero-flame-word hero-e-line block">
+            <span ref={rotWrapRef} className="flame-text hero-e-line block">
               {ROTATE_WORDS[rotIdx]}
             </span>
           </span>

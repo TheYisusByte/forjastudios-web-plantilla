@@ -227,7 +227,7 @@ export function ProjectsE({ projects }: { projects: Project[] }) {
           style={{ fontSize: "clamp(2.6rem, 6.5vw, 5.5rem)" }}
         >
           <span className="block text-forja-bone">{t("projectsHeading1")}</span>
-          <span className="fire-text block">{t("projectsHeading2")}</span>
+          <span className="flame-text block">{t("projectsHeading2")}</span>
         </h2>
       </div>
 

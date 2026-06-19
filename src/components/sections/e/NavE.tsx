@@ -79,7 +79,7 @@ export function NavE() {
             <ul className="flex items-center gap-8 text-sm uppercase tracking-[0.12em]">
               {NAV_ITEMS.map((item) => (
                 <li key={item.key}>
-                  <Link href={hrefOf(item)} className="text-forja-bone/90 transition-colors duration-200 hover:text-accent">
+                  <Link href={hrefOf(item)} className="text-forja-bone/90 transition-colors duration-200 hover:text-forja-amber">
                     {t(item.key as Parameters<typeof t>[0])}
                   </Link>
                 </li>
@@ -133,7 +133,7 @@ export function NavE() {
             type="button"
             onClick={() => setOpen(false)}
             aria-label="Close menu"
-            className="cursor-pointer rounded-full p-1 transition-colors hover:text-accent"
+            className="cursor-pointer rounded-full p-1 transition-colors hover:text-forja-amber"
           >
             <X className="size-5" />
           </button>
@@ -142,7 +142,7 @@ export function NavE() {
         {/* Nav links — stagger in when drawer opens */}
         <nav className="flex flex-1 flex-col justify-center px-8">
           {NAV_ITEMS.map((item, i) => {
-            const linkClass = "group flex items-baseline gap-4 border-b border-border/50 py-5 font-display font-black uppercase leading-none transition-colors hover:text-accent";
+            const linkClass = "group flex items-baseline gap-4 border-b border-border/50 py-5 font-display font-black uppercase leading-none transition-colors hover:text-forja-amber";
             const linkStyle = {
               fontSize: "clamp(1.6rem, 6vw, 2rem)",
               opacity:    open ? 1 : 0,
@@ -152,7 +152,7 @@ export function NavE() {
             };
             const inner = (
               <>
-                <span className="font-mono text-[10px] text-fg-muted/50 transition-colors group-hover:text-accent/50">
+                <span className="font-mono text-[10px] text-fg-muted/50 transition-colors group-hover:text-forja-amber/60">
                   0{i + 1}
                 </span>
                 {t(item.key as Parameters<typeof t>[0])}
