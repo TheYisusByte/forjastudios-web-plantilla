@@ -340,7 +340,15 @@ export function HeroE() {
 
         <h1
           className="font-display font-black uppercase leading-[0.86]"
-          style={{ fontSize: "clamp(2.8rem, 8.5vw, 7.5rem)" }}
+          style={{
+            fontSize: "clamp(2.8rem, 8.5vw, 7.5rem)",
+            // La sombra va como filter sobre el h1 (no text-shadow heredada),
+            // así no la recortan los `overflow-hidden` de cada línea y queda
+            // suave/difusa en el exterior.
+            textShadow: "none",
+            filter:
+              "drop-shadow(0 1px 2px rgba(0,0,0,0.45)) drop-shadow(0 6px 26px rgba(0,0,0,0.3))",
+          }}
         >
           {STATIC_LINES.map((word) => (
             <span key={word} className="block overflow-hidden">
@@ -348,7 +356,7 @@ export function HeroE() {
             </span>
           ))}
           <span className="block overflow-hidden">
-            <span ref={rotWrapRef} className="hero-e-line block text-forja-bone">
+            <span ref={rotWrapRef} className="hero-flame-word hero-e-line block">
               {ROTATE_WORDS[rotIdx]}
             </span>
           </span>
@@ -371,12 +379,12 @@ export function HeroE() {
         <div className="hero-e-fade mt-10 flex flex-wrap gap-4">
           <a
             href="#work"
-            className="fire-bg inline-flex items-center rounded-full px-8 py-3.5 font-semibold text-forja-black transition-opacity hover:opacity-85"
+            className="inline-flex items-center rounded-full border border-forja-bone/25 px-8 py-3.5 font-semibold text-forja-bone/85 transition-all hover:border-fg hover:text-fg"
           >
             {t("heroCtaWork")}
           </a>
           <a
-            href="#contact"
+            href="#about"
             className="inline-flex items-center rounded-full border border-forja-bone/25 px-8 py-3.5 font-semibold text-forja-bone/85 transition-all hover:border-fg hover:text-fg"
           >
             {t("heroCtaContact")}
