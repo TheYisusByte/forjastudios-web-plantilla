@@ -31,7 +31,7 @@ export default async function ConceptoETeamPage({ params }: PageProps) {
             our
           </span>
           <span
-            className="block text-forja-bone"
+            className="flame-text block"
             style={{ fontSize: "clamp(7rem, 18vw, 14rem)", letterSpacing: "-0.03em" }}
           >
             TEAM

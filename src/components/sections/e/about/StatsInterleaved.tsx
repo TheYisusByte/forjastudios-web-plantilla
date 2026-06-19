@@ -35,7 +35,7 @@ export function StatsInterleaved({ stats }: { stats: SiteMeta["stats"] }) {
             style={{ fontSize: "clamp(1.9rem, 4vw, 3.4rem)" }}
           >
             <span className="text-forja-bone">{t("sectionHeading1")} </span>
-            <span className="fire-text">{t("sectionHeading2")}</span>
+            <span className="flame-text">{t("sectionHeading2")}</span>
           </h2>
         </Reveal>
 

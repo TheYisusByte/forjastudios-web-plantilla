@@ -188,7 +188,7 @@ export function ContactForgeMeter({ content }: { content: SiteContent }) {
           <p className="forge-reveal mb-6 text-xs uppercase tracking-[0.3em] text-forja-muted">{tf("eyebrow")}</p>
           <h2 className="forge-reveal font-display font-black uppercase leading-[0.95]" style={{ fontSize: "clamp(2rem, 4vw, 3.4rem)" }}>
             {tf("headLead")}{" "}
-            <span ref={rotWrapRef} className="fire-text inline-block">{ROTATE[rotIdx]}</span>
+            <span ref={rotWrapRef} className="flame-text inline-block">{ROTATE[rotIdx]}</span>
             {tf("headTail")}
           </h2>
           <p className="forge-reveal mt-6 max-w-md text-pretty leading-relaxed text-forja-muted">
@@ -204,7 +204,7 @@ export function ContactForgeMeter({ content }: { content: SiteContent }) {
             <ul className="flex flex-wrap gap-4 pt-1 text-forja-muted">
               {content.meta.socials.map((s) => (
                 <li key={s.label}>
-                  <a href={s.href} target="_blank" rel="noreferrer" className="transition-colors hover:text-forja-bone">{s.label}</a>
+                  <a href={s.href} target="_blank" rel="noreferrer" className="transition-colors hover:text-forja-amber">{s.label}</a>
                 </li>
               ))}
             </ul>
