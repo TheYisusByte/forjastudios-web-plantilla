@@ -32,21 +32,21 @@ add_filter('graphql_connection_max_query_amount', function (int $max): int {
 });
 
 /**
- * Galería de proyecto (página interna) = MEDIOS ADJUNTOS al post.
+ * Galería (página interna) = MEDIOS ADJUNTOS al post.
  * ----------------------------------------------------------------
- * El front (ProjectDetailGalleryE / ProjectsE) muestra una galería masonry con
- * imágenes y videos, usando las dimensiones reales para conservar el aspecto.
- * Como el campo Gallery de ACF es PRO, exponemos en su lugar los archivos
- * ADJUNTOS al proyecto (Subir/Adjuntar al post) vía un campo GraphQL propio
- * `galeria` en el tipo `Proyecto`. Imágenes y videos, en orden de menú.
+ * El front muestra una galería masonry con imágenes y videos, usando las
+ * dimensiones reales para conservar el aspecto. Como el campo Gallery de ACF es
+ * PRO, exponemos en su lugar los archivos ADJUNTOS al post (Subir/Adjuntar) vía
+ * un campo GraphQL propio `galeria`, registrado en los tipos `Proyecto` e `Ip`.
+ * Imágenes y videos, en orden de menú.
  *
- * Edición en WP: en el proyecto, "Subir/insertar" imágenes y .mp4 y dejarlos
+ * Edición en WP: en el proyecto/IP, "Subir/insertar" imágenes y .mp4 y dejarlos
  * adjuntos al post; ordénalos con el "orden" del adjunto. El poster del video
  * es la imagen destacada del propio adjunto de video (si se asigna).
  */
 add_action('graphql_register_types', function (): void {
     register_graphql_object_type('ForjaGaleriaItem', [
-        'description' => 'Item de galería de un proyecto (imagen o video adjunto).',
+        'description' => 'Item de galería (imagen o video adjunto).',
         'fields'      => [
             'sourceUrl' => ['type' => 'String', 'description' => 'URL del archivo.'],
             'mimeType'  => ['type' => 'String', 'description' => 'MIME type (image/* o video/*).'],
@@ -56,51 +56,54 @@ add_action('graphql_register_types', function (): void {
         ],
     ]);
 
-    register_graphql_field('Proyecto', 'galeria', [
-        'type'        => ['list_of' => 'ForjaGaleriaItem'],
-        'description' => 'Medios adjuntos al proyecto (imágenes y videos), en orden de menú.',
-        'resolve'     => function ($post): array {
-            $parent_id = $post->databaseId ?? ($post->ID ?? 0);
-            if (! $parent_id) {
-                return [];
-            }
-            $atts = get_posts([
-                'post_parent'    => $parent_id,
-                'post_type'      => 'attachment',
-                'post_mime_type' => ['image', 'video'],
-                'post_status'    => 'inherit',
-                'orderby'        => 'menu_order',
-                'order'          => 'ASC',
-                'numberposts'    => 50,
-            ]);
+    // Resolver compartido. Los IDs vienen del metabox "Galería" (meta
+    // `_forja_galeria`, en orden) o, si está vacío, de los medios adjuntos
+    // (post_parent). Ver inc/galeria-metabox.php (forja_galeria_ids).
+    $resolve_galeria = function ($post): array {
+        $parent_id = (int) ($post->databaseId ?? ($post->ID ?? 0));
+        if (! $parent_id) {
+            return [];
+        }
+        $ids = function_exists('forja_galeria_ids') ? forja_galeria_ids($parent_id) : [];
 
-            $out = [];
-            foreach ($atts as $att) {
-                $mime = get_post_mime_type($att->ID) ?: '';
-                $item = [
-                    'sourceUrl' => wp_get_attachment_url($att->ID) ?: null,
-                    'mimeType'  => $mime,
-                    'width'     => null,
-                    'height'    => null,
-                    'poster'    => null,
-                ];
-                if (strpos($mime, 'image/') === 0) {
-                    $meta = wp_get_attachment_metadata($att->ID);
-                    if (is_array($meta)) {
-                        $item['width']  = isset($meta['width'])  ? (int) $meta['width']  : null;
-                        $item['height'] = isset($meta['height']) ? (int) $meta['height'] : null;
-                    }
-                } else {
-                    $thumb_id = get_post_thumbnail_id($att->ID);
-                    if ($thumb_id) {
-                        $item['poster'] = wp_get_attachment_url($thumb_id) ?: null;
-                    }
-                }
-                $out[] = $item;
+        $out = [];
+        foreach ($ids as $id) {
+            $mime = get_post_mime_type($id) ?: '';
+            $item = [
+                'sourceUrl' => wp_get_attachment_url($id) ?: null,
+                'mimeType'  => $mime,
+                'width'     => null,
+                'height'    => null,
+                'poster'    => null,
+            ];
+            if (! $item['sourceUrl']) {
+                continue; // adjunto borrado; lo saltamos
             }
-            return $out;
-        },
-    ]);
+            if (strpos($mime, 'image/') === 0) {
+                $meta = wp_get_attachment_metadata($id);
+                if (is_array($meta)) {
+                    $item['width']  = isset($meta['width'])  ? (int) $meta['width']  : null;
+                    $item['height'] = isset($meta['height']) ? (int) $meta['height'] : null;
+                }
+            } else {
+                $thumb_id = get_post_thumbnail_id($id);
+                if ($thumb_id) {
+                    $item['poster'] = wp_get_attachment_url($thumb_id) ?: null;
+                }
+            }
+            $out[] = $item;
+        }
+        return $out;
+    };
+
+    // Mismo campo `galeria` en proyectos e IPs.
+    foreach (['Proyecto', 'Ip'] as $gql_type) {
+        register_graphql_field($gql_type, 'galeria', [
+            'type'        => ['list_of' => 'ForjaGaleriaItem'],
+            'description' => 'Medios adjuntos (imágenes y videos), en orden de menú.',
+            'resolve'     => $resolve_galeria,
+        ]);
+    }
 });
 
 /**

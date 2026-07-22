@@ -1,4 +1,4 @@
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import Image from "next/image";
 import { getSiteContent } from "@/lib/wp/client";
 import { Link } from "@/i18n/navigation";
@@ -6,6 +6,8 @@ import type { Locale } from "@/i18n/routing";
 import { NavE } from "@/components/sections/e/NavE";
 // import { CursorE } from "@/components/sections/e/CursorE";
 import { TeamE } from "@/components/sections/e/TeamE";
+
+const FORJA_LOGO = "/assets/forja/images/f40ce8_54c70335883e4115ab035396d8db0215~mv2.png";
 
 interface PageProps {
   params: Promise<{ locale: Locale }>;
@@ -15,6 +17,8 @@ export default async function ConceptoETeamPage({ params }: PageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
   const content = await getSiteContent(locale);
+  const t = await getTranslations("TeamPage");
+  const tf = await getTranslations("Footer");
 
   return (
     <div data-concept="e" className="min-h-screen bg-bg text-fg">
@@ -28,31 +32,28 @@ export default async function ConceptoETeamPage({ params }: PageProps) {
             className="block text-forja-bone"
             style={{ fontSize: "clamp(3.2rem, 7vw, 6rem)", letterSpacing: "-0.02em" }}
           >
-            our
+            {t("headingTop")}
           </span>
           <span
             className="flame-text block"
             style={{ fontSize: "clamp(7rem, 18vw, 14rem)", letterSpacing: "-0.03em" }}
           >
-            TEAM
+            {t("headingMain")}
           </span>
         </h1>
 
-        <div className="mt-8 flex items-start gap-3">
-          <div className="shrink-0 pt-0.5">
-            <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-forja-bone">
-              Forja<sup className="text-[0.65em]">®</sup>
-            </p>
-            <p className="text-[11px] uppercase tracking-[0.28em] text-forja-muted">
-              Studios
-            </p>
-          </div>
+        <div className="mt-8 flex items-start gap-4">
+          <Image
+            src={FORJA_LOGO}
+            alt="Forja Studios"
+            width={420}
+            height={155}
+            style={{ height: "2.5rem", width: "auto" }}
+            className="shrink-0 object-contain"
+          />
           <div className="h-8 w-px self-center bg-border/60" />
           <p className="max-w-md text-sm leading-relaxed text-forja-muted">
-            We have a multidisciplinary team of over 70 artists, animators, designers,
-            developers, 3D specialists, SFX experts, directors, and producers with more
-            than 15 years of experience creating content for video games, animated series,
-            advertising, Web3, audiovisual marketing, and digital products.
+            {t("intro")}
           </p>
         </div>
       </div>
@@ -65,7 +66,7 @@ export default async function ConceptoETeamPage({ params }: PageProps) {
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
             <Link href="/">
               <Image
-                src="/assets/forja/images/f40ce8_54c70335883e4115ab035396d8db0215~mv2.png"
+                src={FORJA_LOGO}
                 alt="Forja Studios"
                 height={40}
                 width={160}
@@ -74,16 +75,9 @@ export default async function ConceptoETeamPage({ params }: PageProps) {
               />
             </Link>
             <p className="text-xs text-forja-muted">
-              © {new Date().getFullYear()} Forja Studios. All rights reserved.
+              © 2013–{new Date().getFullYear()} FORJA Studios. {tf("rights")}
             </p>
           </div>
-          <p className="mt-6 text-center text-[11px] leading-relaxed text-forja-muted/50">
-            All the content displayed in this website and related to Forja Studios have all rights
-            reserved © 2025. All audio, artwork and animations was developed by FORJA Studios
-            and/or their team and have been authorized by them to be published in this website.
-            If any content published infringes any copyright laws please contact us via email or
-            contact section above.
-          </p>
         </div>
       </footer>
     </div>

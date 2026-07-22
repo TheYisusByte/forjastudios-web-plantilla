@@ -20,7 +20,7 @@ import {
   team,
 } from "@/lib/content/data";
 import { isWpEnabled, wpFetch } from "./fetcher";
-import { SITE_CONTENT_QUERY } from "./queries";
+import { siteContentQuery } from "./queries";
 
 // Logo de cliente por nombre (fallback de data.json cuando WP no trae logo).
 const clientLogoByName: Record<string, string | undefined> = Object.fromEntries(
@@ -142,19 +142,53 @@ function getMockContent(locale: Locale): SiteContent {
 // ── WordPress (WPGraphQL) ────────────────────────────────────────────────────
 
 async function getWpContent(locale: Locale): Promise<SiteContent> {
-  const data = await wpFetch<WpSiteContent>(SITE_CONTENT_QUERY, {
-    locale: localeToLanguage(locale),
-  });
+  const data = await fetchSiteContent(locale);
 
-  return {
+  const content: SiteContent = {
     // meta y services son constantes de marca, no CPTs → se mantienen locales.
     meta: buildMeta(locale),
     services: services.map((s) => ({ key: s.key, label: s.label[locale] })),
     projects: (data.proyectos?.nodes ?? []).map(mapProject),
     ips: (data.ips?.nodes ?? []).map(mapIp),
-    team: (data.miembros?.nodes ?? []).map(mapMember),
+    team: (data.miembros?.nodes ?? []).map((n, i) => mapMember(n, i, locale)),
     clients: (data.clientes?.nodes ?? []).map(mapClient),
   };
+
+  // Resumen en consola del servidor: confirma la conexión y cuánto trajo WP
+  // (útil en localhost para ver si falta publicar contenido en el CMS).
+  console.log(
+    `[wp] api.forjastudios.com [${locale}] → ${content.projects.length} proyectos, ` +
+      `${content.ips.length} ips, ${content.team.length} miembros, ${content.clients.length} clientes`,
+  );
+
+  return content;
+}
+
+/**
+ * Trae el contenido aplicando el filtro de idioma (Polylang). Si el backend aún
+ * no tiene Polylang + WPGraphQL Polylang, el argumento `language` no existe en el
+ * esquema y la query falla; en ese caso reintenta SIN el filtro (todo el
+ * contenido queda en un único idioma hasta que se active Polylang).
+ */
+async function fetchSiteContent(locale: Locale): Promise<WpSiteContent> {
+  try {
+    return await wpFetch<WpSiteContent>(siteContentQuery(true), {
+      locale: localeToLanguage(locale),
+    });
+  } catch (err) {
+    if (!isPolylangMissingError(err)) throw err;
+    console.warn(
+      "[wp] Polylang no está activo: instala Polylang + WPGraphQL Polylang para " +
+        "servir ES/EN. Consultando sin filtro de idioma.",
+    );
+    return wpFetch<WpSiteContent>(siteContentQuery(false));
+  }
+}
+
+/** El error de WPGraphQL cuando falta Polylang menciona el argumento `language`. */
+function isPolylangMissingError(err: unknown): boolean {
+  const msg = err instanceof Error ? err.message : String(err);
+  return /\blanguage\b/i.test(msg) && /(not defined|Unknown argument)/i.test(msg);
 }
 
 function mapProject(node: WpProyecto, i: number): Project {
@@ -196,6 +230,17 @@ function mapProject(node: WpProyecto, i: number): Project {
 }
 
 function mapIp(node: WpIp, i: number): IP {
+  const cover = node.camposIp?.cover?.node?.sourceUrl || undefined;
+  // Galería real desde los medios adjuntos a la IP (imágenes y videos), igual
+  // que los proyectos. Detecta video por mimeType; poster del video o el cover.
+  const gallery: MediaItem[] = (node.galeria ?? [])
+    .filter((g): g is WpGaleriaItem & { sourceUrl: string } => Boolean(g.sourceUrl))
+    .map((g): MediaItem =>
+      (g.mimeType ?? "").startsWith("video/")
+        ? { type: "video", src: g.sourceUrl, poster: g.poster ?? cover, width: g.width, height: g.height }
+        : { type: "image", src: g.sourceUrl, width: g.width, height: g.height },
+    );
+
   return {
     slug: node.slug,
     name: decode(node.title),
@@ -203,16 +248,46 @@ function mapIp(node: WpIp, i: number): IP {
     accent: accentAt(i),
     // videoId de fondo desde WP; si falta, cae al de data.json por slug.
     videoId: node.camposIp?.videoId || ips.find((x) => x.slug === node.slug)?.videoId || "",
+    coverUrl: cover,
+    gallery: gallery.length ? gallery : undefined,
   };
 }
 
-function mapMember(node: WpMiembro, i: number): TeamMember {
+// Roles ES→EN — Polylang aún no está activo, así que WP guarda el rol solo en
+// español; en el sitio en inglés lo traducimos con este mapa (clave normalizada
+// sin acentos y en mayúsculas). Roles sin entrada quedan tal cual.
+const ROLE_EN: Record<string, string> = {
+  "CEO": "CEO",
+  "DIRECTOR CREATIVO": "Creative Director",
+  "DIRECTOR DE ARTE": "Art Director",
+  "DIRECTOR DE ANIMACION": "Animation Director",
+  "PRODUCTOR EJECUTIVO": "Executive Producer",
+  "ANIMADOR": "Animator",
+  "ADMINISTRADORA": "Operations Manager",
+};
+
+function translateRole(rol: string, locale: Locale): string {
+  if (locale !== "en" || !rol) return rol;
+  const key = rol
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "") // quita acentos
+    .trim()
+    .toUpperCase()
+    .replace(/\s+/g, " ");
+  const en = ROLE_EN[key];
+  if (!en) return rol; // sin traducción conocida → deja el original
+  // Conserva el estilo del original: TODO-MAYÚSCULAS vs. normal.
+  return rol === rol.toUpperCase() ? en.toUpperCase() : en;
+}
+
+function mapMember(node: WpMiembro, i: number, locale: Locale): TeamMember {
   const name = decode(node.title);
   return {
     name,
-    role: node.camposMiembro?.rol ?? "",
+    role: translateRole(node.camposMiembro?.rol ?? "", locale),
     initials: initialsOf(name),
     accent: accentAt(i),
+    photo: node.camposMiembro?.foto?.node?.sourceUrl,
   };
 }
 
@@ -312,7 +387,8 @@ interface WpProyecto {
 interface WpIp {
   slug: string;
   title: string;
-  camposIp?: { descripcion?: string; videoId?: string; enlace?: string; logo?: WpMedia };
+  camposIp?: { cover?: WpMedia; descripcion?: string; videoId?: string; enlace?: string; logo?: WpMedia };
+  galeria?: WpGaleriaItem[];
 }
 interface WpMiembro {
   title: string;

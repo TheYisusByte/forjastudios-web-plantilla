@@ -15,18 +15,18 @@
     "menu": "Menú"
   },
   "ConceptE": {
-    "heroKicker": "Animación 2D/3D · VFX · Concept Art · Videojuegos",
-    "heroSub": "Somos los herreros del entretenimiento. Más de 12 años forjando mundos, personajes e historias que encienden al mundo.",
+    "heroKicker": "Ilustración · Concept Art · Animación · VFX · Desarrollo Visual",
+    "heroSub": "Somos los herreros del entretenimiento. Durante más de 12 años hemos forjado el arte detrás de videojuegos, cine y series animadas para clientes de todo el mundo.",
     "heroCtaWork": "Ver proyectos",
     "heroCtaContact": "Conoce el estudio",
     "clientsTitle": "Nuestros clientes",
-    "projectsTitle": "Proyectos seleccionados",
+    "projectsTitle": "Nuestro portafolio",
     "projectsHeading1": "Mundos que",
     "projectsHeading2": "hemos forjado.",
     "teamTitle": "El equipo",
     "teamHeading1": "Los",
     "teamHeading2": "blacksmiths.",
-    "ipsTitle": "IP Original",
+    "ipsTitle": "IPs Originales",
     "ipsHeading1": "Mundos",
     "ipsHeading2": "propios.",
     "aboutTitle": "El estudio",
@@ -42,6 +42,7 @@
     "clientsHeading2": "de los mejores.",
     "ipsBody": "Historias nacidas por completo dentro de la forja: concepto, producción y alma, todo hecho en casa.",
     "ipsTag": "IP Original",
+    "ipsView": "Ver IP",
     "scroll": "Desliza"
   },
   "ConceptD": {
@@ -97,17 +98,17 @@
   },
   "Stats": {
     "years": "Años de experiencia",
-    "blacksmiths": "Blacksmiths",
+    "blacksmiths": "Herreros",
     "projects": "Proyectos",
     "sectionEyebrow": "La forja en cifras",
     "sectionHeading1": "Forjado en el",
     "sectionHeading2": "fuego de la creatividad.",
     "yearsLabel": "Años",
-    "yearsBody": "imaginando lo inimaginable, creando mundos extravagantes y disfrutando del camino.",
-    "blacksmithsLabel": "Blacksmiths",
-    "blacksmithsBody": "siempre listos para dar vida a tus ideas y convertir tu visión en realidad.",
+    "yearsBody": "Imaginando lo inimaginable, creando mundos extravagantes y disfrutando del camino.",
+    "blacksmithsLabel": "Herreros",
+    "blacksmithsBody": "Siempre listos para dar vida a tus ideas y convertir tu visión en realidad.",
     "projectsLabel": "Proyectos",
-    "projectsBody": "creados, forjados y probados en el fuego de la creatividad y la dedicación."
+    "projectsBody": "Creados, forjados y probados en el fuego de la creatividad y la dedicación."
   },
   "Contact": {
     "name": "Nombre",
@@ -144,8 +145,12 @@
   },
   "Footer": {
     "rights": "Todos los derechos reservados.",
-    "tagline": "Forge your flame",
-    "disclaimer": "Todo el contenido mostrado en este sitio web y relacionado con Forja Studios tiene todos los derechos reservados © 2025. Todo el audio, las ilustraciones y las animaciones fueron desarrollados por FORJA Studios y/o su equipo, y han sido autorizados por ellos para publicarse en este sitio. Si algún contenido publicado infringe alguna ley de derechos de autor, contáctanos por correo o en la sección de contacto de arriba."
+    "tagline": "Forge your flame"
+  },
+  "TeamPage": {
+    "headingTop": "nuestro",
+    "headingMain": "EQUIPO",
+    "intro": "Contamos con un equipo multidisciplinario de más de 70 artistas, animadores, diseñadores, desarrolladores, especialistas en 3D, expertos en SFX, directores y productores con más de 15 años de experiencia creando contenido para videojuegos, series animadas, publicidad, Web3, marketing audiovisual y productos digitales."
   },
   "Index": {
     "title": "Forja Studios — Conceptos de diseño",

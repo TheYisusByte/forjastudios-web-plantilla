@@ -6,6 +6,7 @@ const IMG = "/assets/forja/images";
 const GIF = "/assets/forja/gifs";
 const POSTER = "/assets/forja/posters";
 const TEAM = "/assets/forja/team";
+const ICONS = "/assets/forja/ICONS";
 
 export interface AnimatedAsset {
   gif: string;
@@ -42,14 +43,15 @@ export const forjaAssets = {
     team: gif("dce2b0cfc10848b7ad4c9ed226009b68"),
   },
 
-  /** White social glyphs from the original sidebar (keyed by socials label). */
+  /** Social media icons (rounded app-tile PNGs in ICONS/), keyed by socials label. */
   socialIcons: {
-    WhatsApp: `${IMG}/11062b_dc9641e157b2422b9f6a74d9b2b07f84~mv2.png`,
-    Instagram: `${IMG}/11062b_603340b7bcb14e7785c7b65b233cd9f9~mv2.png`,
-    Facebook: `${IMG}/11062b_f4e3e7f537ff4762a1914aa14e3e36b9~mv2.png`,
-    X: `${IMG}/11062b_5195e2d838ab4a2f805305f71ca49890~mv2.png`,
-    LinkedIn: `${IMG}/11062b_7dcffe5daf2944b7be0a46ac6d472634~mv2.png`,
-    YouTube: `${IMG}/11062b_c67939a99eaf442d95d3f851857ceedf~mv2.png`,
+    Instagram: `${ICONS}/instagram_icon.png`,
+    Facebook: `${ICONS}/facebook_icon.png`,
+    X: `${ICONS}/x_icon.png`,
+    YouTube: `${ICONS}/youtube_icon.png`,
+    LinkedIn: `${ICONS}/linkedin_icon.png`,
+    WhatsApp: `${ICONS}/whastapp_icon.png`,
+    Email: `${ICONS}/mail_icon.png`,
   } as Record<string, string>,
 
   /** Team member portrait thumbnails (order matches data.ts team list start). */

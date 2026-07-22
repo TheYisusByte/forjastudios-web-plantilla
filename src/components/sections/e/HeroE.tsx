@@ -6,8 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import Image from "next/image";
-import { HeroBgVideo } from "@/components/sections/d/HeroBgVideo";
-import { meta } from "@/lib/content/data";
+import { HeroBgVideoFile } from "@/components/sections/e/HeroBgVideoFile";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -212,7 +211,14 @@ function useForgeCanvas(
 // Hero title: "Forge your ___" — la última palabra rota (misma animación que
 // el formulario de contacto). Editable: cambia/añade palabras aquí.
 const STATIC_LINES = ["Forge", "your"];
-const ROTATE_WORDS = ["flame.", "world.", "story.", "legend."];
+const ROTATE_WORDS = [
+  "art.", "game.", "world.", "story.",
+  "heroes.", "vision.", "motion.", "vfx.",
+];
+
+// Fondo de video del hero (servido desde Vercel Blob público / edge CDN).
+const HERO_VIDEO_URL =
+  "https://wzfwvbfikmgkjeay.public.blob.vercel-storage.com/animation%20loop.webm";
 
 export function HeroE() {
   const t = useTranslations("ConceptE");
@@ -279,7 +285,14 @@ export function HeroE() {
       onMouseLeave={() => { mouseRef.current.inside = false; }}
     >
       {/* ── Showreel video background ─────────────────────────────────── */}
-      <HeroBgVideo videoId={meta.showreelId} mobileAnchorRight />
+      {/* objectPosition = qué franja del video se ve. En móvil (portrait) el
+          video 16:9 se recorta a los lados; "75% center" corre el video a la
+          izquierda (deja visible la franja derecha). */}
+      <HeroBgVideoFile
+        src={HERO_VIDEO_URL}
+        objectPosition="center"
+        mobileObjectPosition="75% center"
+      />
 
       {/* ── Overlay: heavier at top & bottom for nav/text readability ─── */}
       <div
@@ -392,13 +405,15 @@ export function HeroE() {
         </div>
       </div>
 
-      {/* ── Scroll indicator ─────────────────────────────────────────── */}
+      {/* ── Scroll indicator (mouse) ─────────────────────────────────── */}
       <div
         aria-hidden="true"
-        className="hero-e-fade absolute bottom-8 left-1/2 z-[4] flex -translate-x-1/2 flex-col items-center gap-2"
+        className="hero-e-fade absolute bottom-8 left-1/2 z-[4] flex -translate-x-1/2 flex-col items-center gap-3"
       >
-        <div className="h-10 w-px bg-gradient-to-b from-forja-bone/60 to-transparent" />
-        <span className="text-[10px] uppercase tracking-[0.3em] text-forja-muted">
+        <span className="flex h-9 w-[22px] justify-center rounded-full border-2 border-forja-bone/40 pt-1.5">
+          <span className="hero-scroll-dot h-1.5 w-1 rounded-full bg-forja-bone/80" />
+        </span>
+        <span className="text-xs italic tracking-wide text-forja-muted">
           {t("scroll")}
         </span>
       </div>

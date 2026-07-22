@@ -272,3 +272,20 @@
   animation: candle-flicker var(--flicker-dur, 3.2s) ease-in-out infinite;
   animation-delay: var(--flicker-delay, 0s);
 }
+
+/* Indicador de scroll del hero — ruedita del "mouse" que baja y se desvanece. */
+@keyframes scroll-wheel {
+  0%   { transform: translateY(0);      opacity: 0; }
+  15%  { opacity: 1; }
+  100% { transform: translateY(0.5rem); opacity: 0; }
+}
+.hero-scroll-dot {
+  animation: scroll-wheel 1.7s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-scroll-dot {
+    animation: none;
+    opacity: 0.9;
+    transform: translateY(0.15rem);
+  }
+}

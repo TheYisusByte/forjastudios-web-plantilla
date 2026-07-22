@@ -10,6 +10,7 @@ import { ProjectsE } from "@/components/sections/e/ProjectsE";
 import { IPsE } from "@/components/sections/e/IPsE";
 import { StatsInterleaved } from "@/components/sections/e/about/StatsInterleaved";
 import { ContactForgeMeter } from "@/components/sections/e/contact/ForgeMeter";
+import { ReelE } from "@/components/sections/e/ReelE";
 
 interface PageProps {
   params: Promise<{ locale: Locale }>;
@@ -30,6 +31,7 @@ export default async function ConceptoEPage({ params }: PageProps) {
       <ProjectsE projects={content.projects} />
       <IPsE ips={content.ips} projects={content.projects} />
       <StatsInterleaved stats={content.meta.stats} />
+      <ReelE />
       <ContactForgeMeter content={content} />
 
       {/* Footer */}
@@ -47,12 +49,9 @@ export default async function ConceptoEPage({ params }: PageProps) {
               />
             </a>
             <p className="text-xs text-forja-muted">
-              © {new Date().getFullYear()} Forja Studios. {tf("rights")}
+              © 2013–{new Date().getFullYear()} FORJA Studios. {tf("rights")}
             </p>
           </div>
-          <p className="mt-6 text-center text-[11px] leading-relaxed text-forja-muted/50">
-            {tf("disclaimer")}
-          </p>
         </div>
       </footer>
     </div>

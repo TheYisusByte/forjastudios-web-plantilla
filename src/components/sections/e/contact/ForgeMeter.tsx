@@ -5,7 +5,9 @@ import { useTranslations } from "next-intl";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import Image from "next/image";
 import type { SiteContent } from "@/lib/content/types";
+import { forjaAssets } from "@/lib/content/assets";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -181,7 +183,7 @@ export function ContactForgeMeter({ content }: { content: SiteContent }) {
   };
 
   return (
-    <section ref={sectionRef} id="contact" className="relative overflow-hidden py-24">
+    <section ref={sectionRef} id="contact" className="relative overflow-hidden pt-12 pb-24">
       <div className="mx-auto grid max-w-7xl gap-16 px-6 lg:grid-cols-2 lg:gap-24">
         {/* Left — pitch + info */}
         <div className="flex flex-col justify-center">
@@ -201,12 +203,29 @@ export function ContactForgeMeter({ content }: { content: SiteContent }) {
             <a href={`https://wa.me/${content.meta.contact.whatsapp.replace(/[^\d]/g, "")}`} target="_blank" rel="noreferrer" className="text-forja-muted transition-colors hover:text-forja-amber">
               {content.meta.contact.whatsapp}
             </a>
-            <ul className="flex flex-wrap gap-4 pt-1 text-forja-muted">
-              {content.meta.socials.map((s) => (
-                <li key={s.label}>
-                  <a href={s.href} target="_blank" rel="noreferrer" className="transition-colors hover:text-forja-amber">{s.label}</a>
-                </li>
-              ))}
+            <ul className="flex flex-wrap items-center gap-3 pt-2">
+              {content.meta.socials.map((s) => {
+                const icon = forjaAssets.socialIcons[s.label];
+                return (
+                  <li key={s.label}>
+                    {icon ? (
+                      <a
+                        href={s.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label={s.label}
+                        className="block opacity-80 transition-opacity hover:opacity-100"
+                      >
+                        <Image src={icon} alt={s.label} width={32} height={32} className="h-8 w-8 rounded-md" />
+                      </a>
+                    ) : (
+                      <a href={s.href} target="_blank" rel="noreferrer" className="text-sm text-forja-muted transition-colors hover:text-forja-amber">
+                        {s.label}
+                      </a>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           </div>
         </div>
@@ -233,8 +252,7 @@ export function ContactForgeMeter({ content }: { content: SiteContent }) {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="flex flex-col gap-7" noValidate>
-                <div className="mb-1 flex items-center justify-between gap-4">
-                  <p className="text-xs uppercase tracking-[0.3em] text-forja-muted">Forge your flame</p>
+                <div className="mb-1 flex items-center justify-end gap-4">
                   <div className="flex items-center gap-2">
                     <span className="text-[10px] font-semibold uppercase tracking-widest transition-colors duration-300" style={{ color: heat.color }}>{heat.label}</span>
                     <div className="relative h-1.5 w-24 overflow-hidden rounded-full bg-white/10">

@@ -7,7 +7,7 @@
  * front (src/lib/wp/queries.ts). No renombrar sin actualizar el front:
  *
  *   camposProyecto { cliente, anio, videoUrl, cover, destacado }
- *   camposIp       { descripcion, videoId, enlace, logo }
+ *   camposIp       { cover, descripcion, videoId, enlace, logo }   (+ galeria = adjuntos)
  *
  * La GALERÍA de cada proyecto (imágenes y videos de la página interna) NO es un
  * campo ACF (Gallery es ACF PRO): se resuelve desde los MEDIOS ADJUNTOS al post
@@ -85,6 +85,7 @@ function forja_register_acf_fields(): void {
         ],
         'active'             => true,
         'show_in_graphql'    => 1,
+        'show_in_rest'       => 1, // expone/escribe los campos bajo `acf` en la REST API
         'graphql_field_name' => 'camposProyecto',
         'graphql_types'      => ['Proyecto'], // = graphql_single_name capitalizado
     ]);
@@ -94,6 +95,16 @@ function forja_register_acf_fields(): void {
         'key'    => 'group_forja_ip',
         'title'  => 'Campos · IP',
         'fields' => [
+            [
+                'key'           => 'field_ip_cover',
+                'label'         => 'Cover (imagen)',
+                'name'          => 'cover',
+                'type'          => 'image',
+                'return_format' => 'array', // WPGraphQL for ACF lo expone como conexión a MediaItem
+                'preview_size'  => 'medium',
+                'library'       => 'all',
+                'show_in_graphql' => 1,
+            ],
             [
                 'key'           => 'field_ip_descripcion',
                 'label'         => 'Descripción',
@@ -136,6 +147,7 @@ function forja_register_acf_fields(): void {
         ],
         'active'             => true,
         'show_in_graphql'    => 1,
+        'show_in_rest'       => 1,
         'graphql_field_name' => 'camposIp',
         'graphql_types'      => ['Ip'],
     ]);
@@ -177,6 +189,7 @@ function forja_register_acf_fields(): void {
         ],
         'active'             => true,
         'show_in_graphql'    => 1,
+        'show_in_rest'       => 1,
         'graphql_field_name' => 'camposMiembro',
         'graphql_types'      => ['Miembro'],
     ]);
@@ -209,6 +222,7 @@ function forja_register_acf_fields(): void {
         ],
         'active'             => true,
         'show_in_graphql'    => 1,
+        'show_in_rest'       => 1,
         'graphql_field_name' => 'camposCliente',
         'graphql_types'      => ['Cliente'],
     ]);

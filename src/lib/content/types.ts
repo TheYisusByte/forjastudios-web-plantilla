@@ -54,6 +54,10 @@ export interface IP {
   accent: Accent;
   /** Video de YouTube de fondo en la sección de IPs (concepto E). */
   videoId: string;
+  /** Imagen principal de la IP (cover). Si falta, se usa el gradiente de acento. */
+  coverUrl?: string;
+  /** Galería de la IP (imágenes y/o videos), para su página interna. */
+  gallery?: MediaItem[];
 }
 
 export interface TeamMember {
@@ -61,6 +65,8 @@ export interface TeamMember {
   role: string;
   initials: string;
   accent: Accent;
+  /** Foto subida en WP (sourceUrl). Si falta, se usa una foto local por índice. */
+  photo?: string;
 }
 
 export interface Client {

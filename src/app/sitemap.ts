@@ -8,10 +8,11 @@ const base = "https://forjastudios.com";
 const staticPaths = ["", "/team"];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // Detalle de proyectos (mismos slugs en ambos locales).
+  // Detalle de proyectos e IPs (mismos slugs en ambos locales).
   const content = await getSiteContent(routing.defaultLocale);
   const projectPaths = content.projects.map((p) => `/proyecto/${p.slug}`);
-  const paths = [...staticPaths, ...projectPaths];
+  const ipPaths = content.ips.map((ip) => `/ip/${ip.slug}`);
+  const paths = [...staticPaths, ...projectPaths, ...ipPaths];
 
   return paths.flatMap((path) =>
     routing.locales.map((locale) => ({

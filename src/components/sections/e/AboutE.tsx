@@ -137,7 +137,7 @@ export function AboutE() {
   };
 
   return (
-    <section ref={sectionRef} id="contact" className="relative overflow-hidden py-24">
+    <section ref={sectionRef} id="contact" className="relative overflow-hidden pt-12 pb-24">
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="grid gap-16 lg:grid-cols-2 lg:gap-24">
 

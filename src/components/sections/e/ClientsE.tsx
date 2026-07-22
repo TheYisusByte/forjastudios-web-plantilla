@@ -25,17 +25,17 @@ function MarqueeRow({ items }: { items: Client[] }) {
         aria-hidden="true"
       >
         {row.map((client, i) => (
-          <span key={i} className="flex items-center gap-10 px-6">
+          <span key={i} className="flex items-center gap-6 px-4">
             {client.logo ? (
               <Image
                 src={client.logo}
                 alt={client.name}
                 width={640}
                 height={240}
-                className="h-32 w-auto object-contain opacity-70 transition-opacity duration-300 hover:opacity-100 sm:h-40 lg:h-48"
+                className="h-20 w-auto object-contain opacity-70 sm:h-24 lg:h-28"
               />
             ) : (
-              <span className="whitespace-nowrap font-display text-xl font-black uppercase tracking-[0.1em] text-forja-bone/60">
+              <span className="whitespace-nowrap font-display text-base font-black uppercase tracking-[0.1em] text-forja-bone/60 sm:text-lg">
                 {client.name}
               </span>
             )}
@@ -87,7 +87,7 @@ export function ClientsE({ clients }: ClientsEProps) {
   );
 
   return (
-    <section ref={sectionRef} id="clients" className="py-24">
+    <section ref={sectionRef} id="clients" className="pt-12 pb-24">
       {/* Heading */}
       <div className="clients-e-heading mx-auto mb-20 max-w-7xl px-6">
         <p className="mb-3 text-xs uppercase tracking-[0.3em] text-forja-muted">

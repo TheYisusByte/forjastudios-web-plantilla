@@ -6,6 +6,7 @@ import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { Link, useRouter } from "@/i18n/navigation";
 import type { IP, Project } from "@/lib/content/types";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -24,9 +25,11 @@ interface IPCardProps {
   offset: number;
   isActive: boolean;
   onClick: () => void;
+  /** Abrir el detalle de la IP (solo la card activa). */
+  onOpen: () => void;
 }
 
-function IPCard({ ip, image, offset, isActive, onClick }: IPCardProps) {
+function IPCard({ ip, image, offset, isActive, onClick, onOpen }: IPCardProps) {
   const t = useTranslations("ConceptE");
   const tiltRef = useRef<HTMLDivElement>(null);
   const absOff  = Math.abs(offset);
@@ -42,7 +45,7 @@ function IPCard({ ip, image, offset, isActive, onClick }: IPCardProps) {
       const r  = tiltRef.current.getBoundingClientRect();
       const cx = (e.clientX - r.left) / r.width  - 0.5;
       const cy = (e.clientY - r.top)  / r.height - 0.5;
-      gsap.to(tiltRef.current, { rotateY: cx * 24, rotateX: -cy * 18, duration: 0.25, ease: "power2.out" });
+      gsap.to(tiltRef.current, { rotateY: cx * 32, rotateX: -cy * 24, z: 80, duration: 0.3, ease: "power2.out" });
       const shine = tiltRef.current.querySelector<HTMLElement>(".ip-shine");
       if (shine) {
         shine.style.opacity = "1";
@@ -54,7 +57,7 @@ function IPCard({ ip, image, offset, isActive, onClick }: IPCardProps) {
 
   const handleMouseLeave = useCallback(() => {
     if (!tiltRef.current) return;
-    gsap.to(tiltRef.current, { rotateY: 0, rotateX: 0, duration: 0.7, ease: "elastic.out(1,0.75)" });
+    gsap.to(tiltRef.current, { rotateY: 0, rotateX: 0, z: 0, duration: 0.7, ease: "elastic.out(1,0.75)" });
     const shine = tiltRef.current.querySelector<HTMLElement>(".ip-shine");
     if (shine) gsap.to(shine, { opacity: 0, duration: 0.4 });
   }, []);
@@ -73,11 +76,11 @@ function IPCard({ ip, image, offset, isActive, onClick }: IPCardProps) {
         transform: `translateX(${offset * GAP_X}px) translateZ(${depth}px) rotateY(${offset * -ROT_Y}deg)`,
         opacity: !visible ? 0 : Math.max(0, 1 - absOff * 0.22),
         transition: "transform 0.7s cubic-bezier(0.22,0.61,0.36,1), opacity 0.5s ease",
-        cursor: isActive ? "default" : "pointer",
+        cursor: "pointer",
         pointerEvents: visible ? "auto" : "none",
         willChange: "transform, opacity",
       }}
-      onClick={!isActive ? onClick : undefined}
+      onClick={isActive ? onOpen : onClick}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
@@ -90,7 +93,7 @@ function IPCard({ ip, image, offset, isActive, onClick }: IPCardProps) {
           overflow: "hidden",
           transformStyle: "preserve-3d",
           boxShadow: isActive
-            ? "0 32px 80px rgba(0,0,0,0.7), 0 0 0 1.5px rgba(255,178,62,0.5)"
+            ? "0 44px 100px rgba(0,0,0,0.75), 0 0 0 1.5px rgba(255,178,62,0.5)"
             : "0 14px 36px rgba(0,0,0,0.5)",
           transition: "box-shadow 0.4s ease",
         }}
@@ -142,6 +145,7 @@ function IPCard({ ip, image, offset, isActive, onClick }: IPCardProps) {
 
 export function IPsE({ ips, projects }: { ips: IP[]; projects: Project[] }) {
   const t = useTranslations("ConceptE");
+  const router = useRouter();
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
   const stageRef   = useRef<HTMLDivElement>(null);
@@ -154,6 +158,7 @@ export function IPsE({ ips, projects }: { ips: IP[]; projects: Project[] }) {
   // proyecto homónimo (carameloki, india-catalina…); si no, usa el pool.
   const covers = projects.map((p) => p.coverUrl).filter((c): c is string => !!c);
   const imageForIp = (ip: IP, i: number) =>
+    ip.coverUrl ??
     projects.find((p) => p.slug === ip.slug)?.coverUrl ??
     covers[i % Math.max(1, covers.length)] ??
     "";
@@ -238,6 +243,10 @@ export function IPsE({ ips, projects }: { ips: IP[]; projects: Project[] }) {
 
   const activeIP = ips[active];
 
+  // Sin IPs (CMS sin contenido o idioma sin traducir) no renderizamos la sección
+  // en lugar de romper al indexar ips[active].
+  if (!activeIP) return null;
+
   return (
     <section ref={sectionRef} id="ips" className="relative overflow-hidden" style={{ minHeight: "100vh" }}>
 
@@ -281,7 +290,7 @@ export function IPsE({ ips, projects }: { ips: IP[]; projects: Project[] }) {
       />
 
       {/* ── Content ────────────────────────────────────────────────────────── */}
-      <div className="relative flex flex-col py-24" style={{ zIndex: 2 }}>
+      <div className="relative flex flex-col pt-12 pb-24" style={{ zIndex: 2 }}>
 
         {/* Heading */}
         <div ref={headingRef} className="mx-auto w-full max-w-7xl px-6 pb-20">
@@ -295,9 +304,6 @@ export function IPsE({ ips, projects }: { ips: IP[]; projects: Project[] }) {
             <span className="block text-forja-bone">{t("ipsHeading1")}</span>
             <span className="flame-text block">{t("ipsHeading2")}</span>
           </h2>
-          <p className="mt-4 max-w-sm text-sm leading-relaxed text-forja-muted">
-            {t("ipsBody")}
-          </p>
         </div>
 
         {/* Carousel stage */}
@@ -326,6 +332,7 @@ export function IPsE({ ips, projects }: { ips: IP[]; projects: Project[] }) {
                   offset={offset}
                   isActive={i === active}
                   onClick={() => goTo(i)}
+                  onOpen={() => router.push(`/ip/${ip.slug}`)}
                 />
               );
             })}
@@ -378,6 +385,12 @@ export function IPsE({ ips, projects }: { ips: IP[]; projects: Project[] }) {
               {activeIP.description}
             </p>
           )}
+          <Link
+            href={`/ip/${activeIP.slug}`}
+            className="mt-5 inline-flex items-center gap-2 text-sm uppercase tracking-widest text-forja-amber transition-colors hover:text-forja-bone"
+          >
+            {t("ipsView")} <span aria-hidden>→</span>
+          </Link>
         </div>
 
       </div>

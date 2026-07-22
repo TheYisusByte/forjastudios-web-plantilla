@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { useTranslations } from "next-intl";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -47,9 +46,9 @@ function MemberCard({
   };
 
   return (
-    <TiltCard intensity={12}>
+    <TiltCard intensity={18}>
       <div
-        className="group relative aspect-[3/4] overflow-hidden rounded-2xl bg-forja-coal ring-1 ring-inset ring-white/10"
+        className="group relative aspect-[3/4] overflow-hidden rounded-2xl bg-forja-coal shadow-lg ring-1 ring-inset ring-white/10 transition-shadow duration-300 hover:shadow-[0_30px_55px_-20px_rgba(0,0,0,0.75)]"
         onMouseMove={handleMouseMove}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -100,18 +99,10 @@ function MemberCard({
           />
         </div>
 
-        {/* Hover overlay — slides up from bottom */}
-        <div className="absolute inset-x-0 bottom-0 z-10 translate-y-full bg-gradient-to-t from-black/95 to-transparent p-5 transition-transform duration-400 ease-out group-hover:translate-y-0">
-          <div className="mb-1 h-px bg-gradient-to-r from-amber-400 via-orange-500 to-transparent" />
-          <p className="mt-3 font-display text-lg font-black uppercase leading-tight text-white">
-            {member.name}
-          </p>
-          <p className="text-sm text-white/65">{member.role}</p>
-        </div>
-
-        {/* Static bottom name — hidden on hover */}
-        <div className="absolute inset-x-0 bottom-0 z-10 p-5 transition-opacity duration-300 group-hover:opacity-0">
-          <p className="font-display text-base font-bold uppercase text-white">{member.name}</p>
+        {/* Nombre + cargo — siempre visibles (sin reveal en hover) */}
+        <div className="absolute inset-x-0 bottom-0 z-10 p-5">
+          <div className="mb-2 h-px w-10 bg-gradient-to-r from-amber-400 via-orange-500 to-transparent" />
+          <p className="font-display text-base font-bold uppercase leading-tight text-white">{member.name}</p>
           <p className="text-xs text-white/60">{member.role}</p>
         </div>
       </div>
@@ -122,7 +113,6 @@ function MemberCard({
 // ── Section ───────────────────────────────────────────────────────────────────
 
 export function TeamE({ team }: TeamEProps) {
-  const t = useTranslations("ConceptE");
   const sectionRef = useRef<HTMLElement>(null);
 
   // Random flicker params per member — set after hydration
@@ -131,6 +121,7 @@ export function TeamE({ team }: TeamEProps) {
   );
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setFlicker(
       team.map(() => ({
         dur:   `${(2.4 + Math.random() * 2.2).toFixed(2)}s`,
@@ -158,14 +149,14 @@ export function TeamE({ team }: TeamEProps) {
   );
 
   return (
-    <section ref={sectionRef} id="team" className="py-24">
+    <section ref={sectionRef} id="team" className="pt-12 pb-24">
       <div className="mx-auto max-w-7xl px-6">
         <div className="team-e-grid grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {team.map((member, i) => (
             <div key={member.name} className="team-e-card">
               <MemberCard
                 member={member}
-                photoSrc={forjaAssets.teamPhotos[i % forjaAssets.teamPhotos.length]}
+                photoSrc={member.photo ?? forjaAssets.teamPhotos[i % forjaAssets.teamPhotos.length]}
                 flickerDur={flicker[i]?.dur   ?? "3.2s"}
                 flickerDelay={flicker[i]?.delay ?? "0s"}
               />

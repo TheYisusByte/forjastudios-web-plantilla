@@ -33,13 +33,23 @@ export async function wpFetch<T>(
     throw new Error("WP_GRAPHQL_URL no está definido");
   }
 
-  const res = await fetch(WP_GRAPHQL_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ query, variables }),
-    // ISR: cachea y revalida vía tag (webhook WP → revalidateTag('site-content')).
-    next: { tags: ["site-content"] },
-  });
+  // Timeout duro: si WP está caído/lento, abortamos y dejamos que getSiteContent
+  // caiga al mock en vez de colgar el render (build/ISR/SSR) esperando el TCP.
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 8000);
+  let res: Response;
+  try {
+    res = await fetch(WP_GRAPHQL_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query, variables }),
+      // ISR: cachea y revalida vía tag (webhook WP → revalidateTag('site-content')).
+      next: { tags: ["site-content"] },
+      signal: controller.signal,
+    });
+  } finally {
+    clearTimeout(timeout);
+  }
 
   if (!res.ok) {
     throw new Error(`WPGraphQL HTTP ${res.status} ${res.statusText}`);

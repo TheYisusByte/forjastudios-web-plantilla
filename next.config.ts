@@ -8,8 +8,10 @@ const nextConfig: NextConfig = {
     formats: ["image/avif", "image/webp"],
     // Allow optimizing images served from the WordPress CMS.
     remotePatterns: [
+      // CMS headless en producción (api.forjastudios.com).
+      { protocol: "https", hostname: "api.forjastudios.com" },
       { protocol: "https", hostname: "cms.forjastudios.com" },
-      // Multisite actual en Hostinger (sitio /forja/, ID 4) hasta migrar a cms.*
+      // Multisite anterior en Hostinger (sitio /forja/, ID 4) — legado.
       { protocol: "https", hostname: "powderblue-gazelle-820281.hostingersite.com" },
     ],
   },

@@ -15,18 +15,18 @@
     "menu": "Menu"
   },
   "ConceptE": {
-    "heroKicker": "2D/3D Animation · VFX · Concept Art · Games",
-    "heroSub": "We are the blacksmiths of entertainment. Over 12 years forging worlds, characters and stories that set the world ablaze.",
+    "heroKicker": "Illustration · Visual Development · Concept Art · Animation · VFX",
+    "heroSub": "We are the blacksmiths of entertainment. For over 12 years, we've been forging the art behind video games, films, and animated series for clients around the world.",
     "heroCtaWork": "See projects",
     "heroCtaContact": "Know the studio",
     "clientsTitle": "Our clients",
-    "projectsTitle": "Selected projects",
+    "projectsTitle": "Our Portfolio",
     "projectsHeading1": "Worlds we",
     "projectsHeading2": "have forged.",
     "teamTitle": "The team",
     "teamHeading1": "The",
     "teamHeading2": "blacksmiths.",
-    "ipsTitle": "Original IP",
+    "ipsTitle": "Original IPs",
     "ipsHeading1": "Worlds",
     "ipsHeading2": "of our own.",
     "aboutTitle": "The studio",
@@ -42,7 +42,8 @@
     "clientsHeading2": "by the best.",
     "ipsBody": "Stories born entirely inside the forge — concept, production, and soul all in‑house.",
     "ipsTag": "Original IP",
-    "scroll": "Scroll"
+    "ipsView": "View IP",
+    "scroll": "Scroll Down"
   },
   "ConceptD": {
     "intro": "We are a creative studio with more than 12 years of experience producing world-class content for the entertainment industry, specializing in 2D/3D animation, illustration, concept art, VFX, sound design, and audiovisual production.",
@@ -103,11 +104,11 @@
     "sectionHeading1": "Built in the",
     "sectionHeading2": "fire of creativity.",
     "yearsLabel": "Years",
-    "yearsBody": "of imagining the unimaginable, creating bizarre worlds and having a blast along the way.",
+    "yearsBody": "Of imagining the unimaginable, creating bizarre worlds and having a blast along the way.",
     "blacksmithsLabel": "Blacksmiths",
-    "blacksmithsBody": "always available to help bring your ideas to life, turning your vision into reality.",
+    "blacksmithsBody": "Always available to help bring your ideas to life, turning your vision into reality.",
     "projectsLabel": "Projects",
-    "projectsBody": "brought to life, forged and tested in the fire of creativity and dedication."
+    "projectsBody": "Brought to life, forged and tested in the fire of creativity and dedication."
   },
   "Contact": {
     "name": "Name",
@@ -143,9 +144,13 @@
     ]
   },
   "Footer": {
-    "rights": "All rights reserved.",
-    "tagline": "Forge your flame",
-    "disclaimer": "All the content displayed in this website and related to Forja Studios have all rights reserved © 2025. All audio, artwork and animations was developed by FORJA Studios and/or their team and have been authorized by them to be published in this website. If any content published infringes any copyright laws please contact us via email or contact section above."
+    "rights": "All Rights Reserved.",
+    "tagline": "Forge your flame"
+  },
+  "TeamPage": {
+    "headingTop": "our",
+    "headingMain": "TEAM",
+    "intro": "We have a multidisciplinary team of over 70 artists, animators, designers, developers, 3D specialists, SFX experts, directors, and producers with more than 15 years of experience creating content for video games, animated series, advertising, Web3, audiovisual marketing, and digital products."
   },
   "Index": {
     "title": "Forja Studios — Design concepts",

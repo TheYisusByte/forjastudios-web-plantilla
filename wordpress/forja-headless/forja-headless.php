@@ -3,7 +3,7 @@
  * Plugin Name:       Forja Headless
  * Plugin URI:        https://www.forjastudios.com/
  * Description:        Custom Post Types, taxonomías y campos ACF de Forja Studios, expuestos en WPGraphQL para el front headless en Next.js. Define proyecto, ip, miembro y cliente.
- * Version:           1.0.0
+ * Version:           1.3.0
  * Author:            Forja Studios
  * Text Domain:       forja-headless
  * Requires at least: 6.4
@@ -37,7 +37,27 @@
  *  Para i18n ES/EN (filtro `where: { language: ... }` que usa el front):
  *    - Polylang  +  WPGraphQL Polylang   (ver inc/graphql.php)
  *
- *  Endpoint GraphQL resultante:  https://<dominio>/forja/graphql
+ *  Endpoint GraphQL resultante:  https://<dominio>/graphql
+ *
+ * --------------------------------------------------------------------------
+ *  Changelog
+ * --------------------------------------------------------------------------
+ *  1.3.0
+ *    - Metabox "Galería" visible en el editor de Proyecto e IP (inc/galeria-metabox.php):
+ *      selecciona/ordena/quita imágenes y videos con la Biblioteca de Medios.
+ *      Guarda los IDs en el meta `_forja_galeria`; el campo GraphQL `galeria` lo
+ *      lee (con fallback a medios adjuntos). La forma en GraphQL no cambia.
+ *  1.2.0
+ *    - IPs equiparadas a proyectos: nuevo campo ACF `cover` (imagen) en camposIp
+ *      y campo GraphQL `galeria` (medios adjuntos) también en el tipo `Ip`.
+ *  1.1.0
+ *    - Redirección headless del front al sitio público (inc/headless-redirect.php),
+ *      con exenciones para /graphql, REST, admin, login, cron, medios y entorno local.
+ *    - Campos ACF expuestos en REST (`show_in_rest`) para poder crear/editar
+ *      proyectos y subir medios por la API REST además de GraphQL.
+ *  1.0.0
+ *    - CPTs (proyecto/ip/miembro/cliente), taxonomía `categoria`, campos ACF y
+ *      exposición en WPGraphQL.
  */
 
 if (! defined('ABSPATH')) {
@@ -50,6 +70,8 @@ require_once FORJA_HEADLESS_DIR . 'inc/post-types.php';
 require_once FORJA_HEADLESS_DIR . 'inc/taxonomies.php';
 require_once FORJA_HEADLESS_DIR . 'inc/acf-fields.php';
 require_once FORJA_HEADLESS_DIR . 'inc/graphql.php';
+require_once FORJA_HEADLESS_DIR . 'inc/galeria-metabox.php';
+require_once FORJA_HEADLESS_DIR . 'inc/headless-redirect.php';
 
 /**
  * Al activar, refresca las reglas de reescritura para que los slugs de los

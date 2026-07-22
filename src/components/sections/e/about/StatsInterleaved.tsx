@@ -24,7 +24,7 @@ export function StatsInterleaved({ stats }: { stats: SiteMeta["stats"] }) {
   ]);
 
   return (
-    <section id="about" className="relative overflow-hidden py-24">
+    <section id="about" className="relative overflow-hidden pt-12 pb-24">
       <div className="mx-auto max-w-7xl px-6">
         <Reveal className="mb-14 max-w-2xl">
           <p className="mb-5 text-xs uppercase tracking-[0.3em] text-forja-muted">

@@ -93,6 +93,28 @@ queries de `src/lib/wp/queries.ts` y mapea la respuesta a `SiteContent`. La
 forma de los datos es idéntica, así que ningún componente cambia. Variables de
 entorno: `WP_GRAPHQL_URL` (= `https://<dominio>/forja/graphql`), `NEXT_PUBLIC_WP_URL`.
 
+## Redirección headless del front
+
+`inc/headless-redirect.php` envía las visitas al **front de WordPress**
+(`https://api.forjastudios.com/...`) hacia el sitio público
+(`https://forjastudios.com`), para no exponer el theme crudo. **No** afecta a la
+API ni al desarrollo:
+
+- **Exento:** `/graphql`, `/wp-json` (REST), `/wp-admin`, login/registro, cron,
+  WP-CLI y `/wp-content/` (medios). También los **editores logueados** (pueden
+  previsualizar el front).
+- **Exención local:** no redirige en `localhost`, `127.0.0.1`, `*.local`,
+  `*.test` ni cuando `wp_get_environment_type()` es `local`/`development`. Así el
+  front en `localhost:3000` sigue leyendo `/graphql` sin tropiezos.
+- **Personalizar destino:** `define('FORJA_HEADLESS_FRONT_URL', 'https://...')`
+  en `wp-config.php`, o el filtro `forja_headless_front_url`. Por defecto redirige
+  a la **home** (las rutas del front llevan prefijo de idioma y no mapean 1:1);
+  para mapear ruta a ruta usa el filtro `forja_headless_redirect_location($url, $req)`.
+- **Desactivar:** `define('FORJA_HEADLESS_DISABLE_REDIRECT', true);` o
+  `add_filter('forja_headless_redirect_enabled', '__return_false');`.
+- Por defecto es **302** (reversible); cambia a 301 con el filtro
+  `forja_headless_redirect_status` solo si mapeas las rutas 1:1.
+
 ## Notas
 
 - **`metaQuery` / `destacado`:** si tu versión de WPGraphQL no soporta `metaQuery`
