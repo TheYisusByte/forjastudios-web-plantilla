@@ -3,6 +3,8 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
+import dynamic from "next/dynamic";
+import { Move3d } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -19,25 +21,32 @@ const VISIBLE = 2;
 
 // ── IP Card ───────────────────────────────────────────────────────────────────
 
+// Carta WebGL (Three.js) — chunk aparte, sin SSR. Solo se carga en desktop.
+const IPCardWebGL = dynamic(() => import("./IPCardWebGL"), { ssr: false });
+
 interface IPCardProps {
   ip: IP;
   image: string;
   offset: number;
   isActive: boolean;
+  isDesktop: boolean;
   onClick: () => void;
   /** Abrir el detalle de la IP (solo la card activa). */
   onOpen: () => void;
 }
 
-function IPCard({ ip, image, offset, isActive, onClick, onOpen }: IPCardProps) {
+function IPCard({ ip, image, offset, isActive, isDesktop, onClick, onOpen }: IPCardProps) {
   const t = useTranslations("ConceptE");
   const tiltRef = useRef<HTMLDivElement>(null);
+  const downRef = useRef<{ x: number; y: number; t: number } | null>(null);
   const absOff  = Math.abs(offset);
   const visible  = absOff <= VISIBLE + 1;
   // La profundidad la da translateZ (no el zIndex): al interpolarse junto al
   // resto del transform, cada card pasa SIEMPRE por detrás de las demás
   // mientras viaja a su posición, sin solaparse por el frente.
   const depth    = -absOff * 230;
+  // La carta activa en desktop se renderiza en WebGL (Three.js); el resto en CSS.
+  const useWebGL = isActive && isDesktop;
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -45,12 +54,13 @@ function IPCard({ ip, image, offset, isActive, onClick, onOpen }: IPCardProps) {
       const r  = tiltRef.current.getBoundingClientRect();
       const cx = (e.clientX - r.left) / r.width  - 0.5;
       const cy = (e.clientY - r.top)  / r.height - 0.5;
-      gsap.to(tiltRef.current, { rotateY: cx * 32, rotateX: -cy * 24, z: 80, duration: 0.3, ease: "power2.out" });
-      const shine = tiltRef.current.querySelector<HTMLElement>(".ip-shine");
-      if (shine) {
-        shine.style.opacity = "1";
-        shine.style.background = `radial-gradient(circle at ${(cx + 0.5) * 100}% ${(cy + 0.5) * 100}%, rgba(255,255,255,0.15) 0%, transparent 55%)`;
-      }
+      gsap.to(tiltRef.current, { rotateY: cx * 40, rotateX: -cy * 30, z: 110, duration: 0.3, ease: "power2.out" });
+      const el = tiltRef.current;
+      el.style.setProperty("--hx", `${((cx + 0.5) * 100).toFixed(1)}%`);
+      el.style.setProperty("--hy", `${((cy + 0.5) * 100).toFixed(1)}%`);
+      el.querySelectorAll<HTMLElement>(".ip-holo, .ip-glare, .ip-pattern").forEach((n) => {
+        n.style.opacity = "1";
+      });
     },
     [isActive],
   );
@@ -58,8 +68,9 @@ function IPCard({ ip, image, offset, isActive, onClick, onOpen }: IPCardProps) {
   const handleMouseLeave = useCallback(() => {
     if (!tiltRef.current) return;
     gsap.to(tiltRef.current, { rotateY: 0, rotateX: 0, z: 0, duration: 0.7, ease: "elastic.out(1,0.75)" });
-    const shine = tiltRef.current.querySelector<HTMLElement>(".ip-shine");
-    if (shine) gsap.to(shine, { opacity: 0, duration: 0.4 });
+    tiltRef.current.querySelectorAll<HTMLElement>(".ip-holo, .ip-glare, .ip-pattern").forEach((n) => {
+      gsap.to(n, { opacity: 0, duration: 0.5 });
+    });
   }, []);
 
   return (
@@ -76,67 +87,88 @@ function IPCard({ ip, image, offset, isActive, onClick, onOpen }: IPCardProps) {
         transform: `translateX(${offset * GAP_X}px) translateZ(${depth}px) rotateY(${offset * -ROT_Y}deg)`,
         opacity: !visible ? 0 : Math.max(0, 1 - absOff * 0.22),
         transition: "transform 0.7s cubic-bezier(0.22,0.61,0.36,1), opacity 0.5s ease",
-        cursor: "pointer",
         pointerEvents: visible ? "auto" : "none",
         willChange: "transform, opacity",
       }}
-      onClick={isActive ? onOpen : onClick}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
     >
-      <div
-        ref={tiltRef}
-        style={{
-          width: "100%",
-          height: "100%",
-          borderRadius: 18,
-          overflow: "hidden",
-          transformStyle: "preserve-3d",
-          boxShadow: isActive
-            ? "0 44px 100px rgba(0,0,0,0.75), 0 0 0 1.5px rgba(255,178,62,0.5)"
-            : "0 14px 36px rgba(0,0,0,0.5)",
-          transition: "box-shadow 0.4s ease",
-        }}
-      >
-        {/* Media — imagen de proyecto acomodada a la card */}
-        <div className="absolute inset-0">
-          <Image src={image} alt={ip.name} fill sizes="400px" className="object-cover" />
+      {useWebGL ? (
+        // ── Carta WebGL (activa · desktop) — arrastrar para rotar; click abre ──
+        <div
+          className="group absolute inset-0"
+          style={{ cursor: "grab" }}
+          onPointerDown={(e) => {
+            // Burbuja (no capture): así OrbitControls sí recibe el evento en el
+            // canvas; el stopPropagation solo evita el swipe del carrusel (stage).
+            e.stopPropagation();
+            downRef.current = { x: e.clientX, y: e.clientY, t: Date.now() };
+          }}
+          onPointerUp={(e) => {
+            e.stopPropagation();
+            const d = downRef.current;
+            downRef.current = null;
+            if (d && Math.hypot(e.clientX - d.x, e.clientY - d.y) < 6 && Date.now() - d.t < 300) onOpen();
+          }}
+        >
+          <IPCardWebGL imageUrl={image} name={ip.name} />
+          {/* Hint de interactividad — sutil siempre, más visible al hover */}
+          <div className="pointer-events-none absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-black/50 px-3 py-1.5 text-[10px] uppercase tracking-widest text-white/70 opacity-60 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100">
+            <Move3d className="h-3 w-3" />
+            {t("ipsDrag")}
+          </div>
         </div>
-
-        {/* Scrim */}
+      ) : (
+        // ── Carta CSS (side cards · móvil) ──
         <div
-          className="absolute inset-0"
-          style={{ background: "linear-gradient(to top, rgba(0,0,0,0.94) 0%, rgba(0,0,0,0.18) 55%, rgba(0,0,0,0.35) 100%)" }}
-        />
-
-        {/* Shine overlay */}
-        <div
-          className="ip-shine pointer-events-none absolute inset-0"
-          style={{ opacity: 0, borderRadius: 18, transition: "opacity 0.3s" }}
-        />
-
-        {/* Active amber ring */}
-        {isActive && (
+          className="h-full w-full"
+          style={{ cursor: "pointer" }}
+          onClick={isActive ? onOpen : onClick}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+        >
           <div
-            className="pointer-events-none absolute inset-0"
-            style={{ borderRadius: 18, boxShadow: "inset 0 0 0 1.5px rgba(255,178,62,0.65)" }}
-          />
-        )}
+            ref={tiltRef}
+            style={{
+              width: "100%",
+              height: "100%",
+              borderRadius: 18,
+              transformStyle: "preserve-3d",
+              // Sin sombra inferior: solo un glow tipo "bloom" + borde ámbar en la activa.
+              boxShadow: isActive
+                ? "0 0 55px rgba(255,150,70,0.22), 0 0 0 1.5px rgba(255,178,62,0.5)"
+                : "none",
+              transition: "box-shadow 0.4s ease",
+            }}
+          >
+            {/* Cara de la card — capas planas, clip a esquinas redondeadas */}
+            <div className="absolute inset-0 overflow-hidden" style={{ borderRadius: 18 }}>
+              <div className="absolute inset-0">
+                <Image src={image} alt={ip.name} fill sizes="400px" className="object-cover" />
+              </div>
+              {/* Scrim */}
+              <div
+                className="absolute inset-0"
+                style={{ background: "linear-gradient(to top, rgba(0,0,0,0.94) 0%, rgba(0,0,0,0.18) 55%, rgba(0,0,0,0.35) 100%)" }}
+              />
+              {/* Patrón de foil + holográfico + glare — se activan con el puntero (card activa) */}
+              <div className="ip-pattern pointer-events-none absolute inset-0" />
+              <div className="ip-holo pointer-events-none absolute inset-0" />
+              <div className="ip-glare pointer-events-none absolute inset-0" />
+            </div>
 
-        {/* Tag */}
-        <div className="absolute left-4 top-4 z-10">
-          <span className="rounded-full bg-black/60 px-3 py-1 text-[10px] uppercase tracking-widest text-white/60 backdrop-blur-sm">
-            {t("ipsTag")}
-          </span>
+            {/* Contenido flotante — parallax 3D (se despega de la cara al inclinar) */}
+            <div className="absolute left-4 top-4 z-10" style={{ transform: "translateZ(38px)" }}>
+              <span className="rounded-full bg-black/60 px-3 py-1 text-[10px] uppercase tracking-widest text-white/60 backdrop-blur-sm">
+                {t("ipsTag")}
+              </span>
+            </div>
+            <div className="absolute inset-x-0 bottom-0 z-10 p-5" style={{ transform: "translateZ(38px)" }}>
+              <p className="font-display text-lg font-black uppercase leading-tight text-forja-bone">
+                {ip.name}
+              </p>
+            </div>
+          </div>
         </div>
-
-        {/* Card info */}
-        <div className="absolute inset-x-0 bottom-0 z-10 p-5">
-          <p className="font-display text-lg font-black uppercase leading-tight text-forja-bone">
-            {ip.name}
-          </p>
-        </div>
-      </div>
+      )}
     </div>
   );
 }
@@ -151,8 +183,28 @@ export function IPsE({ ips, projects }: { ips: IP[]; projects: Project[] }) {
   const stageRef   = useRef<HTMLDivElement>(null);
   const infoRef    = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  // La carta WebGL solo en desktop con puntero fino; en móvil/touch se usa CSS.
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px) and (pointer: fine)");
+    const update = () => setIsDesktop(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
 
   const total = ips.length;
+
+  // Reproduce solo el video de la IP activa; pausa el resto (ahorra recursos).
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  useEffect(() => {
+    videoRefs.current.forEach((v, i) => {
+      if (!v) return;
+      if (i === active) v.play().catch(() => {});
+      else v.pause();
+    });
+  }, [active]);
 
   // Imágenes de proyectos para las cards: empareja por slug si existe el
   // proyecto homónimo (carameloki, india-catalina…); si no, usa el pool.
@@ -163,37 +215,14 @@ export function IPsE({ ips, projects }: { ips: IP[]; projects: Project[] }) {
     covers[i % Math.max(1, covers.length)] ??
     "";
 
-  // ── Auto-rotate ─────────────────────────────────────────────────────────────
-  const autoTimer  = useRef<ReturnType<typeof setInterval> | null>(null);
-  const restartRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const stopAuto = useCallback(() => {
-    if (autoTimer.current)  { clearInterval(autoTimer.current);  autoTimer.current  = null; }
-    if (restartRef.current) { clearTimeout(restartRef.current);  restartRef.current = null; }
-  }, []);
-
-  const startAuto = useCallback(() => {
-    stopAuto();
-    autoTimer.current = setInterval(() => setActive(p => (p + 1) % total), 4000);
-  }, [stopAuto, total]);
-
-  const pauseResume = useCallback(() => {
-    stopAuto();
-    restartRef.current = setTimeout(startAuto, 5500);
-  }, [stopAuto, startAuto]);
-
-  useEffect(() => { startAuto(); return stopAuto; }, [startAuto, stopAuto]);
-
-  // ── Navigate ─────────────────────────────────────────────────────────────────
+  // ── Navigate (slider manual — sin auto-avance) ───────────────────────────────
   const navigate = useCallback((dir: 1 | -1) => {
-    pauseResume();
     setActive(p => (p + dir + total) % total);
-  }, [pauseResume, total]);
+  }, [total]);
 
   const goTo = useCallback((i: number) => {
-    pauseResume();
     setActive(i);
-  }, [pauseResume]);
+  }, []);
 
   // ── Drag / swipe ─────────────────────────────────────────────────────────────
   const dragStart = useRef(0);
@@ -203,14 +232,12 @@ export function IPsE({ ips, projects }: { ips: IP[]; projects: Project[] }) {
     dragging.current  = true;
     dragStart.current = e.clientX;
     e.currentTarget.setPointerCapture(e.pointerId);
-    stopAuto();
   };
   const onPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!dragging.current) return;
     dragging.current = false;
     const delta = e.clientX - dragStart.current;
     if (Math.abs(delta) > 55) navigate(delta < 0 ? 1 : -1);
-    else pauseResume();
   };
 
   // ── Info panel fade on change ────────────────────────────────────────────────
@@ -250,37 +277,32 @@ export function IPsE({ ips, projects }: { ips: IP[]; projects: Project[] }) {
   return (
     <section ref={sectionRef} id="ips" className="relative overflow-hidden" style={{ minHeight: "100vh" }}>
 
-      {/* ── YouTube background videos — all loaded, only active is visible ── */}
+      {/* ── Video de fondo (URL directa desde WP) — solo el activo visible ── */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0" style={{ zIndex: 0 }}>
-        {ips.map((ip, i) => (
-          <div
-            key={ip.videoId}
-            className="absolute inset-0"
-            style={{
-              opacity: i === active ? 1 : 0,
-              transition: "opacity 1s ease",
-            }}
-          >
-            <div
-              className="absolute"
-              style={{
-                top: "50%", left: "50%",
-                transform: "translate(-50%, -50%)",
-                width: "100%", height: "100%",
-                minWidth: "177.78vh",
-                minHeight: "56.25vw",
-              }}
-            >
-              <iframe
-                src={`https://www.youtube-nocookie.com/embed/${ip.videoId}?autoplay=1&mute=1&loop=1&playlist=${ip.videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1`}
-                allow="autoplay; encrypted-media"
-                className="h-full w-full border-0"
-                title={ip.name}
-              />
-            </div>
-          </div>
-        ))}
+        {ips.map((ip, i) =>
+          ip.videoUrl && ip.videoUrl.startsWith("http") ? (
+            <video
+              key={ip.slug}
+              ref={(el) => { videoRefs.current[i] = el; }}
+              src={ip.videoUrl}
+              poster={imageForIp(ip, i)}
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              className="absolute inset-0 h-full w-full object-cover"
+              style={{ opacity: i === active ? 1 : 0, transition: "opacity 1s ease" }}
+            />
+          ) : null,
+        )}
       </div>
+
+      {/* Overlay oscuro sobre el video de fondo */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
+        style={{ zIndex: 1, background: "rgba(10,10,11,0.55)" }}
+      />
 
       {/* Bottom fade */}
       <div
@@ -312,7 +334,7 @@ export function IPsE({ ips, projects }: { ips: IP[]; projects: Project[] }) {
           className="relative mx-auto w-full select-none"
           style={{
             height: CARD_H + 80,
-            perspective: "1400px",
+            perspective: "1150px",
             perspectiveOrigin: "50% 50%",
             overflow: "hidden",
           }}
@@ -331,6 +353,7 @@ export function IPsE({ ips, projects }: { ips: IP[]; projects: Project[] }) {
                   image={imageForIp(ip, i)}
                   offset={offset}
                   isActive={i === active}
+                  isDesktop={isDesktop}
                   onClick={() => goTo(i)}
                   onOpen={() => router.push(`/ip/${ip.slug}`)}
                 />
@@ -344,7 +367,7 @@ export function IPsE({ ips, projects }: { ips: IP[]; projects: Project[] }) {
           <button
             onClick={() => navigate(-1)}
             aria-label="IP anterior"
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 text-forja-muted backdrop-blur-sm transition-all hover:border-forja-amber hover:text-forja-amber"
+            className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-white/30 text-forja-muted backdrop-blur-sm transition-all hover:border-forja-amber hover:text-forja-amber"
           >
             ←
           </button>
@@ -369,22 +392,14 @@ export function IPsE({ ips, projects }: { ips: IP[]; projects: Project[] }) {
           <button
             onClick={() => navigate(1)}
             aria-label="IP siguiente"
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 text-forja-muted backdrop-blur-sm transition-all hover:border-forja-amber hover:text-forja-amber"
+            className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-white/30 text-forja-muted backdrop-blur-sm transition-all hover:border-forja-amber hover:text-forja-amber"
           >
             →
           </button>
         </div>
 
-        {/* Active IP detail */}
+        {/* Active IP detail — solo el CTA (título y descripción removidos) */}
         <div ref={infoRef} className="mx-auto mt-8 max-w-md px-6 text-center">
-          <p className="font-display text-2xl font-black uppercase text-forja-bone">
-            {activeIP.name}
-          </p>
-          {activeIP.description && (
-            <p className="mt-3 text-sm leading-relaxed text-forja-muted/75">
-              {activeIP.description}
-            </p>
-          )}
           <Link
             href={`/ip/${activeIP.slug}`}
             className="mt-5 inline-flex items-center gap-2 text-sm uppercase tracking-widest text-forja-amber transition-colors hover:text-forja-bone"

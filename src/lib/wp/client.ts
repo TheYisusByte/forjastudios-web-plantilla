@@ -127,7 +127,7 @@ function getMockContent(locale: Locale): SiteContent {
       name: ip.name,
       description: ip.description[locale],
       accent: ip.accent,
-      videoId: ip.videoId,
+      videoUrl: ip.videoId,
     })),
     team: team.map((m) => ({
       name: m.name,
@@ -246,8 +246,8 @@ function mapIp(node: WpIp, i: number): IP {
     name: decode(node.title),
     description: clean(node.camposIp?.descripcion),
     accent: accentAt(i),
-    // videoId de fondo desde WP; si falta, cae al de data.json por slug.
-    videoId: node.camposIp?.videoId || ips.find((x) => x.slug === node.slug)?.videoId || "",
+    // URL del video de fondo desde WP (el campo ACF `videoId` ahora guarda la URL directa).
+    videoUrl: node.camposIp?.videoId || "",
     coverUrl: cover,
     gallery: gallery.length ? gallery : undefined,
   };

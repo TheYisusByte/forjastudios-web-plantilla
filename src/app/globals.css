@@ -289,3 +289,56 @@
     transform: translateY(0.15rem);
   }
 }
+
+/* ── Cards holográficas (IPs) ─────────────────────────────────────────────
+   Foil iridiscente + brillo (glare), ambos dirigidos por el puntero vía las
+   CSS vars --hx/--hy (se setean en IPsE.handleMouseMove). Se activan por
+   opacidad solo en la card activa. */
+.ip-holo {
+  border-radius: 18px;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  background: repeating-linear-gradient(
+    110deg,
+    hsla(18, 100%, 60%, 0.45) 0%,
+    hsla(48, 100%, 64%, 0.45) 9%,
+    hsla(150, 85%, 58%, 0.40) 18%,
+    hsla(200, 95%, 60%, 0.40) 27%,
+    hsla(280, 88%, 64%, 0.45) 36%,
+    hsla(330, 95%, 62%, 0.45) 45%,
+    hsla(18, 100%, 60%, 0.45) 54%
+  );
+  background-size: 240% 240%;
+  background-position: var(--hx, 50%) var(--hy, 50%);
+  mix-blend-mode: color-dodge;
+}
+.ip-glare {
+  border-radius: 18px;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  background: radial-gradient(
+    circle at var(--hx, 50%) var(--hy, 50%),
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0.08) 22%,
+    transparent 46%
+  );
+  mix-blend-mode: soft-light;
+}
+/* Patrón de foil (textura de carta física) — fijo, no sigue el puntero. */
+.ip-pattern {
+  border-radius: 18px;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  background-image:
+    repeating-linear-gradient(63deg, rgba(255, 255, 255, 0.1) 0 1px, transparent 1px 5px),
+    radial-gradient(rgba(255, 255, 255, 0.18) 0.5px, transparent 1.3px);
+  background-size: auto, 7px 7px;
+  mix-blend-mode: overlay;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ip-holo,
+  .ip-glare,
+  .ip-pattern { transition: none; }
+}
+
+/* touch: recompilar dev */

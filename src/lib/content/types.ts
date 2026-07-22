@@ -52,8 +52,8 @@ export interface IP {
   name: string;
   description: string;
   accent: Accent;
-  /** Video de YouTube de fondo en la sección de IPs (concepto E). */
-  videoId: string;
+  /** URL del video de fondo en la sección de IPs (concepto E), servido desde WP. */
+  videoUrl: string;
   /** Imagen principal de la IP (cover). Si falta, se usa el gradiente de acento. */
   coverUrl?: string;
   /** Galería de la IP (imágenes y/o videos), para su página interna. */

@@ -115,13 +115,15 @@ function forja_register_acf_fields(): void {
                 'show_in_graphql' => 1,
             ],
             [
-                // Video de fondo de la sección IPs (concepto E). Solo el ID de
-                // YouTube (p. ej. dQw4w9WgXcQ), no la URL completa.
+                // Video de fondo de la sección IPs (concepto E). URL completa
+                // del archivo de video (mp4/webm), no un ID de YouTube.
+                // La clave/nombre se mantienen como `videoId` para no perder
+                // datos existentes; su contenido es ahora una URL.
                 'key'           => 'field_ip_videoId',
-                'label'         => 'Video de fondo (YouTube ID)',
+                'label'         => 'Video de fondo (URL)',
                 'name'          => 'videoId',
-                'type'          => 'text',
-                'instructions'  => 'Solo el ID del video de YouTube (ej. dQw4w9WgXcQ).',
+                'type'          => 'url',
+                'instructions'  => 'URL completa del video de fondo (ej. https://.../video.mp4).',
                 'show_in_graphql' => 1,
             ],
             [
