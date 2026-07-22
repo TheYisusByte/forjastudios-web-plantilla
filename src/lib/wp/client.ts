@@ -87,14 +87,34 @@ function ensureGallery(
  * La forma devuelta es idéntica en ambos casos, así que ningún componente cambia.
  */
 export async function getSiteContent(locale: Locale): Promise<SiteContent> {
+  let content: SiteContent | null = null;
   if (isWpEnabled()) {
     try {
-      return await getWpContent(locale);
+      content = await getWpContent(locale);
     } catch (err) {
       console.error("[wp] fallo al obtener contenido, usando mock:", err);
     }
   }
-  return getMockContent(locale);
+  content ??= getMockContent(locale);
+
+  // El CEO (Oscar) siempre encabeza el equipo, sea cual sea el orden de la
+  // fuente (MENU_ORDER en WP o el mock).
+  content.team = pinCeoFirst(content.team);
+  return content;
+}
+
+/**
+ * Reordena el equipo para que el CEO quede primero, preservando el orden
+ * relativo del resto. Detecta el rol por la sigla "CEO" (presente en ES y EN),
+ * así funciona con el contenido de WordPress y con el mock.
+ */
+function pinCeoFirst(team: SiteContent["team"]): SiteContent["team"] {
+  const idx = team.findIndex((m) => /\bceo\b/i.test(m.role));
+  if (idx <= 0) return team;
+  const reordered = [...team];
+  const [ceo] = reordered.splice(idx, 1);
+  reordered.unshift(ceo);
+  return reordered;
 }
 
 // ── Mock (placeholder hasta materiales del cliente) ──────────────────────────
