@@ -30,14 +30,13 @@ interface IPCardProps {
   offset: number;
   isActive: boolean;
   isDesktop: boolean;
-  /** Devuelve true si el gesto en curso fue un arrastre (swipe), no un tap. */
-  dragGuard: () => boolean;
+  /** Centrar esta card (click sobre una card lateral). */
   onClick: () => void;
   /** Abrir el detalle de la IP (solo la card activa). */
   onOpen: () => void;
 }
 
-function IPCard({ ip, image, offset, isActive, isDesktop, dragGuard, onClick, onOpen }: IPCardProps) {
+function IPCard({ ip, image, offset, isActive, isDesktop, onClick, onOpen }: IPCardProps) {
   const t = useTranslations("ConceptE");
   const tiltRef = useRef<HTMLDivElement>(null);
   const downRef = useRef<{ x: number; y: number; t: number } | null>(null);
@@ -99,13 +98,11 @@ function IPCard({ ip, image, offset, isActive, isDesktop, dragGuard, onClick, on
           className="group absolute inset-0"
           style={{ cursor: "grab" }}
           onPointerDown={(e) => {
-            // Burbuja (no capture): así OrbitControls sí recibe el evento en el
-            // canvas; el stopPropagation solo evita el swipe del carrusel (stage).
-            e.stopPropagation();
+            // Registramos el gesto para distinguir un tap (abre el detalle) de un
+            // arrastre (OrbitControls rota la carta, sin cambiar de posición).
             downRef.current = { x: e.clientX, y: e.clientY, t: Date.now() };
           }}
           onPointerUp={(e) => {
-            e.stopPropagation();
             const d = downRef.current;
             downRef.current = null;
             if (d && Math.hypot(e.clientX - d.x, e.clientY - d.y) < 6 && Date.now() - d.t < 300) onOpen();
@@ -123,12 +120,7 @@ function IPCard({ ip, image, offset, isActive, isDesktop, dragGuard, onClick, on
         <div
           className="h-full w-full"
           style={{ cursor: "pointer" }}
-          onClick={() => {
-            // Si el gesto fue un swipe, no centrar/abrir (lo maneja el stage).
-            if (dragGuard()) return;
-            if (isActive) onOpen();
-            else onClick();
-          }}
+          onClick={isActive ? onOpen : onClick}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
         >
@@ -231,31 +223,6 @@ export function IPsE({ ips, projects }: { ips: IP[]; projects: Project[] }) {
     setActive(i);
   }, []);
 
-  // ── Drag / swipe ─────────────────────────────────────────────────────────────
-  // Sin setPointerCapture: capturar el puntero en el stage haría que el `click`
-  // se dispare sobre el stage y no sobre la card → los clicks laterales no
-  // centraban. `didDrag` distingue un tap (centra la card) de un swipe.
-  const dragStart = useRef(0);
-  const dragging  = useRef(false);
-  const didDrag   = useRef(false);
-
-  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    dragging.current  = true;
-    didDrag.current   = false;
-    dragStart.current = e.clientX;
-  };
-  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (dragging.current && Math.abs(e.clientX - dragStart.current) > 8) {
-      didDrag.current = true;
-    }
-  };
-  const onPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!dragging.current) return;
-    dragging.current = false;
-    const delta = e.clientX - dragStart.current;
-    if (Math.abs(delta) > 55) navigate(delta < 0 ? 1 : -1);
-  };
-
   // ── Info panel fade on change ────────────────────────────────────────────────
   useEffect(() => {
     if (!infoRef.current) return;
@@ -354,11 +321,12 @@ export function IPsE({ ips, projects }: { ips: IP[]; projects: Project[] }) {
             perspectiveOrigin: "50% 50%",
             overflow: "hidden",
           }}
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerUp={onPointerUp}
         >
-          <div className="absolute inset-0" style={{ transformStyle: "preserve-3d" }}>
+          {/* pointerEvents:none — este plano preserve-3d está en z=0 y, si captura
+              eventos, tapa a las cards laterales (empujadas a translateZ negativo)
+              y les roba el click. Sin captura aquí, cada card (pointer-events:auto)
+              se vuelve directamente clickeable en su posición 3D real. */}
+          <div className="absolute inset-0" style={{ transformStyle: "preserve-3d", pointerEvents: "none" }}>
             {ips.map((ip, i) => {
               let offset = i - active;
               if (offset >  total / 2) offset -= total;
@@ -371,7 +339,6 @@ export function IPsE({ ips, projects }: { ips: IP[]; projects: Project[] }) {
                   offset={offset}
                   isActive={i === active}
                   isDesktop={isDesktop}
-                  dragGuard={() => didDrag.current}
                   onClick={() => goTo(i)}
                   onOpen={() => router.push(`/ip/${ip.slug}`)}
                 />
