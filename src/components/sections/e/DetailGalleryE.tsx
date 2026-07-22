@@ -197,6 +197,8 @@ export interface DetailGalleryProps {
   kicker?: string;
   description?: string;
   coverUrl?: string;
+  /** URL de video para usar como portada (en vez de la imagen). Tiene prioridad. */
+  coverVideoUrl?: string;
   gallery?: MediaItem[];
   /** Destino del botón "Regresar". Por defecto la sección de proyectos. */
   backHref?: string;
@@ -207,21 +209,31 @@ export function DetailGalleryE({
   kicker,
   description,
   coverUrl,
+  coverVideoUrl,
   gallery,
   backHref = "/#work",
 }: DetailGalleryProps) {
   const t = useTranslations("Common");
   const rootRef = useRef<HTMLDivElement>(null);
+  const coverVideoRef = useRef<HTMLVideoElement>(null);
 
-  const media: MediaItem[] =
-    gallery && gallery.length > 0
-      ? gallery
-      : coverUrl
-        ? [{ type: "image", src: coverUrl }]
-        : [];
+  const hasVideoCover = !!coverVideoUrl && coverVideoUrl.startsWith("http");
 
-  // Imagen principal (portada). El resto va al grid, sin duplicar la portada.
-  const grid = coverUrl ? media.filter((m) => m.src !== coverUrl) : media;
+  // Grid = ítems de galería. Con portada de imagen se excluye esa imagen del
+  // grid; con portada de video, la imagen de cover (si existe) queda de poster.
+  const grid: MediaItem[] = (gallery ?? []).filter(
+    (m) => hasVideoCover || m.src !== coverUrl,
+  );
+
+  // Fuerza autoplay del video de portada (algunos navegadores lo requieren
+  // explícito aunque esté muted).
+  useEffect(() => {
+    const v = coverVideoRef.current;
+    if (v) {
+      v.muted = true;
+      v.play().catch(() => {});
+    }
+  }, [coverVideoUrl]);
 
   // Lightbox: índice del elemento abierto (null = cerrado).
   const [lightbox, setLightbox] = useState<number | null>(null);
@@ -264,8 +276,34 @@ export function DetailGalleryE({
         <span>{t("back")}</span>
       </Link>
 
-      {/* Imagen principal a pantalla completa + título superpuesto */}
-      {coverUrl ? (
+      {/* Portada a pantalla completa (video o imagen) + título superpuesto */}
+      {hasVideoCover ? (
+        <section className="relative h-dvh w-full overflow-hidden">
+          <video
+            ref={coverVideoRef}
+            src={coverVideoUrl}
+            poster={coverUrl}
+            autoPlay
+            muted
+            loop
+            playsInline
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+          <div className="gallery-intro absolute inset-x-0 bottom-0 mx-auto max-w-7xl px-6 pb-14 sm:pb-20">
+            {kicker && (
+              <p className="mb-3 text-xs uppercase tracking-[0.3em] text-white/70">{kicker}</p>
+            )}
+            <h1
+              className="font-display font-black uppercase leading-[0.9] text-white drop-shadow-xl"
+              style={{ fontSize: "clamp(2.4rem, 7vw, 6rem)" }}
+            >
+              {title}
+            </h1>
+          </div>
+        </section>
+      ) : coverUrl ? (
         <section className="relative h-dvh w-full overflow-hidden">
           <Image
             src={coverUrl}

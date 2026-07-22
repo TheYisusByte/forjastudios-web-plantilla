@@ -26,6 +26,7 @@ export default async function IPDetailPage({ params }: PageProps) {
         kicker={t("ipsTag")}
         description={ip.description}
         coverUrl={ip.coverUrl}
+        coverVideoUrl={ip.videoUrl}
         gallery={ip.gallery}
         backHref="/#ips"
       />
