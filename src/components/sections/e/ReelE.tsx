@@ -40,7 +40,6 @@ export function ReelE() {
         muted
         loop
         playsInline
-        controls
         preload="metadata"
         className="block h-auto w-full"
       />

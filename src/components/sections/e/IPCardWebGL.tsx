@@ -64,7 +64,15 @@ const FRAG = /* glsl */ `
               + (uMouse.x - 0.5) * 0.7 + (uMouse.y - 0.5) * 0.4;
       vec3 holo = irid(t);
       vec3 base = uHasTex > 0.5 ? texture2D(uTex, vUv).rgb : vec3(0.06, 0.06, 0.07);
-      col = base + holo * fres * 0.95 + holo * 0.18;
+
+      // Patrón de foil: bandas diagonales finas (textura de carta física),
+      // teñidas por el iridiscente y realzadas en ángulo rasante.
+      float diag = fract((vUv.x - vUv.y) * 48.0);
+      float foilLine = smoothstep(0.0, 0.5, diag) - smoothstep(0.5, 1.0, diag);
+      vec3 foil = holo * foilLine * (0.06 + fres * 0.22);
+
+      // Holográfico más tenue → se ve más la portada; el patrón aporta la textura.
+      col = base + holo * fres * 0.5 + holo * 0.08 + foil;
     } else {
       // ── DORSO: fondo oscuro (SIN holográfico) + marco blanco + logo ──
       col = vec3(0.05, 0.05, 0.055);

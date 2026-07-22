@@ -30,12 +30,14 @@ interface IPCardProps {
   offset: number;
   isActive: boolean;
   isDesktop: boolean;
+  /** Devuelve true si el gesto en curso fue un arrastre (swipe), no un tap. */
+  dragGuard: () => boolean;
   onClick: () => void;
   /** Abrir el detalle de la IP (solo la card activa). */
   onOpen: () => void;
 }
 
-function IPCard({ ip, image, offset, isActive, isDesktop, onClick, onOpen }: IPCardProps) {
+function IPCard({ ip, image, offset, isActive, isDesktop, dragGuard, onClick, onOpen }: IPCardProps) {
   const t = useTranslations("ConceptE");
   const tiltRef = useRef<HTMLDivElement>(null);
   const downRef = useRef<{ x: number; y: number; t: number } | null>(null);
@@ -121,7 +123,12 @@ function IPCard({ ip, image, offset, isActive, isDesktop, onClick, onOpen }: IPC
         <div
           className="h-full w-full"
           style={{ cursor: "pointer" }}
-          onClick={isActive ? onOpen : onClick}
+          onClick={() => {
+            // Si el gesto fue un swipe, no centrar/abrir (lo maneja el stage).
+            if (dragGuard()) return;
+            if (isActive) onOpen();
+            else onClick();
+          }}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
         >
@@ -225,13 +232,22 @@ export function IPsE({ ips, projects }: { ips: IP[]; projects: Project[] }) {
   }, []);
 
   // ── Drag / swipe ─────────────────────────────────────────────────────────────
+  // Sin setPointerCapture: capturar el puntero en el stage haría que el `click`
+  // se dispare sobre el stage y no sobre la card → los clicks laterales no
+  // centraban. `didDrag` distingue un tap (centra la card) de un swipe.
   const dragStart = useRef(0);
   const dragging  = useRef(false);
+  const didDrag   = useRef(false);
 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     dragging.current  = true;
+    didDrag.current   = false;
     dragStart.current = e.clientX;
-    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (dragging.current && Math.abs(e.clientX - dragStart.current) > 8) {
+      didDrag.current = true;
+    }
   };
   const onPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!dragging.current) return;
@@ -339,6 +355,7 @@ export function IPsE({ ips, projects }: { ips: IP[]; projects: Project[] }) {
             overflow: "hidden",
           }}
           onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
         >
           <div className="absolute inset-0" style={{ transformStyle: "preserve-3d" }}>
@@ -354,6 +371,7 @@ export function IPsE({ ips, projects }: { ips: IP[]; projects: Project[] }) {
                   offset={offset}
                   isActive={i === active}
                   isDesktop={isDesktop}
+                  dragGuard={() => didDrag.current}
                   onClick={() => goTo(i)}
                   onOpen={() => router.push(`/ip/${ip.slug}`)}
                 />

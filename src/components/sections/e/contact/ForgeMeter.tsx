@@ -23,6 +23,23 @@ const EMBERS = Array.from({ length: 14 }, (_, i) => ({
 }));
 const SPARKS = Array.from({ length: 12 }, (_, i) => i);
 
+// Iconos de contacto (inline, heredan color vía currentColor).
+function MailIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="shrink-0">
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="m3 7 9 6 9-6" />
+    </svg>
+  );
+}
+function WhatsappIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" className="shrink-0">
+      <path d="M17.5 14.4c-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51l-.57-.01c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.22 3.08.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.7.63.71.23 1.36.19 1.87.12.57-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.13-.27-.2-.57-.35zM12.05 21.5h-.01a9.5 9.5 0 0 1-4.84-1.33l-.35-.2-3.6.94.96-3.5-.23-.36a9.46 9.46 0 0 1-1.45-5.05c0-5.24 4.27-9.5 9.52-9.5 2.54 0 4.93.99 6.73 2.79a9.44 9.44 0 0 1 2.78 6.72c0 5.24-4.27 9.5-9.5 9.5z" />
+    </svg>
+  );
+}
+
 // Verbo rotativo del título — estilo "Let's ___ something." (opción C).
 
 interface FieldProps {
@@ -197,10 +214,12 @@ export function ContactForgeMeter({ content }: { content: SiteContent }) {
             {tf("body")}
           </p>
           <div className="forge-reveal mt-8 flex flex-col gap-3 text-sm">
-            <a href={`mailto:${content.meta.contact.email}`} className="text-forja-muted transition-colors hover:text-forja-amber">
+            <a href={`mailto:${content.meta.contact.email}`} className="inline-flex items-center gap-2.5 text-forja-muted transition-colors hover:text-forja-amber">
+              <MailIcon />
               {content.meta.contact.email}
             </a>
-            <a href={`https://wa.me/${content.meta.contact.whatsapp.replace(/[^\d]/g, "")}`} target="_blank" rel="noreferrer" className="text-forja-muted transition-colors hover:text-forja-amber">
+            <a href={`https://wa.me/${content.meta.contact.whatsapp.replace(/[^\d]/g, "")}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2.5 text-forja-muted transition-colors hover:text-forja-amber">
+              <WhatsappIcon />
               {content.meta.contact.whatsapp}
             </a>
             <ul className="flex flex-wrap items-center gap-3 pt-2">
