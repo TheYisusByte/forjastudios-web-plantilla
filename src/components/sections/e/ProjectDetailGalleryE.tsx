@@ -12,6 +12,9 @@ export function ProjectDetailGalleryE({ project }: { project: Project }) {
       kicker={`${project.categoryLabel} · ${project.year}`}
       description={project.description}
       coverUrl={project.coverUrl}
+      // Video del proyecto (ACF `videoUrl`, normalmente un mp4 del propio WP):
+      // manda como portada y deja la imagen de cover como poster.
+      coverVideoUrl={project.videoUrl}
       gallery={project.gallery}
       backHref="/#work"
     />

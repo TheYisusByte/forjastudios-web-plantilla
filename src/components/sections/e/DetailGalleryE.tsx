@@ -18,7 +18,8 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
  * el de IP. Mismo lenguaje visual que la sección de proyectos del home.
  */
 
-const SIZES = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw";
+// Grid masonry de 4 columnas en desktop (1 / 2 / 3 / 4 según breakpoint).
+const SIZES = "(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw";
 
 function MediaCell({ item, alt, onOpen }: { item: MediaItem; alt: string; onOpen: () => void }) {
   const w = item.width ?? 1600;
@@ -350,7 +351,7 @@ export function DetailGalleryE({
       {/* Masonry gallery */}
       {grid.length > 0 && (
         <div className="mx-auto max-w-7xl px-6 pb-28 pt-12">
-          <div className="gallery-grid columns-1 sm:columns-2 lg:columns-3 [column-gap:8px]">
+          <div className="gallery-grid columns-1 sm:columns-2 md:columns-3 lg:columns-4 [column-gap:8px]">
             {grid.map((m, i) => (
               <MediaCell
                 key={i}
