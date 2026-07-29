@@ -93,6 +93,44 @@ queries de `src/lib/wp/queries.ts` y mapea la respuesta a `SiteContent`. La
 forma de los datos es idéntica, así que ningún componente cambia. Variables de
 entorno: `WP_GRAPHQL_URL` (= `https://<dominio>/forja/graphql`), `NEXT_PUBLIC_WP_URL`.
 
+## Ver los cambios en la web sin hacer deploy (revalidación)
+
+El front cachea las respuestas de WPGraphQL con el tag `site-content`
+(`src/lib/wp/fetcher.ts`). `inc/revalidate.php` avisa a Vercel cuando cambia el
+contenido y el sitio se regenera solo — **sin redeploy**.
+
+**Configuración (una sola vez):**
+
+1. Genera un secreto: `openssl rand -hex 32`.
+2. **Vercel** → proyecto `forjastudios-web` → Settings → Environment Variables →
+   `REVALIDATE_SECRET` = ese valor (entorno *Production*). Requiere un redeploy
+   para que la función lo lea.
+3. **WordPress** → Ajustes → **Forja Headless**:
+   - *URL de revalidación:* `https://www.forjastudios.com/api/revalidate`
+   - *Secreto:* el mismo valor
+   - Pulsa **Probar ahora** → debe responder «Front revalidado».
+
+Alternativa a la pantalla de ajustes (tiene prioridad), en `wp-config.php`:
+
+```php
+define('FORJA_REVALIDATE_URL',    'https://www.forjastudios.com/api/revalidate');
+define('FORJA_REVALIDATE_SECRET', '…');
+```
+
+**Qué dispara el aviso:** guardar/publicar/enviar a papelera/borrar un
+`proyecto`, `ip`, `miembro` o `cliente`; subir, editar o borrar adjuntos
+(imágenes y videos); y crear/editar/borrar términos de `categoria`. Todos los
+cambios de una misma petición se agrupan en un solo aviso, que se envía sin
+esperar respuesta para no ralentizar el guardado.
+
+**Cuándo se ve el cambio:** el aviso marca el contenido como caducado; la
+página se regenera en la **siguiente visita** (la primera visita tras el cambio
+puede tardar un segundo de más). Si el webhook no llega, `WP_REVALIDATE_SECONDS`
+(por defecto 300 s) refresca igualmente.
+
+**Diagnóstico:** Ajustes → Forja Headless muestra el resultado del último aviso.
+Un `HTTP 401` significa que el secreto de WP y el de Vercel no coinciden.
+
 ## Redirección headless del front
 
 `inc/headless-redirect.php` envía las visitas al **front de WordPress**

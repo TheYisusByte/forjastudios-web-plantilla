@@ -3,7 +3,7 @@
  * Plugin Name:       Forja Headless
  * Plugin URI:        https://www.forjastudios.com/
  * Description:        Custom Post Types, taxonomías y campos ACF de Forja Studios, expuestos en WPGraphQL para el front headless en Next.js. Define proyecto, ip, miembro y cliente.
- * Version:           1.3.0
+ * Version:           1.4.0
  * Author:            Forja Studios
  * Text Domain:       forja-headless
  * Requires at least: 6.4
@@ -42,6 +42,11 @@
  * --------------------------------------------------------------------------
  *  Changelog
  * --------------------------------------------------------------------------
+ *  1.4.0
+ *    - Revalidación on-demand del front (inc/revalidate.php): al guardar/borrar
+ *      contenido o medios, WordPress avisa a /api/revalidate en Vercel y los
+ *      cambios se ven SIN redeploy. Se configura en Ajustes → Forja Headless
+ *      (URL + secreto) o con las constantes FORJA_REVALIDATE_URL/_SECRET.
  *  1.3.0
  *    - Metabox "Galería" visible en el editor de Proyecto e IP (inc/galeria-metabox.php):
  *      selecciona/ordena/quita imágenes y videos con la Biblioteca de Medios.
@@ -72,6 +77,7 @@ require_once FORJA_HEADLESS_DIR . 'inc/acf-fields.php';
 require_once FORJA_HEADLESS_DIR . 'inc/graphql.php';
 require_once FORJA_HEADLESS_DIR . 'inc/galeria-metabox.php';
 require_once FORJA_HEADLESS_DIR . 'inc/headless-redirect.php';
+require_once FORJA_HEADLESS_DIR . 'inc/revalidate.php';
 
 /**
  * Al activar, refresca las reglas de reescritura para que los slugs de los
