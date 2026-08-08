@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { ArrowLeft, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, Play } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { resolveWpVariant } from "@/lib/wp/media";
 import type { MediaItem, Project } from "@/lib/content/types";
 
 /**
@@ -70,7 +71,8 @@ export function ProjectDetailE({ project }: { project: Project }) {
             alt=""
             aria-hidden
             fill
-            sizes="100vw"
+            // Fondo desenfocado y oscurecido: la variante pequeña basta.
+            sizes="320px"
             className="scale-110 object-cover blur-2xl brightness-[0.45]"
           />
         )}
@@ -80,7 +82,7 @@ export function ProjectDetailE({ project }: { project: Project }) {
               key={current.src}
               ref={videoRef}
               src={current.src}
-              poster={current.poster}
+              poster={current.poster && resolveWpVariant(current.poster, 1920)}
               controls
               playsInline
               preload="metadata"

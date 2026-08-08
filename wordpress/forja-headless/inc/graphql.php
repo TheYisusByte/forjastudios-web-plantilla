@@ -53,6 +53,10 @@ add_action('graphql_register_types', function (): void {
             'width'     => ['type' => 'Int',    'description' => 'Ancho real (imágenes).'],
             'height'    => ['type' => 'Int',    'description' => 'Alto real (imágenes).'],
             'poster'    => ['type' => 'String', 'description' => 'Poster del video (imagen destacada del adjunto).'],
+            // El front sirve estas variantes tal cual en vez de pasar las
+            // imágenes por el optimizador de Vercel (cuota limitada). Mismo
+            // formato que el campo `srcSet` de los MediaItem de WPGraphQL.
+            'srcSet'    => ['type' => 'String', 'description' => 'srcSet con los tamaños generados por WP (imágenes).'],
         ],
     ]);
 
@@ -75,6 +79,7 @@ add_action('graphql_register_types', function (): void {
                 'width'     => null,
                 'height'    => null,
                 'poster'    => null,
+                'srcSet'    => null,
             ];
             if (! $item['sourceUrl']) {
                 continue; // adjunto borrado; lo saltamos
@@ -85,6 +90,9 @@ add_action('graphql_register_types', function (): void {
                     $item['width']  = isset($meta['width'])  ? (int) $meta['width']  : null;
                     $item['height'] = isset($meta['height']) ? (int) $meta['height'] : null;
                 }
+                // Solo incluye las variantes que conservan el aspecto del
+                // original (WP descarta ahí los tamaños recortados).
+                $item['srcSet'] = wp_get_attachment_image_srcset($id, 'full') ?: null;
             } else {
                 $thumb_id = get_post_thumbnail_id($id);
                 if ($thumb_id) {

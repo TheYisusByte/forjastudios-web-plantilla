@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { resolveWpVariant, toSameOriginMedia } from "@/lib/wp/media";
 
 /**
  * Carta holográfica 3D para una IP:
@@ -96,11 +97,19 @@ const FRAG = /* glsl */ `
   }
 `;
 
-// URL same-origin optimizada por Next (evita el CORS-taint de WebGL). q=75.
-function optimized(src: string): string {
+/** Ancho de la textura de la carta. La carta se pinta a 360 CSS px. */
+const TEXTURE_WIDTH = 828;
+
+/**
+ * URL de textura lista para WebGL: la variante de WordPress del tamaño que toca,
+ * servida same-origin por el proxy `/wp-media/` (WordPress no manda CORS y una
+ * textura cross-origin sin CORS contamina el canvas). Antes esto pasaba por
+ * `/_next/image`, que consumía cuota de optimización de Vercel y dejaba la carta
+ * en negro cuando esa cuota se agotaba.
+ */
+function textureUrl(src: string): string {
   if (!src) return src;
-  if (src.startsWith("/_next/image")) return src;
-  return `/_next/image?url=${encodeURIComponent(src)}&w=828&q=75`;
+  return toSameOriginMedia(resolveWpVariant(src, TEXTURE_WIDTH));
 }
 
 export default function IPCardWebGL({
@@ -160,8 +169,8 @@ export default function IPCardWebGL({
     scene.add(front, back);
 
     const loader = new THREE.TextureLoader();
-    // Portada (frente) — same-origin vía optimizador.
-    loader.load(optimized(imageUrl), (tex) => {
+    // Portada (frente) — same-origin vía el proxy /wp-media/.
+    loader.load(textureUrl(imageUrl), (tex) => {
       tex.colorSpace = THREE.SRGBColorSpace;
       frontU.uTex.value = tex;
       frontU.uHasTex.value = 1;

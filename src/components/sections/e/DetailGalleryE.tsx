@@ -8,6 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { ArrowLeft, Play, X, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { resolveWpVariant } from "@/lib/wp/media";
 import type { MediaItem } from "@/lib/content/types";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -113,7 +114,9 @@ function Lightbox({
           alt=""
           aria-hidden
           fill
-          sizes="100vw"
+          // Va desenfocada al 25% de opacidad: pedir la variante grande solo
+          // gastaría ancho de banda, a esta escala no se distingue.
+          sizes="320px"
           className="scale-110 object-cover opacity-25 blur-2xl"
         />
       )}
@@ -126,7 +129,7 @@ function Lightbox({
           <video
             key={item.src}
             src={item.src}
-            poster={item.poster}
+            poster={item.poster && resolveWpVariant(item.poster, 1200)}
             controls
             autoPlay
             playsInline
@@ -283,7 +286,7 @@ export function DetailGalleryE({
           <video
             ref={coverVideoRef}
             src={coverVideoUrl}
-            poster={coverUrl}
+            poster={coverUrl && resolveWpVariant(coverUrl, 1920)}
             autoPlay
             muted
             loop

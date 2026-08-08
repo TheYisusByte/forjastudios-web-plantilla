@@ -63,7 +63,9 @@ function Masonry({ projects }: { projects: Project[] }) {
                 alt={p.title}
                 width={c.w}
                 height={c.h}
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                // El masonry es de 3 columnas (4 en xl) en TODOS los anchos,
+                // también en móvil: cada celda ocupa un tercio, nunca la pantalla.
+                sizes="(min-width: 1280px) 25vw, 33vw"
                 className="block h-auto w-full transition-transform duration-500 ease-out group-hover:scale-[1.03]"
               />
             ) : (
@@ -148,7 +150,9 @@ function Justified({ projects }: { projects: Project[] }) {
                   src={cell.src}
                   alt={cell.project.title}
                   fill
-                  sizes="100vw"
+                  // Ancho real de la celda: lo calcula el layout justificado,
+                  // así que se puede declarar exacto en vez de estimarlo en vw.
+                  sizes={`${Math.ceil(cell.w)}px`}
                   className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
                 />
               ) : (
@@ -201,19 +205,34 @@ export function ProjectsE({ projects }: { projects: Project[] }) {
     { scope: sectionRef },
   );
 
-  // Reveal de las celdas — sí se re-ejecuta cuando cambia el layout.
+  // Reveal de las celdas — se re-ejecuta cuando cambian el layout o el orden.
+  //
+  // Va con `fromTo` + `immediateRender: false`, NO con `gsap.from`: `from` fija
+  // `opacity: 0` en cuanto se crea el tween y solo la recupera si el
+  // ScrollTrigger llega a dispararse. Al barajar, React reordena los nodos y el
+  // tween del render anterior se quedaba huérfano —su ScrollTrigger moría sin
+  // disparar— y el grid entero se quedaba invisible. Así las tarjetas parten
+  // visibles y la animación es puramente aditiva: si el trigger falla, se ven.
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
       mm.add("(prefers-reduced-motion: no-preference)", () => {
-        gsap.from(".project-e-cell", {
-          opacity: 0, duration: 0.5, stagger: { each: 0.04, from: "random" }, ease: "power2.out",
-          scrollTrigger: { trigger: ".project-e-grid", start: "top 85%", once: true },
-        });
+        const cells = sectionRef.current?.querySelectorAll<HTMLElement>(".project-e-cell");
+        if (!cells?.length) return;
+        gsap.fromTo(
+          cells,
+          { opacity: 0 },
+          {
+            opacity: 1, duration: 0.5, stagger: { each: 0.04, from: "random" }, ease: "power2.out",
+            immediateRender: false,
+            scrollTrigger: { trigger: ".project-e-grid", start: "top 85%", once: true },
+          },
+        );
+        return () => gsap.set(cells, { clearProps: "opacity" });
       });
       return () => mm.revert();
     },
-    { scope: sectionRef, dependencies: [layout] },
+    { scope: sectionRef, dependencies: [layout, order] },
   );
 
   return (

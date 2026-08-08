@@ -3,7 +3,7 @@
  * Plugin Name:       Forja Headless
  * Plugin URI:        https://www.forjastudios.com/
  * Description:        Custom Post Types, taxonomías y campos ACF de Forja Studios, expuestos en WPGraphQL para el front headless en Next.js. Define proyecto, ip, miembro y cliente.
- * Version:           1.4.0
+ * Version:           1.5.0
  * Author:            Forja Studios
  * Text Domain:       forja-headless
  * Requires at least: 6.4

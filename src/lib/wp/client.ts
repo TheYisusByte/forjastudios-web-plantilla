@@ -20,7 +20,8 @@ import {
   team,
 } from "@/lib/content/data";
 import { isWpEnabled, wpFetch } from "./fetcher";
-import { siteContentQuery } from "./queries";
+import { withWpVariants } from "./media";
+import { ALL_CAPABILITIES, siteContentQuery, type WpCapabilities } from "./queries";
 
 // Logo de cliente por nombre (fallback de data.json cuando WP no trae logo).
 const clientLogoByName: Record<string, string | undefined> = Object.fromEntries(
@@ -185,37 +186,80 @@ async function getWpContent(locale: Locale): Promise<SiteContent> {
 }
 
 /**
- * Trae el contenido aplicando el filtro de idioma (Polylang). Si el backend aún
- * no tiene Polylang + WPGraphQL Polylang, el argumento `language` no existe en el
- * esquema y la query falla; en ese caso reintenta SIN el filtro (todo el
- * contenido queda en un único idioma hasta que se active Polylang).
+ * Trae el contenido pidiendo todas las capacidades opcionales y, si el backend
+ * no tiene alguna, reintenta sin ella. Cada capacidad depende de un plugin o de
+ * una versión concreta del plugin propio; pedir un campo/argumento inexistente
+ * hace fallar la query entera, así que se van desactivando de una en una:
+ *
+ *  · `language`      → falta Polylang + WPGraphQL Polylang (todo el contenido
+ *                      queda en un único idioma).
+ *  · `galeriaSrcSet` → el plugin forja-headless del servidor es anterior al
+ *                      campo `srcSet` en `galeria` (las imágenes de galería se
+ *                      sirven en tamaño original, más pesadas).
+ *
+ * Se reintenta como máximo una vez por capacidad. Lo que se descubre queda
+ * memorizado en el proceso (`supported`): durante `next build` se generan
+ * decenas de páginas y sería absurdo repetir los reintentos en cada una.
  */
+let supported: WpCapabilities = { ...ALL_CAPABILITIES };
+
 async function fetchSiteContent(locale: Locale): Promise<WpSiteContent> {
-  try {
-    return await wpFetch<WpSiteContent>(siteContentQuery(true), {
-      locale: localeToLanguage(locale),
-    });
-  } catch (err) {
-    if (!isPolylangMissingError(err)) throw err;
-    console.warn(
-      "[wp] Polylang no está activo: instala Polylang + WPGraphQL Polylang para " +
-        "servir ES/EN. Consultando sin filtro de idioma.",
-    );
-    return wpFetch<WpSiteContent>(siteContentQuery(false));
+  // `next build` genera muchas páginas en paralelo, así que varias llamadas
+  // pueden estar en la cascada a la vez. Cada intento trabaja sobre un snapshot
+  // y `supported` se REEMPLAZA (nunca se muta), de modo que comparar por
+  // identidad basta para saber si otra llamada ya ajustó las capacidades: si lo
+  // hizo, este fallo era esperable y solo hay que reintentar con las nuevas.
+  const maxAttempts = Object.keys(ALL_CAPABILITIES).length + 2;
+
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    const used = supported;
+    try {
+      return await wpFetch<WpSiteContent>(
+        siteContentQuery(used),
+        used.language ? { locale: localeToLanguage(locale) } : undefined,
+      );
+    } catch (err) {
+      if (supported !== used) continue; // otra llamada ya las ajustó
+      const missing = detectMissingCapability(err, used);
+      if (!missing) throw err;
+      supported = { ...used, [missing]: false };
+      console.warn(`[wp] ${CAPABILITY_HINTS[missing]} Reintentando sin esa capacidad.`);
+    }
   }
+
+  throw new Error("[wp] no se pudo resolver la query de contenido tras varios intentos");
 }
 
-/** El error de WPGraphQL cuando falta Polylang menciona el argumento `language`. */
-function isPolylangMissingError(err: unknown): boolean {
+const CAPABILITY_HINTS: Record<keyof WpCapabilities, string> = {
+  language:
+    "Polylang no está activo: instala Polylang + WPGraphQL Polylang para servir ES/EN.",
+  galeriaSrcSet:
+    "El plugin forja-headless del servidor no expone `srcSet` en `galeria`: " +
+    "actualízalo (wordpress/forja-headless.zip) para servir las imágenes de " +
+    "galería en su tamaño responsivo.",
+};
+
+/**
+ * Deduce qué capacidad activa falta en el esquema a partir del error de
+ * WPGraphQL, que nombra el campo o argumento desconocido.
+ */
+function detectMissingCapability(
+  err: unknown,
+  caps: WpCapabilities,
+): keyof WpCapabilities | null {
   const msg = err instanceof Error ? err.message : String(err);
-  return /\blanguage\b/i.test(msg) && /(not defined|Unknown argument)/i.test(msg);
+  const unknown = /(not defined|Unknown argument|Cannot query field|doesn't exist)/i.test(msg);
+  if (!unknown) return null;
+  if (caps.language && /\blanguage\b/i.test(msg)) return "language";
+  if (caps.galeriaSrcSet && /\bsrcSet\b/i.test(msg)) return "galeriaSrcSet";
+  return null;
 }
 
 function mapProject(node: WpProyecto, i: number): Project {
   const cat = node.categorias?.nodes?.[0];
   const category = (cat?.slug ?? "animation-3d") as ProjectCategory;
   const coverNode = node.camposProyecto?.cover?.node;
-  const cover = coverNode?.sourceUrl || undefined;
+  const cover = withWpVariants(coverNode?.sourceUrl, coverNode?.srcSet);
   const coverWH = {
     width: coverNode?.mediaDetails?.width,
     height: coverNode?.mediaDetails?.height,
@@ -229,7 +273,12 @@ function mapProject(node: WpProyecto, i: number): Project {
     .map((g): MediaItem =>
       (g.mimeType ?? "").startsWith("video/")
         ? { type: "video", src: g.sourceUrl, poster: g.poster ?? cover, width: g.width, height: g.height }
-        : { type: "image", src: g.sourceUrl, width: g.width, height: g.height },
+        : {
+            type: "image",
+            src: withWpVariants(g.sourceUrl, g.srcSet)!,
+            width: g.width,
+            height: g.height,
+          },
     );
 
   return {
@@ -250,7 +299,8 @@ function mapProject(node: WpProyecto, i: number): Project {
 }
 
 function mapIp(node: WpIp, i: number): IP {
-  const cover = node.camposIp?.cover?.node?.sourceUrl || undefined;
+  const coverNode = node.camposIp?.cover?.node;
+  const cover = withWpVariants(coverNode?.sourceUrl, coverNode?.srcSet);
   // Galería real desde los medios adjuntos a la IP (imágenes y videos), igual
   // que los proyectos. Detecta video por mimeType; poster del video o el cover.
   const gallery: MediaItem[] = (node.galeria ?? [])
@@ -258,7 +308,12 @@ function mapIp(node: WpIp, i: number): IP {
     .map((g): MediaItem =>
       (g.mimeType ?? "").startsWith("video/")
         ? { type: "video", src: g.sourceUrl, poster: g.poster ?? cover, width: g.width, height: g.height }
-        : { type: "image", src: g.sourceUrl, width: g.width, height: g.height },
+        : {
+            type: "image",
+            src: withWpVariants(g.sourceUrl, g.srcSet)!,
+            width: g.width,
+            height: g.height,
+          },
     );
 
   return {
@@ -302,21 +357,23 @@ function translateRole(rol: string, locale: Locale): string {
 
 function mapMember(node: WpMiembro, i: number, locale: Locale): TeamMember {
   const name = decode(node.title);
+  const foto = node.camposMiembro?.foto?.node;
   return {
     name,
     role: translateRole(node.camposMiembro?.rol ?? "", locale),
     initials: initialsOf(name),
     accent: accentAt(i),
-    photo: node.camposMiembro?.foto?.node?.sourceUrl,
+    photo: withWpVariants(foto?.sourceUrl, foto?.srcSet),
   };
 }
 
 function mapClient(node: WpCliente): Client {
   const name = decode(node.title);
+  const logo = node.camposCliente?.logo?.node;
   return {
-    name,
     // Prefiere el logo subido en WP; si no, cae al logo local (data.json) por nombre.
-    logo: node.camposCliente?.logo?.node?.sourceUrl || clientLogoByName[name],
+    name,
+    logo: withWpVariants(logo?.sourceUrl, logo?.srcSet) || clientLogoByName[name],
   };
 }
 
@@ -379,12 +436,16 @@ function decode(text: string): string {
 interface WpMedia {
   node?: {
     sourceUrl?: string;
+    /** Variantes generadas por WP; ver src/lib/wp/media.ts. */
+    srcSet?: string;
     altText?: string;
     mediaDetails?: { width?: number; height?: number };
   };
 }
 interface WpGaleriaItem {
   sourceUrl?: string;
+  /** Idem `WpMedia.srcSet`; ausente si el plugin del servidor es antiguo. */
+  srcSet?: string;
   mimeType?: string;
   width?: number;
   height?: number;

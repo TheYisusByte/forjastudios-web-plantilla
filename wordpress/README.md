@@ -93,6 +93,26 @@ queries de `src/lib/wp/queries.ts` y mapea la respuesta a `SiteContent`. La
 forma de los datos es idéntica, así que ningún componente cambia. Variables de
 entorno: `WP_GRAPHQL_URL` (= `https://<dominio>/forja/graphql`), `NEXT_PUBLIC_WP_URL`.
 
+## Imágenes: WordPress es quien las redimensiona
+
+El front **no** pasa las imágenes por el optimizador de Vercel: sirve
+directamente los tamaños que WordPress ya genera al subir un archivo
+(245w, 768w, 1024w, 1536w, 2048w…). El optimizador de Vercel tiene una cuota
+mensual de transformaciones que este sitio agotaba en días —cuando eso pasa
+devuelve `402` y las imágenes se ven rotas—. Ver `src/lib/wp/media.ts` y
+`src/lib/image-loader.ts`.
+
+Consecuencias en el lado de WordPress:
+
+- **El plugin debe ser ≥ 1.5.0**, que expone `srcSet` en el campo `galeria`. Sin
+  él las galerías se sirven en tamaño original (el front lo detecta y sigue
+  funcionando, solo que más pesado; lo avisa por consola durante el build).
+- **Sube archivos ya optimizados.** Sin conversión de formato en el medio, un PNG
+  de 2,7 MB llega tal cual al visitante. Para fotos/ilustraciones usa JPG, no PNG.
+- **Recomendado: un plugin de WebP** (LiteSpeed/QUIC.cloud, ShortPixel o EWWW).
+  Sirve `.webp` en lugar del original sin que el front cambie nada, y recupera la
+  compresión que antes hacía Vercel (≈60 % menos peso).
+
 ## Ver los cambios en la web sin hacer deploy (revalidación)
 
 El front cachea las respuestas de WPGraphQL con el tag `site-content`

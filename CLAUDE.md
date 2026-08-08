@@ -32,6 +32,7 @@ python3 .claude/skills/ui-ux-pro-max/scripts/search.py \
 - **Render:** SSG + ISR on-demand (webhook de WP → `revalidateTag`/`revalidatePath`).
 - **i18n:** ES (default) / EN con `next-intl` y segmento `src/app/[locale]/`; UI en `src/messages/{es,en}.json`, contenido editorial traducido en WP (Polylang/WPML). **Implementado.**
 - **Animación:** Framer Motion + CSS scroll-driven. **Data:** `graphql-request`/Apollo + GraphQL Codegen. **Forms:** Server Action → Resend. **Deploy:** Vercel.
+- **Imágenes:** loader propio (`images.loader: "custom"`), **NO** el optimizador de Vercel — su cuota de transformaciones se agotaba y devolvía `402` (imágenes rotas). `next/image` sirve los tamaños que WordPress ya genera: `client.ts` anexa las variantes al `src` como fragmento `#wp=…` y `src/lib/image-loader.ts` elige la que cubre cada ancho. Detalle en `src/lib/wp/media.ts`. Consecuencia: sin conversión a AVIF/WebP → **subir a WP archivos ya comprimidos** (o instalar allí un plugin de WebP).
 - **Variables de entorno:** `NEXT_PUBLIC_WP_URL`, `WP_GRAPHQL_URL`, `WP_PREVIEW_SECRET`, `REVALIDATE_SECRET`, `RESEND_API_KEY` (ver doc 02).
 
 > ⚠️ **Next 16 / Tailwind v4 — gotchas:** El middleware se llama **`proxy.ts`** (no `middleware.ts`); está en `src/proxy.ts`. `params` es **Promise** (siempre `await`). Tailwind v4 es **CSS-first**: los tokens viven en `src/app/globals.css` (`@theme`), **no** hay `tailwind.config.ts`. El layout raíz vive bajo `src/app/[locale]/layout.tsx`.

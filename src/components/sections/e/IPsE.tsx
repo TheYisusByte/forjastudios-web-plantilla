@@ -9,6 +9,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { Link, useRouter } from "@/i18n/navigation";
+import { resolveWpVariant } from "@/lib/wp/media";
 import type { IP, Project } from "@/lib/content/types";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -268,7 +269,9 @@ export function IPsE({ ips, projects }: { ips: IP[]; projects: Project[] }) {
               key={ip.slug}
               ref={(el) => { videoRefs.current[i] = el; }}
               src={ip.videoUrl}
-              poster={imageForIp(ip, i)}
+              // El poster solo se ve mientras carga el video: basta una
+              // variante de 1280 en vez del original de WP.
+              poster={resolveWpVariant(imageForIp(ip, i), 1280)}
               muted
               loop
               playsInline
