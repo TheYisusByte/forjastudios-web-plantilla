@@ -44,3 +44,7 @@ next-env.d.ts
 # claude code local config
 .claude/settings.local.json
 .claude/skills/**/__pycache__/
+
+# material de referencia suelto en la raíz (no forma parte del sitio)
+/3D Ghost Skull Card/
+/3D-Ghost-Skull-Card.zip
