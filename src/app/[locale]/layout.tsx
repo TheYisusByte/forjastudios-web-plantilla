@@ -38,8 +38,8 @@ export async function generateMetadata({
 // overlay un instante a quien pidió menos animación. Solo marca el <html>; el
 // resto lo hacen globals.css y IntroOverlay. Ver src/components/ui/IntroOverlay.tsx.
 //
-// El intro se ve en CADA carga de página —la primera, cada recarga y cada
-// entrada directa a una interna—, así que aquí no hay más condición que
+// El intro se ve en cada cambio de página —la primera carga, cada recarga y
+// cada navegación dentro del sitio—, así que aquí no hay más condición que
 // `prefers-reduced-motion`.
 const introSkipScript = `try{
 if(matchMedia('(prefers-reduced-motion: reduce)').matches)
@@ -85,8 +85,8 @@ export default async function LocaleLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
         />
         <NextIntlClientProvider>
-          {/* Intro de marca: va en el layout para que tape también las páginas
-              internas cuando se entra directo a ellas o se recarga. */}
+          {/* Intro de marca: va en el layout para cubrir todas las rutas, y se
+              reinicia en cada cambio de página (ver IntroOverlay). */}
           <IntroOverlay />
           {children}
         </NextIntlClientProvider>
