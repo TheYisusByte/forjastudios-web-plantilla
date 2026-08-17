@@ -172,5 +172,8 @@
     "description": "Forge your flame — estudio creativo: animación, concept art, VFX y videojuegos.",
     "ogTitle": "Forja Studios — Forge your flame",
     "ogDescription": "Estudio creativo: animación 2D/3D, concept art, VFX y videojuegos."
+  },
+  "Intro": {
+    "skip": "Saltar intro"
   }
 }

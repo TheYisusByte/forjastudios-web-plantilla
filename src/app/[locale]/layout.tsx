@@ -31,6 +31,15 @@ export async function generateMetadata({
   };
 }
 
+// Decide si el intro de marca se salta, ANTES del primer paint. Tiene que ser
+// un script inline y bloqueante: React llega demasiado tarde y se vería el
+// overlay un instante a quien ya lo vio (o al revés). Solo marca el <html>; el
+// resto lo hacen globals.css y IntroOverlay. Ver src/components/ui/IntroOverlay.tsx.
+const introSkipScript = `try{
+if(sessionStorage.getItem('forja:intro')==='1'||matchMedia('(prefers-reduced-motion: reduce)').matches)
+document.documentElement.dataset.intro='skip'
+}catch(e){document.documentElement.dataset.intro='skip'}`;
+
 // Organization structured data (doc 09 — SEO).
 const orgJsonLd = {
   "@context": "https://schema.org",
@@ -54,6 +63,9 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} className={fontVariables}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: introSkipScript }} />
+      </head>
       <body className="min-h-dvh">
         <script
           type="application/ld+json"
