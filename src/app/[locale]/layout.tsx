@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
@@ -40,6 +41,13 @@ if(sessionStorage.getItem('forja:intro')==='1'||matchMedia('(prefers-reduced-mot
 document.documentElement.dataset.intro='skip'
 }catch(e){document.documentElement.dataset.intro='skip'}`;
 
+// Google Analytics 4. El ID de medición no es secreto (viaja en el HTML), así
+// que va con valor por defecto y se puede sobrescribir por entorno. Solo se
+// carga en producción: así el tráfico de `npm run dev` no ensucia las métricas
+// (para probarlo en local: `npm run build && npm run start`).
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID ?? "G-NDG41Y77ZH";
+const analyticsEnabled = process.env.NODE_ENV === "production" && GA_ID !== "";
+
 // Organization structured data (doc 09 — SEO).
 const orgJsonLd = {
   "@context": "https://schema.org",
@@ -73,6 +81,7 @@ export default async function LocaleLayout({
         />
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
+      {analyticsEnabled && <GoogleAnalytics gaId={GA_ID} />}
     </html>
   );
 }
