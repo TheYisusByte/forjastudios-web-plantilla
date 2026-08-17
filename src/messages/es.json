@@ -169,9 +169,18 @@
     "back": "Regresar"
   },
   "Meta": {
-    "description": "Forge your flame — estudio creativo: animación, concept art, VFX y videojuegos.",
+    "title": "Forja Studios — Animación 2D/3D, VFX y concept art",
+    "description": "Estudio creativo de animación 2D y 3D, VFX, concept art e ilustración. Más de 12 años forjando historias para cine, televisión y videojuegos.",
     "ogTitle": "Forja Studios — Forge your flame",
-    "ogDescription": "Estudio creativo: animación 2D/3D, concept art, VFX y videojuegos."
+    "ogDescription": "Estudio creativo de animación 2D/3D, VFX, concept art e ilustración. Más de 1300 proyectos forjados para estudios de todo el mundo.",
+    "ogImageAlt": "Forja Studios — Forge your flame",
+    "teamTitle": "Equipo",
+    "teamDescription": "Conoce a los blacksmiths de Forja Studios: el equipo de artistas, animadores y directores que da forma a cada proyecto.",
+    "projectsBreadcrumb": "Proyectos",
+    "ipsBreadcrumb": "IPs",
+    "homeBreadcrumb": "Inicio",
+    "projectDescription": "{title} — proyecto de {category} realizado por Forja Studios para {client}.",
+    "ipDescription": "{name} — IP original creada y desarrollada por Forja Studios."
   },
   "Intro": {
     "skip": "Saltar intro"

@@ -1,7 +1,10 @@
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import Image from "next/image";
 import { getSiteContent } from "@/lib/wp/client";
 import type { Locale } from "@/i18n/routing";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { alternates, breadcrumbJsonLd, openGraphBase, teamJsonLd } from "@/lib/seo";
 import { NavE } from "@/components/sections/e/NavE";
 // import { CursorE } from "@/components/sections/e/CursorE";
 import { TeamE } from "@/components/sections/e/TeamE";
@@ -39,10 +42,18 @@ export default async function ConceptoETeamPage({ params }: PageProps) {
   setRequestLocale(locale);
   const content = await getSiteContent(locale);
   const t = await getTranslations("TeamPage");
+  const tMeta = await getTranslations("Meta");
   const indent = OPTICAL_INDENT[locale] ?? { top: "0", main: "0" };
 
   return (
     <div data-concept="e" className="min-h-screen bg-bg text-fg">
+      <JsonLd data={teamJsonLd(content, locale)} />
+      <JsonLd
+        data={breadcrumbJsonLd(locale, [
+          { name: tMeta("homeBreadcrumb"), path: "" },
+          { name: tMeta("teamTitle"), path: "/team" },
+        ])}
+      />
       {/* <CursorE /> */}
       <NavE />
 
@@ -92,6 +103,24 @@ export default async function ConceptoETeamPage({ params }: PageProps) {
       <FooterE />
     </div>
   );
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Meta" });
+
+  return {
+    title: t("teamTitle"),
+    description: t("teamDescription"),
+    alternates: alternates(locale, "/team"),
+    openGraph: {
+      ...openGraphBase(locale, "/team"),
+      type: "profile",
+      title: t("teamTitle"),
+      description: t("teamDescription"),
+    },
+    twitter: { title: t("teamTitle"), description: t("teamDescription") },
+  };
 }
 
 export async function generateStaticParams() {

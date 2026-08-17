@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { getSiteContent } from "@/lib/wp/client";
 import { routing, type Locale } from "@/i18n/routing";
@@ -7,6 +7,16 @@ import { NavE } from "@/components/sections/e/NavE";
 import { ProjectDetailGalleryE } from "@/components/sections/e/ProjectDetailGalleryE";
 import { ContactForgeMeter } from "@/components/sections/e/contact/ForgeMeter";
 import { FooterE } from "@/components/sections/e/FooterE";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { clientDisplayName } from "@/lib/utils";
+import {
+  alternates,
+  breadcrumbJsonLd,
+  ogImage,
+  openGraphBase,
+  projectJsonLd,
+  truncate,
+} from "@/lib/seo";
 
 interface PageProps {
   params: Promise<{ locale: Locale; slug: string }>;
@@ -20,8 +30,18 @@ export default async function ProjectDetailPage({ params }: PageProps) {
   const project = content.projects.find((p) => p.slug === slug);
   if (!project) notFound();
 
+  const tMeta = await getTranslations({ locale, namespace: "Meta" });
+
   return (
     <div data-concept="e" className="min-h-screen bg-bg text-fg">
+      <JsonLd data={projectJsonLd(project, locale)} />
+      <JsonLd
+        data={breadcrumbJsonLd(locale, [
+          { name: tMeta("homeBreadcrumb"), path: "" },
+          { name: tMeta("projectsBreadcrumb"), path: "/#work" },
+          { name: project.title, path: `/proyecto/${project.slug}` },
+        ])}
+      />
       <NavE />
       <ProjectDetailGalleryE project={project} />
       <ContactForgeMeter content={content} />
@@ -34,7 +54,41 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { locale, slug } = await params;
   const content = await getSiteContent(locale);
   const project = content.projects.find((p) => p.slug === slug);
-  return { title: project ? `${project.title} · Forja Studios` : "Forja Studios" };
+  if (!project) return {};
+
+  const t = await getTranslations({ locale, namespace: "Meta" });
+  const path = `/proyecto/${project.slug}`;
+  // La descripción del CMS es la buena; el patrón traducido solo cubre los
+  // proyectos que aún no la traen.
+  const description = project.description
+    ? truncate(project.description, 160)
+    : t("projectDescription", {
+        title: project.title,
+        category: project.categoryLabel,
+        // Sin el prefijo de créditos que trae el campo de WP ("Client © X").
+        client: clientDisplayName(project.client),
+      });
+  // La portada real del proyecto vende mucho más que la tarjeta de marca; si
+  // falta, se hereda la de `[locale]/opengraph-image`.
+  const images = project.coverUrl ? [ogImage(project.coverUrl, project.title)] : undefined;
+
+  return {
+    title: project.title,
+    description,
+    alternates: alternates(locale, path),
+    openGraph: {
+      ...openGraphBase(locale, path),
+      type: "article",
+      title: `${project.title} — ${project.categoryLabel}`,
+      description,
+      ...(images ? { images } : {}),
+    },
+    twitter: {
+      title: `${project.title} — ${project.categoryLabel}`,
+      description,
+      ...(images ? { images } : {}),
+    },
+  };
 }
 
 export async function generateStaticParams() {

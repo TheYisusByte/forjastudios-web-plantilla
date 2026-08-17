@@ -49,7 +49,10 @@ python3 .claude/skills/ui-ux-pro-max/scripts/search.py \
 - `src/lib/content/` (modelo + **mock bilingüe tipado**) y `src/lib/wp/` (cliente stub que resuelve por locale; `getSiteContent(locale)` — único punto a cambiar cuando WP esté vivo).
 - `src/components/ui/` (Nav, LangSwitch, Button, Marquee, Section), `src/components/motion/` (Reveal, CountUp, Parallax, MagneticButton, BreathingLight — todas respetan `prefers-reduced-motion`), `src/components/sections/` (compartidas + `a/ b/ c/` por concepto).
 - Tokens de concepto: cada página envuelve el contenido en `<div data-concept="a|b|c">`; `globals.css` re-tematiza las CSS vars por concepto.
-- SEO: `src/app/sitemap.ts` (con hreflang), `robots.ts`, JSON-LD Organization en el layout.
+- SEO/AEO: **todo se compone desde `src/lib/seo.ts`** (canonical + hreflang con `x-default`, bloques Open Graph, constructores de JSON-LD) y se emite con `src/components/seo/JsonLd.tsx`. Cada página aporta su `generateMetadata`. Rutas de metadata: `sitemap.ts`, `robots.ts` (con permiso explícito a los bots de IA), `manifest.ts`, `apple-icon.tsx`, `llms.txt/route.ts`, y la tarjeta social generada en `[locale]/opengraph-image.tsx`.
+  - Esa tarjeta usa `src/lib/fonts/garet-*.ttf`: Satori no lee woff2. Son los mismos archivos que el sitio, convertidos con `fonttools`, y **solo se leen en build** (al navegador no llegan).
+  - `apple-icon` es el único archivo de metadata sin extensión, así que está excluido a mano en el matcher de `src/proxy.ts`; si no, i18n lo redirige.
+- Analítica: Google Analytics 4 vía `@next/third-parties` en el layout. Solo carga en producción (`NEXT_PUBLIC_GA_ID` para apuntar a otra propiedad).
 - **Contenido = mock** (placeholder hasta materiales del cliente); formulario de contacto valida y simula éxito (Resend pendiente).
 
 ## Identidad de marca (resumen)
