@@ -166,9 +166,7 @@
   },
   "Common": {
     "language": "Idioma",
-    "back": "Regresar",
-    "client": "Cliente",
-    "studio": "Estudio"
+    "back": "Regresar"
   },
   "Meta": {
     "description": "Forge your flame — estudio creativo: animación, concept art, VFX y videojuegos.",

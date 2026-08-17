@@ -370,7 +370,7 @@ function mapProject(node: WpProyecto, i: number): Project {
     category,
     categoryLabel: cat?.name ?? categoryLabels[category]?.es ?? "",
     year: Number(node.camposProyecto?.anio) || new Date().getFullYear(),
-    description: clean(node.excerpt),
+    description: realExcerpt(node.excerpt),
     featured: Boolean(node.camposProyecto?.destacado),
     accent: accentAt(i),
     videoUrl: node.camposProyecto?.videoUrl || undefined,
@@ -487,6 +487,24 @@ function initialsOf(name: string): string {
     .map((w) => w[0]?.toUpperCase() ?? "")
     .join("");
 }
+
+/**
+ * Descripción del proyecto, o cadena vacía si es el marcador de posición.
+ *
+ * WordPress rellenó el extracto de casi todos los proyectos con la misma frase
+ * genérica al importarlos; repetirla bajo cada portada no aporta nada. Al
+ * tratarla como vacía, la interna no muestra descripción hasta que se escriba
+ * una de verdad.
+ */
+function realExcerpt(html?: string): string {
+  const text = clean(html);
+  return PLACEHOLDER_EXCERPTS.has(text.toLowerCase()) ? "" : text;
+}
+
+const PLACEHOLDER_EXCERPTS = new Set([
+  "pieza del portafolio de forja studios.",
+  "portfolio piece by forja studios.",
+]);
 
 /** Quita etiquetas HTML (excerpt/textarea de WP) y normaliza espacios. */
 function clean(html?: string): string {

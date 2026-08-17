@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { getSiteContent } from "@/lib/wp/client";
 import { routing, type Locale } from "@/i18n/routing";
@@ -20,12 +20,10 @@ export default async function ProjectDetailPage({ params }: PageProps) {
   const project = content.projects.find((p) => p.slug === slug);
   if (!project) notFound();
 
-  const t = await getTranslations("Common");
-
   return (
     <div data-concept="e" className="min-h-screen bg-bg text-fg">
       <NavE />
-      <ProjectDetailGalleryE project={project} clientLabel={t("client")} />
+      <ProjectDetailGalleryE project={project} />
       <ContactForgeMeter content={content} />
       <FooterE />
     </div>

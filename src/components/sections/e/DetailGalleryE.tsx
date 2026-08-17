@@ -275,12 +275,12 @@ function Lightbox({
 
 /** Firma de autoría bajo la portada: de quién es el trabajo. */
 export interface DetailBrand {
-  /** Etiqueta ya traducida ("Cliente", "Estudio"). */
-  label: string;
-  /** Nombre del cliente o del estudio. */
-  name: string;
-  /** Logo. Si falta, se muestra solo el nombre. */
+  /** Línea de crédito ya compuesta: «Client © Ludia - 2023». */
+  credit: string;
+  /** Logo. Si falta, se muestra solo el crédito. */
   logoUrl?: string;
+  /** Texto alternativo del logo (el nombre a secas). */
+  name: string;
 }
 
 export interface DetailGalleryProps {
@@ -468,27 +468,22 @@ export function DetailGalleryE({
         </section>
       )}
 
-      {/* Firma: de quién es el trabajo (cliente, o el estudio en las IPs) */}
+      {/* Firma: de quién es el trabajo (el cliente, o el estudio en las IPs) */}
       {brand && (
-        <div className="mx-auto flex max-w-7xl items-center gap-5 px-6 pt-10">
+        <div className="mx-auto flex max-w-7xl flex-col items-center gap-5 px-6 pt-12 text-center">
           {brand.logoUrl && (
             <Image
-              src={resolveWpVariant(brand.logoUrl, 320)}
+              src={resolveWpVariant(brand.logoUrl, 640)}
               alt={brand.name}
-              width={320}
-              height={128}
-              sizes="200px"
-              className="h-12 w-auto max-w-[180px] object-contain object-left"
+              width={640}
+              height={256}
+              sizes="(max-width: 640px) 60vw, 360px"
+              className="h-24 w-auto max-w-[280px] object-contain sm:h-32 sm:max-w-[360px]"
             />
           )}
-          <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-forja-muted sm:text-sm">
-              {brand.label}
-            </p>
-            <p className="font-display text-lg font-bold uppercase tracking-wide text-forja-bone">
-              {brand.name}
-            </p>
-          </div>
+          <p className="text-xs uppercase tracking-[0.3em] text-forja-muted sm:text-sm">
+            {brand.credit}
+          </p>
         </div>
       )}
 

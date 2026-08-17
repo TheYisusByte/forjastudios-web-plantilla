@@ -22,7 +22,6 @@ export default async function IPDetailPage({ params }: PageProps) {
   if (!ip) notFound();
 
   const t = await getTranslations("ConceptE");
-  const tc = await getTranslations("Common");
 
   return (
     <div data-concept="e" className="min-h-screen bg-bg text-fg">
@@ -31,7 +30,7 @@ export default async function IPDetailPage({ params }: PageProps) {
         title={ip.name}
         kicker={t("ipsTag")}
         // Las IPs son del propio estudio: la firma bajo la portada es Forja.
-        brand={{ label: tc("studio"), name: "Forja Studios", logoUrl: FORJA_LOGO }}
+        brand={{ name: "Forja Studios", credit: "© Forja Studios", logoUrl: FORJA_LOGO }}
         description={ip.description}
         coverUrl={ip.coverUrl}
         coverVideoUrl={ip.videoUrl}

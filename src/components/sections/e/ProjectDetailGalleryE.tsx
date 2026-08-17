@@ -6,25 +6,22 @@ import { DetailGalleryE } from "./DetailGalleryE";
  * Detalle de proyecto = galería genérica con los datos del proyecto.
  * La UI vive en DetailGalleryE (compartida con el detalle de IP).
  */
-export function ProjectDetailGalleryE({
-  project,
-  clientLabel,
-}: {
-  project: Project;
-  /** Etiqueta ya traducida de la firma bajo la portada ("Cliente"). */
-  clientLabel: string;
-}) {
+export function ProjectDetailGalleryE({ project }: { project: Project }) {
+  const client = clientDisplayName(project.client);
+
   return (
     <DetailGalleryE
       title={project.title}
       kicker={`${project.categoryLabel} · ${project.year}`}
-      // Firma: el cliente del proyecto, con su logo (campo `clienteLogo` del
-      // proyecto o, si está vacío, el del CPT «Cliente» que se llame igual).
+      // Firma bajo la portada: el logo del cliente (campo `clienteLogo` del
+      // proyecto o, si está vacío, el del CPT «Cliente» que se llame igual) y
+      // la línea de crédito. «Client ©» va en inglés a propósito: es la
+      // fórmula del crédito, no texto de interfaz, y no se traduce.
       brand={
-        project.client
+        client
           ? {
-              label: clientLabel,
-              name: clientDisplayName(project.client),
+              name: client,
+              credit: `Client © ${client} - ${project.year}`,
               logoUrl: project.clientLogoUrl,
             }
           : undefined
