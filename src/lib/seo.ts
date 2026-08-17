@@ -17,8 +17,15 @@ import { routing, type Locale } from "@/i18n/routing";
 import { clientDisplayName } from "@/lib/utils";
 import type { Project, IP, SiteContent } from "@/lib/content/types";
 
-/** Origen canónico del sitio. Sin barra final. */
-export const SITE_URL = "https://forjastudios.com";
+/**
+ * Origen canónico del sitio. Sin barra final.
+ *
+ * CON `www`: el apex responde 308 hacia www, así que es www quien sirve las
+ * páginas. Apuntar la canónica al apex mandaría a los buscadores a una URL que
+ * redirige — justo lo que una canónica existe para evitar. Si algún día se
+ * invierte el dominio primario en Vercel, este literal es lo único que cambia.
+ */
+export const SITE_URL = "https://www.forjastudios.com";
 
 /** Nombre legal/comercial, tal cual debe aparecer en resultados. */
 export const SITE_NAME = "Forja Studios";

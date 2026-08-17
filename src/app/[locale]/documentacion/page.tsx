@@ -666,7 +666,9 @@ MediaItem (gallery) { type: "image" | "video", src, poster?, width?, height? }`}
               <Card title="Canonical + hreflang">
                 <Code>alternates(locale, path)</Code> emite la canónica de cada página y los{" "}
                 <Code>hreflang</Code> de ambos idiomas más <Code>x-default</Code>, que es la variante
-                que se sirve a quien no encaja en ninguno.
+                que se sirve a quien no encaja en ninguno. Todo cuelga de{" "}
+                <Code>SITE_URL</Code>, que va <strong className="text-forja-bone">con www</strong>:
+                el apex responde 308 hacia www, y una canónica que redirige no sirve de nada.
               </Card>
               <Card title="robots por página">
                 Las rutas live van <Code>index, follow</Code> con{" "}
@@ -758,7 +760,7 @@ MediaItem (gallery) { type: "image" | "video", src, poster?, width?, height? }`}
 
             <Block title="Etiquetas que emite la home (/es)">{`<title>Forja Studios — Animación 2D/3D, VFX y concept art</title>
 <meta name="description"  content="Estudio creativo de animación 2D y 3D, VFX…">
-<link rel="canonical"     href="https://forjastudios.com/es">
+<link rel="canonical"     href="https://www.forjastudios.com/es">
 <link rel="alternate" hreflang="es|en|x-default" …>
 
 og:title · og:description · og:url · og:site_name · og:type=website
