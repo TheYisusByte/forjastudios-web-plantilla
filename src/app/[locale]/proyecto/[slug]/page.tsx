@@ -16,6 +16,7 @@ import {
   openGraphBase,
   projectJsonLd,
   truncate,
+  twitterBase,
 } from "@/lib/seo";
 
 interface PageProps {
@@ -84,6 +85,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       ...(images ? { images } : {}),
     },
     twitter: {
+      ...twitterBase(locale),
       title: `${project.title} — ${project.categoryLabel}`,
       description,
       ...(images ? { images } : {}),

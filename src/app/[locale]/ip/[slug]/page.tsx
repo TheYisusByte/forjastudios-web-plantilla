@@ -16,6 +16,7 @@ import {
   ogImage,
   openGraphBase,
   truncate,
+  twitterBase,
 } from "@/lib/seo";
 
 interface PageProps {
@@ -85,7 +86,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       ...(images ? { images } : {}),
     },
-    twitter: { title: ip.name, description, ...(images ? { images } : {}) },
+    twitter: {
+      ...twitterBase(locale),
+      title: ip.name,
+      description,
+      ...(images ? { images } : {}),
+    },
   };
 }
 

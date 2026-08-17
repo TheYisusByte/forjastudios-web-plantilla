@@ -65,13 +65,49 @@ export function alternates(locale: Locale, path = ""): Metadata["alternates"] {
   };
 }
 
-/** Bloque `openGraph` común: URL, locale y locale alterno. */
+/**
+ * La tarjeta de marca que genera `[locale]/opengraph-image.tsx`.
+ *
+ * Se referencia a mano en vez de dejar que Next la inyecte sola porque el
+ * archivo solo se aplica cuando la página NO declara su propio `openGraph`, y
+ * aquí todas lo declaran para fijar la URL y el locale.
+ */
+export function defaultOgImage(locale: Locale) {
+  return {
+    url: `${SITE_URL}/${locale}/opengraph-image`,
+    width: 1200,
+    height: 630,
+    alt: `${SITE_NAME} — Forge your flame`,
+  };
+}
+
+/**
+ * Bloque `openGraph` común: URL, locale, locale alterno e imagen por defecto.
+ *
+ * Ojo con la herencia: Next NO fusiona `openGraph` ni `twitter` en profundidad
+ * — el objeto de la página REEMPLAZA entero al del layout. Por eso todo lo que
+ * deba salir en cada página se compone desde aquí y no se hereda: si no, las
+ * internas se quedan sin imagen y sin cuenta de X.
+ */
 export function openGraphBase(locale: Locale, path = "") {
   return {
     url: absoluteUrl(locale, path),
     siteName: SITE_NAME,
     locale: OG_LOCALE[locale],
     alternateLocale: routing.locales.filter((l) => l !== locale).map((l) => OG_LOCALE[l]),
+    images: [defaultOgImage(locale)],
+  };
+}
+
+/** Bloque `twitter` común. Mismo motivo que arriba: se repite, no se hereda. */
+export function twitterBase(locale: Locale) {
+  return {
+    // `summary_large_image` es lo que convierte la tarjeta en un banner ancho;
+    // con `summary` (el default) la imagen queda de miniatura.
+    card: "summary_large_image" as const,
+    site: TWITTER_HANDLE,
+    creator: TWITTER_HANDLE,
+    images: [defaultOgImage(locale)],
   };
 }
 

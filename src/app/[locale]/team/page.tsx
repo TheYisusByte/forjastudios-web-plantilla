@@ -4,7 +4,13 @@ import Image from "next/image";
 import { getSiteContent } from "@/lib/wp/client";
 import type { Locale } from "@/i18n/routing";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { alternates, breadcrumbJsonLd, openGraphBase, teamJsonLd } from "@/lib/seo";
+import {
+  alternates,
+  breadcrumbJsonLd,
+  openGraphBase,
+  teamJsonLd,
+  twitterBase,
+} from "@/lib/seo";
 import { NavE } from "@/components/sections/e/NavE";
 // import { CursorE } from "@/components/sections/e/CursorE";
 import { TeamE } from "@/components/sections/e/TeamE";
@@ -116,10 +122,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: {
       ...openGraphBase(locale, "/team"),
       type: "profile",
-      title: t("teamTitle"),
+      // En la tarjeta social no hay migas ni contexto: «Equipo» a secas no
+      // dice de quién. El <title> de la pestaña sí puede ser corto.
+      title: t("teamOgTitle"),
       description: t("teamDescription"),
     },
-    twitter: { title: t("teamTitle"), description: t("teamDescription") },
+    twitter: {
+      ...twitterBase(locale),
+      // En la tarjeta social no hay migas ni contexto: «Equipo» a secas no
+      // dice de quién. El <title> de la pestaña sí puede ser corto.
+      title: t("teamOgTitle"),
+      description: t("teamDescription"),
+    },
   };
 }
 

@@ -11,10 +11,10 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import {
   SITE_NAME,
   SITE_URL,
-  TWITTER_HANDLE,
   alternates,
   openGraphBase,
   organizationJsonLd,
+  twitterBase,
   websiteJsonLd,
 } from "@/lib/seo";
 import "../globals.css";
@@ -55,11 +55,7 @@ export async function generateMetadata({
       description: t("ogDescription"),
     },
     twitter: {
-      // `summary_large_image` es lo que convierte la tarjeta en un banner
-      // ancho; con `summary` (el default) la imagen queda de miniatura.
-      card: "summary_large_image",
-      site: TWITTER_HANDLE,
-      creator: TWITTER_HANDLE,
+      ...twitterBase(locale),
       title: t("ogTitle"),
       description: t("ogDescription"),
     },
