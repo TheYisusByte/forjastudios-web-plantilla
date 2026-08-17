@@ -90,7 +90,7 @@ export function ClientsE({ clients }: ClientsEProps) {
     <section ref={sectionRef} id="clients" className="pt-12 pb-24">
       {/* Heading */}
       <div className="clients-e-heading mx-auto mb-20 max-w-7xl px-6">
-        <p className="mb-3 text-xs uppercase tracking-[0.3em] text-forja-muted sm:text-sm">
+        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.35em] text-forja-bone sm:text-sm">
           {t("clientsTitle")}
         </p>
         <h2

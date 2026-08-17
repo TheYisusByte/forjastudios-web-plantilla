@@ -414,7 +414,7 @@ export function HeroE() {
         <span className="flex h-9 w-[22px] justify-center rounded-full border-2 border-forja-bone/40 pt-1.5">
           <span className="hero-scroll-dot h-1.5 w-1 rounded-full bg-forja-bone/80" />
         </span>
-        <span className="text-xs italic tracking-wide text-forja-muted sm:text-sm">
+        <span className="text-xs font-semibold uppercase tracking-[0.35em] text-forja-bone sm:text-sm">
           {t("scroll")}
         </span>
       </div>
