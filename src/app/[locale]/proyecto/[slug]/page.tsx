@@ -69,9 +69,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         // Sin el prefijo de créditos que trae el campo de WP ("Client © X").
         client: clientDisplayName(project.client),
       });
-  // La portada real del proyecto vende mucho más que la tarjeta de marca; si
-  // falta, se hereda la de `[locale]/opengraph-image`.
-  const images = project.coverUrl ? [ogImage(project.coverUrl, project.title)] : undefined;
+  // La portada real del proyecto vende mucho más que la tarjeta de marca. Si
+  // falta —o es demasiado pequeña para una tarjeta social—, `ogImage` devuelve
+  // null y se deja la de marca que ya trae openGraphBase.
+  const cover = project.coverUrl ? ogImage(project.coverUrl, project.title) : null;
+  const images = cover ? [cover] : undefined;
 
   return {
     title: project.title,

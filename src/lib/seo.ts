@@ -15,6 +15,7 @@
 import type { Metadata } from "next";
 import { routing, type Locale } from "@/i18n/routing";
 import { clientDisplayName } from "@/lib/utils";
+import { largestWpVariant } from "@/lib/wp/media";
 import type { Project, IP, SiteContent } from "@/lib/content/types";
 
 /**
@@ -124,19 +125,33 @@ export function truncate(text: string, max = 160): string {
 }
 
 /**
- * Convierte una URL de imagen (relativa o absoluta) en la entrada que espera
- * `openGraph.images`. Las de WordPress ya vienen absolutas; las locales se
- * resuelven contra `metadataBase`.
+ * Ancho mínimo para que una portada del CMS sirva como tarjeta social.
+ * Por debajo, LinkedIn rechaza la imagen y el resto de redes la degradan a
+ * miniatura; sale mejor la tarjeta de marca, que siempre es 1200×630.
+ */
+const MIN_OG_WIDTH = 600;
+
+/**
+ * Convierte la portada de un contenido en la entrada que espera
+ * `openGraph.images`, con sus dimensiones reales.
  *
- * El fragmento `#wp=…` que `client.ts` anexa a los `src` para el loader de
- * imágenes no pinta nada aquí y confunde a los scrapers, así que se recorta.
+ * Devuelve `null` cuando la imagen no sirve como tarjeta (es demasiado
+ * pequeña); quien llama debe entonces dejar la de marca que ya trae
+ * `openGraphBase`.
  *
- * Sin `width`/`height` a propósito: son portadas del CMS de tamaño variable y
- * anunciar unas medidas que no son las reales hace que la tarjeta se muestre
- * deformada. Los scrapers las miden al descargar la imagen.
+ * Las medidas salen de las variantes que WordPress generó, no de una
+ * suposición: anunciar unas que no son las reales deforma la tarjeta, y no
+ * anunciar ninguna obliga al scraper a descargar el archivo para maquetar.
  */
 export function ogImage(url: string, alt: string) {
-  return { url: url.split("#")[0], alt };
+  const variant = largestWpVariant(url);
+  if (!variant) {
+    // Sin variantes conocidas (asset local, o WP no las generó): se manda la
+    // URL a secas, sin el fragmento `#wp=…`, que solo entiende nuestro loader.
+    return { url: url.split("#")[0], alt };
+  }
+  if (variant.width < MIN_OG_WIDTH) return null;
+  return { url: variant.url, width: variant.width, height: variant.height, alt };
 }
 
 // ── JSON-LD ───────────────────────────────────────────────────────────────

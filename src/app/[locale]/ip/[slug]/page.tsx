@@ -73,7 +73,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const description = ip.description
     ? truncate(ip.description, 160)
     : t("ipDescription", { name: ip.name });
-  const images = ip.coverUrl ? [ogImage(ip.coverUrl, ip.name)] : undefined;
+  // Si la portada no da el ancho mínimo de una tarjeta social, `ogImage`
+  // devuelve null y se queda la de marca que trae openGraphBase.
+  const cover = ip.coverUrl ? ogImage(ip.coverUrl, ip.name) : null;
+  const images = cover ? [cover] : undefined;
 
   return {
     title: ip.name,

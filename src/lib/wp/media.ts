@@ -79,6 +79,45 @@ export function stripWpVariants(url?: string): string | undefined {
 }
 
 /**
+ * La variante MÁS GRANDE de las que WordPress generó, con sus dimensiones
+ * reales. Devuelve `null` si la URL no lleva el fragmento de variantes.
+ *
+ * Lo usa `og:image`: las redes sociales quieren la URL y las medidas exactas
+ * para maquetar la tarjeta sin descargar el archivo, y son las únicas medidas
+ * que el front conoce con certeza (del original solo se sabe la URL).
+ */
+export function largestWpVariant(
+  src: string,
+): { url: string; width: number; height: number } | null {
+  const mark = src.indexOf(WP_VARIANTS_MARK);
+  if (mark === -1) return null;
+
+  const url = src.slice(0, mark);
+  const spec = src.slice(mark + WP_VARIANTS_MARK.length);
+  const sep = spec.indexOf(":");
+  const bar = spec.indexOf("|");
+  if (sep === -1 || bar === -1 || bar > sep) return null;
+
+  const stem = spec.slice(0, bar);
+  const ext = spec.slice(bar + 1, sep);
+
+  let best: { width: number; height: number; size: string } | null = null;
+  for (const size of spec.slice(sep + 1).split(",")) {
+    const [w, h] = size.split("x").map((n) => Number.parseInt(n, 10));
+    if (!Number.isFinite(w) || !Number.isFinite(h)) continue;
+    if (!best || w > best.width) best = { width: w, height: h, size };
+  }
+  if (!best) return null;
+
+  const slash = url.lastIndexOf("/");
+  return {
+    url: `${url.slice(0, slash + 1)}${stem}-${best.size}${ext}`,
+    width: best.width,
+    height: best.height,
+  };
+}
+
+/**
  * Resuelve una URL con variantes al archivo de WordPress más pequeño que cubra
  * `width` píxeles. Si la URL no lleva variantes, o ninguna llega a ese ancho,
  * devuelve el original.
