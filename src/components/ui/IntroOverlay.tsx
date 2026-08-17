@@ -1,16 +1,15 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 /**
  * Intro animado de marca que tapa la página mientras se reproduce.
  * ---------------------------------------------------------------------------
- * Se muestra en CADA CAMBIO DE PÁGINA: al entrar al sitio, al recargar, al
- * abrir directamente una interna y también al navegar dentro del sitio —entrar
- * a un proyecto y volver a la home cuentan igual—. Vive en el layout, que no se
- * desmonta al navegar, así que el ciclo se reinicia mirando el `pathname`.
+ * Se muestra en CADA CARGA de página: al entrar, al recargar y al abrir
+ * directamente una interna (proyecto, IP, equipo). Vive en el layout, así que
+ * cubre todas las rutas; las navegaciones internas con `<Link>` no recargan el
+ * layout y por tanto no lo repiten.
  *
  * El overlay va en el HTML estático (no montado desde un efecto) para que tape
  * la página desde el primer paint, sin que se vea la web un instante antes. La
@@ -79,50 +78,26 @@ const FADE_MS = 600;
 export function IntroOverlay() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const finished = useRef(false);
-  const fadeTimer = useRef<number | null>(null);
   const [leaving, setLeaving] = useState(false);
   const [gone, setGone] = useState(false);
   const t = useTranslations("Intro");
-
-  // Ruta actual (con locale: cambiar de idioma también cuenta como entrar a
-  // otra página). Cada cambio reinicia el intro.
-  const pathname = usePathname();
-  const [route, setRoute] = useState(pathname);
-
-  // Reinicio DURANTE el render, no en un efecto: así el overlay ya viaja en el
-  // mismo pintado que la página nueva y no se llega a ver un fotograma de ella
-  // antes de que lo tape.
-  if (route !== pathname) {
-    setRoute(pathname);
-    setLeaving(false);
-    setGone(false);
-  }
 
   // Idempotente: da igual cuántas de las salidas lo llamen, ni cuántas veces.
   const finish = useCallback(() => {
     if (finished.current) return;
     finished.current = true;
     setLeaving(true);
-    fadeTimer.current = window.setTimeout(() => {
+    window.setTimeout(() => {
       document.documentElement.dataset.intro = SKIP_ATTR; // libera el scroll
       setGone(true);
     }, FADE_MS);
   }, []);
 
   useEffect(() => {
-    // Quien pidió menos animación no lo ve nunca; el script del layout ya dejó
-    // marcado el <html> y, sin `src`, el video no se descarga.
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    // Al llegar a una ruta nueva hay que retirar la marca que dejó el intro
-    // anterior: es la que oculta el overlay y devuelve el scroll. Y cancelar su
-    // fundido, que si no acabaría cerrando este.
-    if (fadeTimer.current) {
-      window.clearTimeout(fadeTimer.current);
-      fadeTimer.current = null;
-    }
-    delete document.documentElement.dataset.intro;
-    finished.current = false;
+    // El script del layout ya decidió saltarlo (prefers-reduced-motion). El CSS
+    // lo mantiene oculto y, sin `src`, el video nunca se descarga: no hay nada
+    // que hacer.
+    if (document.documentElement.dataset.intro === SKIP_ATTR) return;
 
     const video = videoRef.current;
     if (!video) {
@@ -155,7 +130,7 @@ export function IntroOverlay() {
       window.clearTimeout(maxTimer);
       window.removeEventListener("keydown", onKey);
     };
-  }, [route, finish]);
+  }, [finish]);
 
   if (gone) return null;
 

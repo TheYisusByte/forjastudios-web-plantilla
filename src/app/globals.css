@@ -345,8 +345,7 @@
 
 /* ── Intro de marca (IntroOverlay) ───────────────────────────────────────────
    El overlay viaja en el HTML estático para tapar la página desde el primer
-   paint, y vuelve en cada cambio de página (también al navegar dentro del
-   sitio). `data-intro="skip"` lo pone el
+   paint, en cada carga y en cualquier ruta. `data-intro="skip"` lo pone el
    script inline del layout antes de pintar (prefers-reduced-motion) y el propio
    componente al terminar; con esa marca el overlay desaparece y el scroll
    vuelve. */
