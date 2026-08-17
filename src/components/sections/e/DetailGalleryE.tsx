@@ -22,6 +22,13 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 // Grid masonry de 4 columnas en desktop (1 / 2 / 3 / 4 según breakpoint).
 const SIZES = "(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw";
 
+/** ¿Dos URLs apuntan al mismo archivo? Compara ignorando query y fragmento. */
+function sameFile(a?: string, b?: string): boolean {
+  if (!a || !b) return false;
+  const clean = (url: string) => url.split(/[?#]/)[0];
+  return clean(a) === clean(b);
+}
+
 /**
  * Miniatura de un video que no tiene póster propio: el propio `<video>` pintando
  * su primer fotograma. `#t=0.1` es un media fragment — el navegador se coloca
@@ -275,6 +282,14 @@ export function DetailGalleryE({
 
   const hasVideoCover = !!coverVideoUrl && coverVideoUrl.startsWith("http");
 
+  // Miniatura del video de portada. Si ese mismo archivo está en la galería,
+  // reutiliza su póster (el fotograma que le generó WordPress); si no, la
+  // portada del proyecto. Es lo que rellena, desenfocado, lo que el video no
+  // ocupa: el video se ve entero, nunca recortado.
+  const coverBackdrop =
+    (gallery ?? []).find((m) => m.type === "video" && sameFile(m.src, coverVideoUrl))?.poster ??
+    coverUrl;
+
   // Grid = ítems de galería. Con portada de imagen se excluye esa imagen del
   // grid; con portada de video, la imagen de cover (si existe) queda de poster.
   const grid: MediaItem[] = (gallery ?? []).filter(
@@ -335,17 +350,37 @@ export function DetailGalleryE({
       {/* Portada a pantalla completa (video o imagen) + título superpuesto */}
       {hasVideoCover ? (
         <section className="relative h-dvh w-full overflow-hidden">
-          <video
-            ref={coverVideoRef}
-            src={coverVideoUrl}
-            poster={coverUrl && resolveWpVariant(coverUrl, 1920)}
-            autoPlay
-            muted
-            loop
-            playsInline
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full object-cover object-center"
-          />
+          {/* Fondo: la miniatura del video recortada a pantalla completa y
+              desenfocada. Rellena las franjas que deja el video —que va
+              `contain`, en su proporción real— sin recortarlo ni deformarlo. */}
+          {coverBackdrop && (
+            <Image
+              src={coverBackdrop}
+              alt=""
+              aria-hidden
+              fill
+              // Va desenfocada: pedir la variante grande solo gastaría ancho de
+              // banda, a esta escala no se distingue.
+              sizes="320px"
+              className="scale-110 object-cover blur-2xl brightness-[0.6]"
+            />
+          )}
+          {/* El video se dimensiona a su proporción real (no se estira a la
+              sección con `object-contain`: así el navegador no pinta su propio
+              letterbox negro encima del fondo desenfocado). */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <video
+              ref={coverVideoRef}
+              src={coverVideoUrl}
+              poster={coverBackdrop && resolveWpVariant(coverBackdrop, 1920)}
+              autoPlay
+              muted
+              loop
+              playsInline
+              aria-hidden="true"
+              className="max-h-full max-w-full"
+            />
+          </div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
           <div className="gallery-intro absolute inset-x-0 bottom-0 mx-auto max-w-7xl px-6 pb-14 sm:pb-20">
             {kicker && (
