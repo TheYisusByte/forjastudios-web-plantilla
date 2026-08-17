@@ -8,6 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { ArrowLeft, Play, X, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { MasonryColumns, type MasonryBreakpoint } from "@/components/ui/MasonryColumns";
 import { resolveWpVariant } from "@/lib/wp/media";
 import type { MediaItem } from "@/lib/content/types";
 
@@ -21,6 +22,14 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 // Grid masonry de 4 columnas en desktop (1 / 2 / 3 / 4 según breakpoint).
 const SIZES = "(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw";
+
+// Mismos cortes que `SIZES`, ahora en JS: el reparto de columnas lo hace
+// `MasonryColumns` para que la galería se lea en horizontal (ver ese archivo).
+const GALLERY_COLUMNS: MasonryBreakpoint[] = [
+  { min: 1024, cols: 4 },
+  { min: 768, cols: 3 },
+  { min: 640, cols: 2 },
+];
 
 /** ¿Dos URLs apuntan al mismo archivo? Compara ignorando query y fragmento. */
 function sameFile(a?: string, b?: string): boolean {
@@ -79,14 +88,25 @@ function VideoFrameThumb({ src, width, height }: { src: string; width: number; h
   );
 }
 
-function MediaCell({ item, alt, onOpen }: { item: MediaItem; alt: string; onOpen: () => void }) {
+function MediaCell({
+  item,
+  alt,
+  order,
+  onOpen,
+}: {
+  item: MediaItem;
+  alt: string;
+  /** Posición en la galería: la entrada se escalona en orden de lectura. */
+  order: number;
+  onOpen: () => void;
+}) {
   const w = item.width ?? 1600;
   const h = item.height ?? 900;
   const isVideo = item.type === "video";
   const thumb = isVideo ? item.poster : item.src;
 
   return (
-    <div className="proj-cell mb-2 break-inside-avoid overflow-hidden">
+    <div className="proj-cell overflow-hidden" data-order={order}>
       <button
         type="button"
         onClick={onOpen}
@@ -326,7 +346,11 @@ export function DetailGalleryE({
           y: 30, opacity: 0, duration: 0.8, stagger: 0.08, ease: "power3.out",
         });
         gsap.from(".proj-cell", {
-          opacity: 0, y: 24, duration: 0.6, stagger: { each: 0.05, from: "start" }, ease: "power2.out",
+          opacity: 0, y: 24, duration: 0.6, ease: "power2.out",
+          // En el DOM las celdas van por columnas (col 1 entera, col 2…), así
+          // que el escalonado se calcula con su posición real en la galería
+          // para que entren en el orden en que se leen.
+          stagger: (_i, el) => 0.05 * Number((el as HTMLElement).dataset.order ?? 0),
           scrollTrigger: { trigger: ".gallery-grid", start: "top 88%", once: true },
         });
       });
@@ -441,16 +465,17 @@ export function DetailGalleryE({
       {/* Masonry gallery */}
       {grid.length > 0 && (
         <div className="mx-auto max-w-7xl px-6 pb-28 pt-12">
-          <div className="gallery-grid columns-1 sm:columns-2 md:columns-3 lg:columns-4 [column-gap:8px]">
-            {grid.map((m, i) => (
-              <MediaCell
-                key={i}
-                item={m}
-                alt={`${title} — ${i + 1}`}
-                onOpen={() => setLightbox(i)}
-              />
-            ))}
-          </div>
+          <MasonryColumns
+            className="gallery-grid"
+            items={grid}
+            breakpoints={GALLERY_COLUMNS}
+            defaultColumns={4}
+            gap="8px"
+          >
+            {(m, i) => (
+              <MediaCell item={m} order={i} alt={`${title} — ${i + 1}`} onOpen={() => setLightbox(i)} />
+            )}
+          </MasonryColumns>
         </div>
       )}
 
