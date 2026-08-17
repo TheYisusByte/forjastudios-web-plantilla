@@ -4,6 +4,7 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
+import { IntroOverlay } from "@/components/ui/IntroOverlay";
 import { fontVariables } from "@/lib/fonts";
 import { meta as siteMeta } from "@/lib/content/data";
 import "../globals.css";
@@ -34,10 +35,14 @@ export async function generateMetadata({
 
 // Decide si el intro de marca se salta, ANTES del primer paint. Tiene que ser
 // un script inline y bloqueante: React llega demasiado tarde y se vería el
-// overlay un instante a quien ya lo vio (o al revés). Solo marca el <html>; el
+// overlay un instante a quien pidió menos animación. Solo marca el <html>; el
 // resto lo hacen globals.css y IntroOverlay. Ver src/components/ui/IntroOverlay.tsx.
+//
+// El intro se ve en CADA carga de página —la primera, cada recarga y cada
+// entrada directa a una interna—, así que aquí no hay más condición que
+// `prefers-reduced-motion`.
 const introSkipScript = `try{
-if(sessionStorage.getItem('forja:intro')==='1'||matchMedia('(prefers-reduced-motion: reduce)').matches)
+if(matchMedia('(prefers-reduced-motion: reduce)').matches)
 document.documentElement.dataset.intro='skip'
 }catch(e){document.documentElement.dataset.intro='skip'}`;
 
@@ -79,7 +84,12 @@ export default async function LocaleLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
         />
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider>
+          {/* Intro de marca: va en el layout para que tape también las páginas
+              internas cuando se entra directo a ellas o se recarga. */}
+          <IntroOverlay />
+          {children}
+        </NextIntlClientProvider>
       </body>
       {analyticsEnabled && <GoogleAnalytics gaId={GA_ID} />}
     </html>

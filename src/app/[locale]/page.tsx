@@ -11,7 +11,6 @@ import { StatsInterleaved } from "@/components/sections/e/about/StatsInterleaved
 import { ContactForgeMeter } from "@/components/sections/e/contact/ForgeMeter";
 import { ReelE } from "@/components/sections/e/ReelE";
 import { FooterE } from "@/components/sections/e/FooterE";
-import { IntroOverlay } from "@/components/ui/IntroOverlay";
 
 interface PageProps {
   params: Promise<{ locale: Locale }>;
@@ -24,8 +23,6 @@ export default async function ConceptoEPage({ params }: PageProps) {
 
   return (
     <div data-concept="e" className="min-h-screen bg-bg text-fg">
-      {/* Intro de marca — solo en la home y una vez por sesión. */}
-      <IntroOverlay />
       {/* <CursorE /> */}
       <NavE />
       <HeroE />

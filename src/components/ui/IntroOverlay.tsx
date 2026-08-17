@@ -4,30 +4,30 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 
 /**
- * Intro animado de marca que tapa la home mientras se reproduce.
+ * Intro animado de marca que tapa la página mientras se reproduce.
  * ---------------------------------------------------------------------------
- * Se muestra UNA VEZ POR SESIÓN: quien entra, navega a un proyecto y vuelve a la
- * home no lo vuelve a ver; al cerrar la pestaña se reinicia.
+ * Se muestra en CADA CARGA de página: al entrar, al recargar y al abrir
+ * directamente una interna (proyecto, IP, equipo). Vive en el layout, así que
+ * cubre todas las rutas; las navegaciones internas con `<Link>` no recargan el
+ * layout y por tanto no lo repiten.
  *
  * El overlay va en el HTML estático (no montado desde un efecto) para que tape
  * la página desde el primer paint, sin que se vea la web un instante antes. La
- * decisión de saltarlo la toma un script inline del layout ANTES de pintar
- * —React tarda demasiado para eso— marcando `data-intro="skip"` en el <html>;
- * el CSS de `globals.css` lo oculta con esa marca. Aquí solo se reacciona.
+ * decisión de saltarlo —solo `prefers-reduced-motion`— la toma un script inline
+ * del layout ANTES de pintar (React tarda demasiado para eso), marcando
+ * `data-intro="skip"` en el <html>; el CSS de `globals.css` lo oculta con esa
+ * marca. Aquí solo se reacciona.
  *
  * Hay varios clips y se alternan (ver `CLIPS`): el elegido se asigna al
  * `<video>` ya en el cliente, con `preload="none"`, y solo se descarga al
- * llamar a `play()`. Quien ya vio el intro —o pidió menos animación— no
- * descarga nada, aunque el elemento siga en el DOM. Mientras se elige, el
- * overlay es negro sólido, que es justo como arrancan los clips.
+ * llamar a `play()`. Quien pidió menos animación no descarga nada, aunque el
+ * elemento siga en el DOM. Mientras se elige, el overlay es negro sólido, que
+ * es justo como arrancan los clips.
  *
  * Nunca puede dejar la web inaccesible: se salta con un clic, con cualquier
  * tecla, si el navegador bloquea el autoplay, si el video no carga a tiempo o si
  * se agota el margen de seguridad.
  */
-
-/** Clave de sesión: marca que este visitante ya vio el intro. */
-const SEEN_KEY = "forja:intro";
 
 /** Clave persistente: índice del último clip mostrado, para ir alternando. */
 const LAST_CLIP_KEY = "forja:intro:clip";
@@ -94,16 +94,10 @@ export function IntroOverlay() {
   }, []);
 
   useEffect(() => {
-    // El script del layout ya decidió saltarlo (sesión repetida o
-    // prefers-reduced-motion). El CSS lo mantiene oculto y, sin `src`, el video
-    // nunca se descarga: no hay nada que hacer.
+    // El script del layout ya decidió saltarlo (prefers-reduced-motion). El CSS
+    // lo mantiene oculto y, sin `src`, el video nunca se descarga: no hay nada
+    // que hacer.
     if (document.documentElement.dataset.intro === SKIP_ATTR) return;
-
-    try {
-      sessionStorage.setItem(SEEN_KEY, "1");
-    } catch {
-      // Modo privado o storage bloqueado: se verá en cada carga, no es grave.
-    }
 
     const video = videoRef.current;
     if (!video) {
