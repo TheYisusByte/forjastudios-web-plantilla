@@ -3,7 +3,7 @@
  * Plugin Name:       Forja Headless
  * Plugin URI:        https://www.forjastudios.com/
  * Description:        Custom Post Types, taxonomías y campos ACF de Forja Studios, expuestos en WPGraphQL para el front headless en Next.js. Define proyecto, ip, miembro y cliente.
- * Version:           1.5.0
+ * Version:           1.6.0
  * Author:            Forja Studios
  * Text Domain:       forja-headless
  * Requires at least: 6.4
@@ -42,6 +42,16 @@
  * --------------------------------------------------------------------------
  *  Changelog
  * --------------------------------------------------------------------------
+ *  1.6.0
+ *    - Optimización de medios (inc/media-optimization.php): los tamaños
+ *      derivados se generan en WebP (nativo de WP 5.8+, ~50-70 % menos peso),
+ *      dos anchos intermedios (1280/1600) para que el srcSet no dé saltos, y
+ *      techo del original en 2048. Solo afecta a subidas nuevas: para el
+ *      material ya subido hay que regenerar miniaturas (`wp media regenerate`).
+ *  1.5.0
+ *    - El campo GraphQL `galeria` expone `srcSet`. El front sirve esas variantes
+ *      en lugar de pasar las imágenes por el optimizador de Vercel, cuya cuota
+ *      se agotaba y devolvía 402 (imágenes rotas). Ver inc/graphql.php.
  *  1.4.0
  *    - Revalidación on-demand del front (inc/revalidate.php): al guardar/borrar
  *      contenido o medios, WordPress avisa a /api/revalidate en Vercel y los
@@ -78,6 +88,7 @@ require_once FORJA_HEADLESS_DIR . 'inc/graphql.php';
 require_once FORJA_HEADLESS_DIR . 'inc/galeria-metabox.php';
 require_once FORJA_HEADLESS_DIR . 'inc/headless-redirect.php';
 require_once FORJA_HEADLESS_DIR . 'inc/revalidate.php';
+require_once FORJA_HEADLESS_DIR . 'inc/media-optimization.php';
 
 /**
  * Al activar, refresca las reglas de reescritura para que los slugs de los

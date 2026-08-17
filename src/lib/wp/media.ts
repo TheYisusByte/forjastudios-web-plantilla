@@ -68,7 +68,7 @@ export function withWpVariants(
   if (!sourceUrl) return undefined;
   const parsed = parseWpSrcSet(srcSet);
   if (!parsed) return sourceUrl;
-  return `${sourceUrl}${WP_VARIANTS_MARK}${parsed.stem}:${parsed.sizes.join(",")}`;
+  return `${sourceUrl}${WP_VARIANTS_MARK}${parsed.stem}|${parsed.ext}:${parsed.sizes.join(",")}`;
 }
 
 /** Quita el fragmento de variantes. Para contextos que necesiten la URL limpia. */
@@ -94,9 +94,11 @@ export function resolveWpVariant(src: string, width: number): string {
   const url = src.slice(0, mark);
   const spec = src.slice(mark + WP_VARIANTS_MARK.length);
   const sep = spec.indexOf(":");
-  if (sep === -1) return url;
+  const bar = spec.indexOf("|");
+  if (sep === -1 || bar === -1 || bar > sep) return url;
 
-  const stem = spec.slice(0, sep);
+  const stem = spec.slice(0, bar);
+  const ext = spec.slice(bar + 1, sep);
 
   // Variante más pequeña que aún cubre el ancho pedido. Las de WP vienen
   // ordenadas de menor a mayor, pero no lo damos por hecho.
@@ -111,33 +113,38 @@ export function resolveWpVariant(src: string, width: number): string {
   if (!best) return url;
 
   const slash = url.lastIndexOf("/");
-  const file = url.slice(slash + 1);
-  const dot = file.lastIndexOf(".");
-  const ext = dot === -1 ? "" : file.slice(dot);
-
   return `${url.slice(0, slash + 1)}${stem}-${best.size}${ext}`;
 }
 
-// Una entrada de srcSet de WP: `…/dir/nombre-800x600.jpg 800w`.
-const SRCSET_ENTRY = /\/([^/\s]+?)-(\d+x\d+)\.(\w+)\s+(\d+)w/g;
+// Una entrada de srcSet de WP: `…/dir/nombre-800x600.jpg 800w`. La extensión se
+// captura entera y puede ser compuesta: con la conversión a WebP activada,
+// WordPress nombra los derivados `nombre-800x600.jpg.webp`.
+const SRCSET_ENTRY = /\/([^/\s]+?)-(\d+x\d+)((?:\.\w+)+)\s+\d+w/g;
 
 /**
- * Extrae de un `srcSet` de WordPress el nombre base común y los sufijos `WxH`.
- * Devuelve `null` si el srcSet está vacío o si las entradas no comparten el
- * mismo nombre base (caso anómalo: mejor caer al original que construir URLs
+ * Extrae de un `srcSet` de WordPress el nombre base común, la extensión de los
+ * derivados y los sufijos `WxH`.
+ *
+ * Devuelve `null` si el srcSet está vacío o si las entradas no comparten nombre
+ * base y extensión (caso anómalo: mejor caer al original que construir URLs
  * inexistentes y provocar 404s).
  */
-function parseWpSrcSet(srcSet?: string | null): { stem: string; sizes: string[] } | null {
+function parseWpSrcSet(
+  srcSet?: string | null,
+): { stem: string; ext: string; sizes: string[] } | null {
   if (!srcSet) return null;
 
   let stem: string | null = null;
+  let ext: string | null = null;
   const sizes: string[] = [];
 
-  for (const [, name, size] of srcSet.matchAll(SRCSET_ENTRY)) {
+  for (const [, name, size, extension] of srcSet.matchAll(SRCSET_ENTRY)) {
     if (stem === null) stem = name;
     else if (stem !== name) return null;
+    if (ext === null) ext = extension;
+    else if (ext !== extension) return null;
     if (!sizes.includes(size)) sizes.push(size);
   }
 
-  return stem && sizes.length ? { stem, sizes } : null;
+  return stem && ext && sizes.length ? { stem, ext, sizes } : null;
 }

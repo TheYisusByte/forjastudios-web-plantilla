@@ -107,11 +107,83 @@ Consecuencias en el lado de WordPress:
 - **El plugin debe ser ≥ 1.5.0**, que expone `srcSet` en el campo `galeria`. Sin
   él las galerías se sirven en tamaño original (el front lo detecta y sigue
   funcionando, solo que más pesado; lo avisa por consola durante el build).
-- **Sube archivos ya optimizados.** Sin conversión de formato en el medio, un PNG
-  de 2,7 MB llega tal cual al visitante. Para fotos/ilustraciones usa JPG, no PNG.
-- **Recomendado: un plugin de WebP** (LiteSpeed/QUIC.cloud, ShortPixel o EWWW).
-  Sirve `.webp` en lugar del original sin que el front cambie nada, y recupera la
-  compresión que antes hacía Vercel (≈60 % menos peso).
+- **El plugin ≥ 1.6.0 genera los tamaños derivados en WebP** y añade anchos
+  intermedios (`inc/media-optimization.php`). Es nativo de WordPress, no hace
+  falta ningún plugin de terceros. **Solo aplica a subidas nuevas**: para el
+  material ya cargado hay que regenerar las miniaturas.
+
+### Regenerar las miniaturas del material existente
+
+```bash
+wp media regenerate --yes          # WP-CLI, la vía recomendada
+```
+
+Sin WP-CLI: plugin **Regenerate Thumbnails** → Herramientas. Con cientos de
+imágenes tarda y consume CPU; mejor lanzarlo fuera de horario. Al terminar,
+guarda cualquier proyecto para disparar la revalidación del front.
+
+### Vídeo: WordPress no lo comprime
+
+**WordPress no transcodifica vídeo.** Lo sirve byte a byte tal como se sube, así
+que aquí no hay ningún ajuste que valga: lo que se suba es lo que se descarga el
+visitante.
+
+Estado actual de la biblioteca (medido el 2026-08-07): **86 vídeos, 3,4 GB**,
+con una media de 39,8 MB por archivo y picos de 235 MB. Son masters, no
+versiones web.
+
+Antes de subir un vídeo:
+
+- Exportar a **H.264, máximo 1080p, 2-4 Mbps** → un clip de 30 s pesa ~10 MB.
+- Activar **fast start** (el índice al principio) para que empiece a reproducir
+  sin descargar el archivo entero.
+- Quitar la pista de audio si el vídeo va a ir muteado (fondos, loops).
+- Subir **solo la versión web**; los masters no van en la biblioteca de medios.
+
+Para material largo o mucho catálogo, lo correcto es una plataforma de streaming
+(Cloudflare Stream, Mux, Bunny): entregan calidad adaptativa según la conexión,
+que es algo que un archivo suelto en WordPress no puede hacer.
+
+#### Los dos vídeos de portada
+
+Estaban en Vercel Blob, cuya capa gratuita corta el servicio al pasar la cuota
+de datos (los vídeos desaparecían del sitio a mitad de mes). Desde 2026-08-17
+salen de WordPress, igual que el resto del material:
+
+| Uso | Archivo | Peso |
+|---|---|---|
+| Fondo del hero | `2026/08/animation-loop-web.mp4` | 5,9 MB (1920×1080, sin audio) |
+| Showreel | `2026/08/REEL-FORJA-STUDIOS-ANIMACION-2023.mp4` | 23 MB (1280×720, 1:41) |
+
+El fondo del hero es la versión web del máster de 2560×1440 y 20,5 MB
+(`2026/07/animation-loop.webm`, subido por FTP): a 1080p y CRF 30 pesa un 71 %
+menos y la diferencia no se ve detrás del overlay oscuro y el canvas de humo.
+Comando usado:
+
+```bash
+ffmpeg -i master.webm -an -vf scale=1920:-2 \
+  -c:v libx264 -crf 30 -preset slow -profile:v high \
+  -pix_fmt yuv420p -movflags +faststart animation-loop-web.mp4
+```
+
+Las URLs viven en un único sitio del front: `src/lib/wp/videos.ts`. Si se
+resuben, basta con cambiarlas ahí.
+
+**Sube siempre por la mediateca, no por FTP.** LiteSpeed no conoce la extensión
+`.webm` y la sirve con `Content-Type: text/plain`: Chrome la reproduce igual
+(hace sniffing) pero Firefox y Safari son estrictos y se quedan en negro. Si
+hiciera falta servir `.webm`, añadir al `.htaccess` de la raíz de WordPress:
+
+```apache
+AddType video/webm .webm
+
+# Los uploads no cambian: caché larga en el navegador (WP no la envía de serie).
+<IfModule mod_headers.c>
+  <FilesMatch "\.(mp4|webm|mov|jpg|jpeg|png|webp|avif)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>
+```
 
 ## Ver los cambios en la web sin hacer deploy (revalidación)
 

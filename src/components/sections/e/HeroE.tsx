@@ -7,6 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import Image from "next/image";
 import { HeroBgVideoFile } from "@/components/sections/e/HeroBgVideoFile";
+import { HERO_VIDEO_SOURCES } from "@/lib/wp/videos";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -216,9 +217,8 @@ const ROTATE_WORDS = [
   "heroes.", "vision.", "motion.", "vfx.",
 ];
 
-// Fondo de video del hero (servido desde Vercel Blob público / edge CDN).
-const HERO_VIDEO_URL =
-  "https://wzfwvbfikmgkjeay.public.blob.vercel-storage.com/animation%20loop.webm";
+// Póster del fondo del hero: se ve al instante y sustituye al video en móvil.
+const HERO_POSTER = "/assets/forja/posters/hero-poster.jpg";
 
 export function HeroE() {
   const t = useTranslations("ConceptE");
@@ -289,7 +289,8 @@ export function HeroE() {
           video 16:9 se recorta a los lados; "75% center" corre el video a la
           izquierda (deja visible la franja derecha). */}
       <HeroBgVideoFile
-        src={HERO_VIDEO_URL}
+        sources={HERO_VIDEO_SOURCES}
+        poster={HERO_POSTER}
         objectPosition="center"
         mobileObjectPosition="75% center"
       />
