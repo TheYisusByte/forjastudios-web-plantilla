@@ -59,7 +59,7 @@ function MemberCard({
             alt={member.name}
             fill
             className="e-img object-cover object-top transition-transform duration-700 group-hover:scale-105"
-            sizes="(max-width: 768px) 80vw, 300px"
+            sizes="(max-width: 768px) 80vw, (max-width: 1024px) 33vw, 260px"
           />
         ) : (
           <div
@@ -151,7 +151,7 @@ export function TeamE({ team }: TeamEProps) {
   return (
     <section ref={sectionRef} id="team" className="pt-12 pb-24">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="team-e-grid grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div className="team-e-grid grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
           {team.map((member, i) => (
             <div key={member.name} className="team-e-card">
               <MemberCard

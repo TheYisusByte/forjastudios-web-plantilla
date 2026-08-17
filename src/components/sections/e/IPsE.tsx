@@ -302,7 +302,7 @@ export function IPsE({ ips, projects }: { ips: IP[]; projects: Project[] }) {
 
         {/* Heading */}
         <div ref={headingRef} className="mx-auto w-full max-w-7xl px-6 pb-20">
-          <p className="mb-3 text-xs uppercase tracking-[0.3em] text-forja-muted">
+          <p className="mb-3 text-xs uppercase tracking-[0.3em] text-forja-muted sm:text-sm">
             {t("ipsTitle")}
           </p>
           <h2

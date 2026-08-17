@@ -22,12 +22,15 @@ export interface WpCapabilities {
   galeriaSrcSet: boolean;
   /** Campo `posterSrcSet` en los items de `galeria` (plugin forja-headless). */
   galeriaPosterSrcSet: boolean;
+  /** Campo ACF `clienteLogo` en los proyectos (plugin forja-headless). */
+  clienteLogo: boolean;
 }
 
 export const ALL_CAPABILITIES: WpCapabilities = {
   language: true,
   galeriaSrcSet: true,
   galeriaPosterSrcSet: true,
+  clienteLogo: true,
 };
 
 // `srcSet` trae las variantes que WordPress ya generó (245w, 768w, 1024w…) y que
@@ -63,6 +66,7 @@ export function siteContentQuery(caps: WpCapabilities): string {
             videoUrl
             destacado
             cover { ${MEDIA} }
+            ${caps.clienteLogo ? `clienteLogo { ${MEDIA} }` : ""}
           }
           # Galería de la página interna: medios ADJUNTOS al proyecto (imágenes y
           # videos con dimensiones reales). Campo custom (ver wordpress graphql.php).

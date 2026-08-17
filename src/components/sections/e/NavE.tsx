@@ -7,6 +7,7 @@ import { Menu, X } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { LangSwitch } from "@/components/ui/LangSwitch";
 import { cn } from "@/lib/utils";
+import { FORJA_LOGO } from "@/lib/brand";
 
 // Enlaces locale-aware. Las secciones del home viven en `/` (hero=top, work,
 // contact); apuntar a { pathname:"/", hash } hace que funcionen desde CUALQUIER
@@ -65,7 +66,7 @@ export function NavE() {
         <nav className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-4">
           <Link href={{ pathname: "/", hash: "top" }} className="flex items-center">
             <Image
-              src="/assets/forja/images/f40ce8_54c70335883e4115ab035396d8db0215~mv2.png"
+              src={FORJA_LOGO}
               alt="Forja Studios"
               height={80}
               width={160}

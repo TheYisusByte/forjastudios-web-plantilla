@@ -3,7 +3,7 @@
  * Plugin Name:       Forja Headless
  * Plugin URI:        https://www.forjastudios.com/
  * Description:        Custom Post Types, taxonomías y campos ACF de Forja Studios, expuestos en WPGraphQL para el front headless en Next.js. Define proyecto, ip, miembro y cliente.
- * Version:           1.7.0
+ * Version:           1.8.0
  * Author:            Forja Studios
  * Text Domain:       forja-headless
  * Requires at least: 6.4
@@ -42,6 +42,11 @@
  * --------------------------------------------------------------------------
  *  Changelog
  * --------------------------------------------------------------------------
+ *  1.8.0
+ *    - Campo ACF `clienteLogo` en los proyectos: el logo del cliente que el
+ *      front muestra bajo la portada de la página interna, junto a su nombre.
+ *      Si se deja vacío, el front busca el logo en el CPT «Cliente» que se
+ *      llame igual, así que solo hace falta rellenarlo en las excepciones.
  *  1.7.0
  *    - Miniatura propia para los vídeos de galería: un adjunto de vídeo puede
  *      llevar imagen destacada (su fotograma de portada) y el campo `galeria`

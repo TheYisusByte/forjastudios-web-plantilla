@@ -204,7 +204,7 @@ export function ContactForgeMeter({ content }: { content: SiteContent }) {
       <div className="mx-auto grid max-w-7xl gap-16 px-6 lg:grid-cols-2 lg:gap-24">
         {/* Left — pitch + info */}
         <div className="flex flex-col justify-center">
-          <p className="forge-reveal mb-6 text-xs uppercase tracking-[0.3em] text-forja-muted">{tf("eyebrow")}</p>
+          <p className="forge-reveal mb-6 text-xs uppercase tracking-[0.3em] text-forja-muted sm:text-sm">{tf("eyebrow")}</p>
           <h2 className="forge-reveal font-display font-black uppercase leading-[0.95]" style={{ fontSize: "clamp(2rem, 4vw, 3.4rem)" }}>
             {tf("headLead")}{" "}
             <span ref={rotWrapRef} className="flame-text inline-block">{ROTATE[rotIdx]}</span>

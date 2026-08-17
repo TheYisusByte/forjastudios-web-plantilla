@@ -41,6 +41,12 @@ export interface Project {
   featured: boolean;
   accent: Accent;
   videoUrl?: string;
+  /**
+   * Logo del cliente, para la firma que va bajo la portada en la página interna.
+   * Sale del campo ACF `clienteLogo` del proyecto y, si está vacío, del CPT
+   * «Cliente» que se llame igual que `client`.
+   */
+  clientLogoUrl?: string;
   /** Real thumbnail extracted from the legacy site. Falls back to accent gradient. */
   coverUrl?: string;
   /** Galería de la página interna (imágenes y/o videos). */

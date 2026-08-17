@@ -19,6 +19,7 @@ import {
   services,
   team,
 } from "@/lib/content/data";
+import { FORJA_LOGO } from "@/lib/brand";
 import { isWpEnabled, wpFetch } from "./fetcher";
 import { withWpVariants } from "./media";
 import { ALL_CAPABILITIES, siteContentQuery, type WpCapabilities } from "./queries";
@@ -175,6 +176,8 @@ async function getWpContent(locale: Locale): Promise<SiteContent> {
     clients: (data.clientes?.nodes ?? []).map(mapClient),
   };
 
+  linkClientLogos(content);
+
   // Resumen en consola del servidor: confirma la conexión y cuánto trajo WP
   // (útil en localhost para ver si falta publicar contenido en el CMS).
   console.log(
@@ -183,6 +186,55 @@ async function getWpContent(locale: Locale): Promise<SiteContent> {
   );
 
   return content;
+}
+
+/**
+ * Rellena el logo de cliente de los proyectos que no lo traen propio, buscando
+ * en el CPT «Cliente» uno cuyo nombre aparezca en el campo `cliente` del
+ * proyecto. Así basta con dar de alta cada cliente una vez —con su logo— para
+ * que salga en todos sus proyectos, y el campo `clienteLogo` del proyecto queda
+ * para las excepciones.
+ *
+ * No se compara por igualdad porque el campo del proyecto no es un nombre
+ * limpio sino una línea de créditos: «Client © Jam City & TM DC. © WBIE (s24)»
+ * tiene que reconocer a Jam City. Se busca el nombre como palabra completa
+ * —«king» no puede casar dentro de «Viking»— y gana la coincidencia más larga,
+ * para que «Jurassic World Alive» le gane a «Jurassic World».
+ */
+function linkClientLogos(content: SiteContent): void {
+  const candidates = content.clients
+    .filter((c): c is typeof c & { logo: string } => Boolean(c.logo && c.name.trim()))
+    .map((c) => ({ name: normalizeName(c.name), logo: c.logo }))
+    .sort((a, b) => b.name.length - a.name.length);
+
+  for (const project of content.projects) {
+    if (project.clientLogoUrl || !project.client) continue;
+    const credits = normalizeName(project.client);
+    project.clientLogoUrl =
+      candidates.find((c) => containsWord(credits, c.name))?.logo ??
+      // Los trabajos propios (y el fan art) llevan «Forja Studios» en los
+      // créditos y el estudio no está dado de alta como cliente de sí mismo.
+      (containsWord(credits, "forja studios") ? FORJA_LOGO : undefined);
+  }
+}
+
+/** Texto normalizado: minúsculas, sin acentos y con los espacios colapsados. */
+function normalizeName(value: string): string {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
+}
+
+/** ¿`needle` aparece dentro de `haystack` como palabra completa? Ya normalizados. */
+function containsWord(haystack: string, needle: string): boolean {
+  const isWordChar = (ch?: string) => !!ch && /[a-z0-9]/.test(ch);
+  for (let i = haystack.indexOf(needle); i !== -1; i = haystack.indexOf(needle, i + 1)) {
+    if (!isWordChar(haystack[i - 1]) && !isWordChar(haystack[i + needle.length])) return true;
+  }
+  return false;
 }
 
 /**
@@ -241,6 +293,10 @@ const CAPABILITY_HINTS: Record<keyof WpCapabilities, string> = {
     "El plugin forja-headless del servidor no expone `posterSrcSet` en `galeria`: " +
     "actualízalo (wordpress/forja-headless.zip) para servir los pósters de video " +
     "en su tamaño responsivo.",
+  clienteLogo:
+    "El plugin forja-headless del servidor no expone `clienteLogo` en los proyectos: " +
+    "actualízalo (wordpress/forja-headless.zip) para poder subir el logo del cliente " +
+    "en cada proyecto. Mientras tanto se busca por el nombre del cliente.",
 };
 
 /**
@@ -259,6 +315,7 @@ function detectMissingCapability(
   // de palabra entre "poster" y "SrcSet"), pero el orden lo deja explícito.
   if (caps.galeriaPosterSrcSet && /\bposterSrcSet\b/i.test(msg)) return "galeriaPosterSrcSet";
   if (caps.galeriaSrcSet && /\bsrcSet\b/i.test(msg)) return "galeriaSrcSet";
+  if (caps.clienteLogo && /\bclienteLogo\b/i.test(msg)) return "clienteLogo";
   return null;
 }
 
@@ -294,6 +351,7 @@ function mapProject(node: WpProyecto, i: number): Project {
   const category = (cat?.slug ?? "animation-3d") as ProjectCategory;
   const coverNode = node.camposProyecto?.cover?.node;
   const cover = withWpVariants(coverNode?.sourceUrl, coverNode?.srcSet);
+  const logoNode = node.camposProyecto?.clienteLogo?.node;
   const coverWH = {
     width: coverNode?.mediaDetails?.width,
     height: coverNode?.mediaDetails?.height,
@@ -316,6 +374,7 @@ function mapProject(node: WpProyecto, i: number): Project {
     featured: Boolean(node.camposProyecto?.destacado),
     accent: accentAt(i),
     videoUrl: node.camposProyecto?.videoUrl || undefined,
+    clientLogoUrl: withWpVariants(logoNode?.sourceUrl, logoNode?.srcSet),
     coverUrl: cover,
     // Galería real si hay adjuntos; si no, fallback (cover + otras + reel).
     gallery: wpGallery.length ? wpGallery : ensureGallery(undefined, cover, coverWH, i),
@@ -475,6 +534,8 @@ interface WpProyecto {
   excerpt?: string;
   camposProyecto?: {
     cliente?: string;
+    /** Ausente si el plugin del servidor es anterior a 1.8.0. */
+    clienteLogo?: WpMedia;
     anio?: number | string;
     videoUrl?: string;
     destacado?: boolean;

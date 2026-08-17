@@ -3,7 +3,11 @@ import { setRequestLocale, getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import { getSiteContent } from "@/lib/wp/client";
 import { routing, type Locale } from "@/i18n/routing";
+import { NavE } from "@/components/sections/e/NavE";
 import { DetailGalleryE } from "@/components/sections/e/DetailGalleryE";
+import { ContactForgeMeter } from "@/components/sections/e/contact/ForgeMeter";
+import { FooterE } from "@/components/sections/e/FooterE";
+import { FORJA_LOGO } from "@/lib/brand";
 
 interface PageProps {
   params: Promise<{ locale: Locale; slug: string }>;
@@ -18,18 +22,24 @@ export default async function IPDetailPage({ params }: PageProps) {
   if (!ip) notFound();
 
   const t = await getTranslations("ConceptE");
+  const tc = await getTranslations("Common");
 
   return (
     <div data-concept="e" className="min-h-screen bg-bg text-fg">
+      <NavE />
       <DetailGalleryE
         title={ip.name}
         kicker={t("ipsTag")}
+        // Las IPs son del propio estudio: la firma bajo la portada es Forja.
+        brand={{ label: tc("studio"), name: "Forja Studios", logoUrl: FORJA_LOGO }}
         description={ip.description}
         coverUrl={ip.coverUrl}
         coverVideoUrl={ip.videoUrl}
         gallery={ip.gallery}
         backHref="/#ips"
       />
+      <ContactForgeMeter content={content} />
+      <FooterE />
     </div>
   );
 }

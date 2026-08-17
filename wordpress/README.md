@@ -51,7 +51,7 @@ query Smoke {
   proyectos(first: 5) {
     nodes {
       title
-      camposProyecto { cliente anio videoUrl destacado cover { node { sourceUrl mediaDetails { width height } } } }
+      camposProyecto { cliente clienteLogo { node { sourceUrl } } anio videoUrl destacado cover { node { sourceUrl mediaDetails { width height } } } }
       galeria { sourceUrl mimeType width height poster }
       categorias { nodes { name slug } }
     }
@@ -73,7 +73,7 @@ Los nombres GraphQL están calcados de `src/lib/wp/queries.ts` y
 
 | CPT | GraphQL (singular / plural) | Grupo ACF | Campos |
 |---|---|---|---|
-| `proyecto` | `proyecto` / `proyectos` | `camposProyecto` | `cliente`, `anio`, `videoUrl`, `cover` (imagen), `destacado` (bool) + `galeria` (medios adjuntos, ver abajo) + taxonomía `categorias` |
+| `proyecto` | `proyecto` / `proyectos` | `camposProyecto` | `cliente`, `clienteLogo` (imagen), `anio`, `videoUrl`, `cover` (imagen), `destacado` (bool) + `galeria` (medios adjuntos, ver abajo) + taxonomía `categorias` |
 | `ip` | `ip` / `ips` | `camposIp` | `descripcion`, `videoId` (YouTube ID, fondo IPs), `enlace`, `logo` (imagen) |
 | `miembro` | `miembro` / `miembros` | `camposMiembro` | `rol`, `foto` (imagen), `redes` (textarea, 1 URL/línea) |
 | `cliente` | `cliente` / `clientes` | `camposCliente` | `sitioWeb`, `logo` (imagen) — uso futuro |
@@ -115,6 +115,29 @@ Consecuencias en el lado de WordPress:
   las dimensiones reales de los vídeos (ver "Miniatura de los vídeos de
   galería"). Con uno anterior el front sigue funcionando: saca el fotograma del
   propio vídeo y asume 16:9.
+- **El plugin ≥ 1.8.0** añade el campo `clienteLogo` a los proyectos (ver "Logo
+  del cliente en la página interna").
+
+### Logo del cliente en la página interna
+
+Bajo la portada de cada proyecto va la firma «Cliente + logo». El logo se
+resuelve por este orden:
+
+1. El campo **Logo del cliente** (`clienteLogo`) del propio proyecto.
+2. El logo del CPT **Cliente** cuyo nombre aparezca en el campo `cliente` del
+   proyecto. Ese campo se ha ido rellenando como una línea de créditos
+   («Client © Jam City & TM DC. © WBIE (s24)»), así que la búsqueda es por
+   palabra completa dentro del texto, no por igualdad.
+3. Si los créditos mencionan a «Forja Studios» (trabajo propio o fan art), el
+   logo del estudio.
+
+Lo normal es **dar de alta cada cliente una vez** en Clientes, con su logo: eso
+lo cubre para todos sus proyectos. El campo del proyecto queda para las
+excepciones. Con el contenido de hoy, el paso 2 cubre 14 de los 38 proyectos:
+al resto le falta el cliente en el CPT o hay que rellenarles `clienteLogo`.
+
+En las páginas de IP la firma es siempre **Forja Studios** con el logo del
+estudio: las IPs son material propio.
 
 ### Regenerar las miniaturas del material existente
 

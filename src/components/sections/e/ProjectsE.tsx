@@ -238,7 +238,7 @@ export function ProjectsE({ projects }: { projects: Project[] }) {
   return (
     <section ref={sectionRef} id="work" className="relative bg-forja-coal pt-12 pb-24">
       <div className="projects-e-heading mx-auto max-w-7xl px-6 pb-20">
-        <p className="mb-3 text-xs uppercase tracking-[0.3em] text-forja-muted">
+        <p className="mb-3 text-xs uppercase tracking-[0.3em] text-forja-muted sm:text-sm">
           {t("projectsTitle")}
         </p>
         <h2

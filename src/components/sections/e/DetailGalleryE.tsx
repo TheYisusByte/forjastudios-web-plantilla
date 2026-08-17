@@ -273,11 +273,23 @@ function Lightbox({
   );
 }
 
+/** Firma de autoría bajo la portada: de quién es el trabajo. */
+export interface DetailBrand {
+  /** Etiqueta ya traducida ("Cliente", "Estudio"). */
+  label: string;
+  /** Nombre del cliente o del estudio. */
+  name: string;
+  /** Logo. Si falta, se muestra solo el nombre. */
+  logoUrl?: string;
+}
+
 export interface DetailGalleryProps {
   /** Título principal (proyecto.title o ip.name). */
   title: string;
   /** Línea superior (p. ej. "categoría · año" o "IP Original"). */
   kicker?: string;
+  /** Cliente del proyecto (o el propio estudio, en las IPs). */
+  brand?: DetailBrand;
   description?: string;
   coverUrl?: string;
   /** URL de video para usar como portada (en vez de la imagen). Tiene prioridad. */
@@ -290,6 +302,7 @@ export interface DetailGalleryProps {
 export function DetailGalleryE({
   title,
   kicker,
+  brand,
   description,
   coverUrl,
   coverVideoUrl,
@@ -361,11 +374,11 @@ export function DetailGalleryE({
 
   return (
     <div ref={rootRef} className="min-h-screen">
-      {/* Back (fijo) */}
+      {/* Back (fijo, bajo el menú: este comparte la esquina superior izquierda) */}
       <Link
         href={backHref}
         aria-label={t("back")}
-        className="fixed left-5 top-5 z-40 flex items-center gap-2 rounded-full border border-white/20 bg-black/50 px-4 py-2 text-sm uppercase tracking-widest text-white/80 backdrop-blur-sm transition-colors hover:bg-black/80 hover:text-white"
+        className="fixed left-5 top-20 z-40 flex items-center gap-2 rounded-full border border-white/20 bg-black/50 px-4 py-2 text-sm uppercase tracking-widest text-white/80 backdrop-blur-sm transition-colors hover:bg-black/80 hover:text-white sm:top-24"
       >
         <ArrowLeft className="size-4" />
         <span>{t("back")}</span>
@@ -453,6 +466,30 @@ export function DetailGalleryE({
             {title}
           </h1>
         </section>
+      )}
+
+      {/* Firma: de quién es el trabajo (cliente, o el estudio en las IPs) */}
+      {brand && (
+        <div className="mx-auto flex max-w-7xl items-center gap-5 px-6 pt-10">
+          {brand.logoUrl && (
+            <Image
+              src={resolveWpVariant(brand.logoUrl, 320)}
+              alt={brand.name}
+              width={320}
+              height={128}
+              sizes="200px"
+              className="h-12 w-auto max-w-[180px] object-contain object-left"
+            />
+          )}
+          <div>
+            <p className="text-xs uppercase tracking-[0.3em] text-forja-muted sm:text-sm">
+              {brand.label}
+            </p>
+            <p className="font-display text-lg font-bold uppercase tracking-wide text-forja-bone">
+              {brand.name}
+            </p>
+          </div>
+        </div>
       )}
 
       {/* Descripción */}

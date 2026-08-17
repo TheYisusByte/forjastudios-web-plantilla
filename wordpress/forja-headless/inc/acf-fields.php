@@ -6,7 +6,7 @@
  * Los nombres de grupo y de campo coinciden EXACTAMENTE con las queries del
  * front (src/lib/wp/queries.ts). No renombrar sin actualizar el front:
  *
- *   camposProyecto { cliente, anio, videoUrl, cover, destacado }
+ *   camposProyecto { cliente, clienteLogo, anio, videoUrl, cover, destacado }
  *   camposIp       { cover, descripcion, videoId, enlace, logo }   (+ galeria = adjuntos)
  *
  * La GALERÍA de cada proyecto (imágenes y videos de la página interna) NO es un
@@ -42,6 +42,17 @@ function forja_register_acf_fields(): void {
                 'label'         => 'Cliente',
                 'name'          => 'cliente',
                 'type'          => 'text',
+                'show_in_graphql' => 1,
+            ],
+            [
+                'key'           => 'field_proyecto_clienteLogo',
+                'label'         => 'Logo del cliente',
+                'name'          => 'clienteLogo',
+                'type'          => 'image',
+                'instructions'  => 'Se muestra bajo la portada del proyecto, junto al nombre del cliente. Si se deja vacío, el front usa el logo del CPT «Cliente» que se llame igual.',
+                'return_format' => 'array',
+                'preview_size'  => 'medium',
+                'library'       => 'all',
                 'show_in_graphql' => 1,
             ],
             [

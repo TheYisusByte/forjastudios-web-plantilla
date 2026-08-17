@@ -1,13 +1,12 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import Image from "next/image";
 import { getSiteContent } from "@/lib/wp/client";
-import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { NavE } from "@/components/sections/e/NavE";
 // import { CursorE } from "@/components/sections/e/CursorE";
 import { TeamE } from "@/components/sections/e/TeamE";
-
-const FORJA_LOGO = "/assets/forja/images/f40ce8_54c70335883e4115ab035396d8db0215~mv2.png";
+import { FooterE } from "@/components/sections/e/FooterE";
+import { FORJA_LOGO } from "@/lib/brand";
 
 interface PageProps {
   params: Promise<{ locale: Locale }>;
@@ -18,7 +17,6 @@ export default async function ConceptoETeamPage({ params }: PageProps) {
   setRequestLocale(locale);
   const content = await getSiteContent(locale);
   const t = await getTranslations("TeamPage");
-  const tf = await getTranslations("Footer");
 
   return (
     <div data-concept="e" className="min-h-screen bg-bg text-fg">
@@ -60,26 +58,7 @@ export default async function ConceptoETeamPage({ params }: PageProps) {
 
       <TeamE team={content.team} />
 
-      {/* Footer */}
-      <footer className="border-t border-border py-10">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-            <Link href="/">
-              <Image
-                src={FORJA_LOGO}
-                alt="Forja Studios"
-                height={40}
-                width={160}
-                style={{ height: "1.75rem", width: "auto" }}
-                className="object-contain"
-              />
-            </Link>
-            <p className="text-xs text-forja-muted">
-              © 2013–{new Date().getFullYear()} FORJA Studios. {tf("rights")}
-            </p>
-          </div>
-        </div>
-      </footer>
+      <FooterE />
     </div>
   );
 }
