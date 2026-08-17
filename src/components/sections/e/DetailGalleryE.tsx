@@ -22,6 +22,56 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 // Grid masonry de 4 columnas en desktop (1 / 2 / 3 / 4 según breakpoint).
 const SIZES = "(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw";
 
+/**
+ * Miniatura de un video que no tiene póster propio: el propio `<video>` pintando
+ * su primer fotograma. `#t=0.1` es un media fragment — el navegador se coloca
+ * ahí y muestra ese frame como si fuera el póster.
+ *
+ * Es el plan B, no el camino normal: con `preload="metadata"` el navegador aún
+ * descarga la cabecera y el primer keyframe (~1-2 MB por video), frente a los
+ * ~80 KB de un póster. Por eso solo se monta cuando la celda se acerca al
+ * viewport, y lo que toca es generar los pósters en WordPress
+ * (`scripts/wp-video-posters.py`), que deja esta rama sin usar.
+ */
+function VideoFrameThumb({ src, width, height }: { src: string; width: number; height: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [near, setNear] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setNear(true);
+        io.disconnect();
+      },
+      { rootMargin: "300px 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      className="block w-full bg-forja-coal"
+      style={{ aspectRatio: `${width} / ${height}` }}
+    >
+      {near && (
+        <video
+          src={`${src}#t=0.1`}
+          preload="metadata"
+          muted
+          playsInline
+          aria-hidden="true"
+          className="block h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+        />
+      )}
+    </div>
+  );
+}
+
 function MediaCell({ item, alt, onOpen }: { item: MediaItem; alt: string; onOpen: () => void }) {
   const w = item.width ?? 1600;
   const h = item.height ?? 900;
@@ -45,6 +95,8 @@ function MediaCell({ item, alt, onOpen }: { item: MediaItem; alt: string; onOpen
             sizes={SIZES}
             className="block h-auto w-full transition-transform duration-500 ease-out group-hover:scale-[1.03]"
           />
+        ) : isVideo ? (
+          <VideoFrameThumb src={item.src} width={w} height={h} />
         ) : (
           <span className="block aspect-video w-full bg-forja-coal" />
         )}

@@ -3,7 +3,7 @@
  * Plugin Name:       Forja Headless
  * Plugin URI:        https://www.forjastudios.com/
  * Description:        Custom Post Types, taxonomías y campos ACF de Forja Studios, expuestos en WPGraphQL para el front headless en Next.js. Define proyecto, ip, miembro y cliente.
- * Version:           1.6.0
+ * Version:           1.7.0
  * Author:            Forja Studios
  * Text Domain:       forja-headless
  * Requires at least: 6.4
@@ -42,6 +42,15 @@
  * --------------------------------------------------------------------------
  *  Changelog
  * --------------------------------------------------------------------------
+ *  1.7.0
+ *    - Miniatura propia para los vídeos de galería: un adjunto de vídeo puede
+ *      llevar imagen destacada (su fotograma de portada) y el campo `galeria`
+ *      la expone como `poster` + `posterSrcSet`. Antes la galería enseñaba la
+ *      portada del proyecto en todos los vídeos. Los fotogramas los genera
+ *      `scripts/wp-video-posters.py` en el repo del front.
+ *    - `galeria` devuelve también el ancho y el alto de los VÍDEOS (los saca
+ *      WordPress con getID3 al subirlos), para que el masonry del front
+ *      respete su proporción real en vez de asumir 16:9.
  *  1.6.0
  *    - Optimización de medios (inc/media-optimization.php): los tamaños
  *      derivados se generan en WebP (nativo de WP 5.8+, ~50-70 % menos peso),

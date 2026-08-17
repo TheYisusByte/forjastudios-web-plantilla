@@ -81,6 +81,28 @@ add_filter('big_image_size_threshold', function (): int {
 });
 
 /**
+ * 5. Los vídeos pueden tener imagen destacada (su póster).
+ * ---------------------------------------------------------------------------
+ * WordPress no saca un fotograma de los vídeos que se suben (no lleva ffmpeg),
+ * así que la galería del front se quedaba sin miniatura propia y acababa
+ * enseñando la portada del proyecto en todos los vídeos.
+ *
+ * Con este soporte, un adjunto de vídeo puede llevar su propia imagen
+ * destacada, que es la que el campo `galeria` expone como `poster`
+ * (inc/graphql.php). Se asigna de dos formas:
+ *
+ *   - En masa: `python3 scripts/wp-video-posters.py` en el repo del front —
+ *     saca el primer fotograma de cada vídeo, lo sube y lo asigna.
+ *   - A mano: Medios → (el vídeo) → Editar → "Imagen destacada".
+ *
+ * `show_in_rest` es lo que permite al script asignarla con
+ * `POST /wp-json/wp/v2/media/<id> {"featured_media": <id-imagen>}`.
+ */
+add_action('init', function (): void {
+    add_post_type_support('attachment', 'thumbnail');
+});
+
+/**
  * Aplicar esto al material YA subido
  * ---------------------------------------------------------------------------
  * Los filtros de arriba solo actúan al generar miniaturas. Para el contenido

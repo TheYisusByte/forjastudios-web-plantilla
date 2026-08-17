@@ -111,6 +111,10 @@ Consecuencias en el lado de WordPress:
   intermedios (`inc/media-optimization.php`). Es nativo de WordPress, no hace
   falta ningún plugin de terceros. **Solo aplica a subidas nuevas**: para el
   material ya cargado hay que regenerar las miniaturas.
+- **El plugin ≥ 1.7.0** expone la miniatura propia de cada vídeo de galería y
+  las dimensiones reales de los vídeos (ver "Miniatura de los vídeos de
+  galería"). Con uno anterior el front sigue funcionando: saca el fotograma del
+  propio vídeo y asume 16:9.
 
 ### Regenerar las miniaturas del material existente
 
@@ -143,6 +147,38 @@ Antes de subir un vídeo:
 Para material largo o mucho catálogo, lo correcto es una plataforma de streaming
 (Cloudflare Stream, Mux, Bunny): entregan calidad adaptativa según la conexión,
 que es algo que un archivo suelto en WordPress no puede hacer.
+
+#### Miniatura de los vídeos de galería
+
+WordPress no saca un fotograma de los vídeos que se suben (no lleva ffmpeg), así
+que la galería de un proyecto enseñaba su portada como miniatura de todos sus
+vídeos. Desde el plugin **1.7.0**, un adjunto de vídeo puede llevar **imagen
+destacada** y el campo `galeria` la expone como `poster` (+ `posterSrcSet`, para
+servirla en el tamaño que toca).
+
+Para generar las que faltan, desde el repo del front:
+
+```bash
+python3 scripts/wp-video-posters.py --dry-run   # qué haría
+python3 scripts/wp-video-posters.py             # generar y subir
+```
+
+Saca un fotograma de cada vídeo con ffmpeg —leyendo por rangos HTTP, sin
+descargarlo entero—, lo sube y lo asigna como imagen destacada del vídeo. Es
+idempotente: repite solo lo que falte. Necesita `WORDPRESS_USER` y
+`WORDPRESS_KEY` (contraseña de aplicación) en `.env.local`.
+
+No usa el fotograma 0 pelado: los clips arrancan en negro, en blanco o con una
+cartela, así que elige el **más representativo de los primeros ~10 s** (filtro
+`thumbnail` de ffmpeg) y, si sale liso, busca más adelante. Con `--first-frame`
+se fuerza el fotograma 0.
+
+También se puede poner a mano: **Medios → (el vídeo) → Editar → Imagen
+destacada**. O subir a la mediateca una imagen llamada igual que el vídeo con el
+sufijo `-poster` (p. ej. `mi-video-poster.jpg`), que el plugin encuentra sola.
+
+Sin ninguna de las dos, el front tira del propio vídeo para pintar el fotograma,
+que funciona pero descarga ~1-2 MB por miniatura en vez de ~80 KB.
 
 #### Los dos vídeos de portada
 

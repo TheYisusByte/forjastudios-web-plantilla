@@ -50,9 +50,10 @@ add_action('graphql_register_types', function (): void {
         'fields'      => [
             'sourceUrl' => ['type' => 'String', 'description' => 'URL del archivo.'],
             'mimeType'  => ['type' => 'String', 'description' => 'MIME type (image/* o video/*).'],
-            'width'     => ['type' => 'Int',    'description' => 'Ancho real (imágenes).'],
-            'height'    => ['type' => 'Int',    'description' => 'Alto real (imágenes).'],
+            'width'     => ['type' => 'Int',    'description' => 'Ancho real (imágenes y videos).'],
+            'height'    => ['type' => 'Int',    'description' => 'Alto real (imágenes y videos).'],
             'poster'    => ['type' => 'String', 'description' => 'Poster del video (imagen destacada del adjunto).'],
+            'posterSrcSet' => ['type' => 'String', 'description' => 'srcSet del poster, para servirlo en el tamaño que toca.'],
             // El front sirve estas variantes tal cual en vez de pasar las
             // imágenes por el optimizador de Vercel (cuota limitada). Mismo
             // formato que el campo `srcSet` de los MediaItem de WPGraphQL.
@@ -74,29 +75,53 @@ add_action('graphql_register_types', function (): void {
         foreach ($ids as $id) {
             $mime = get_post_mime_type($id) ?: '';
             $item = [
-                'sourceUrl' => wp_get_attachment_url($id) ?: null,
-                'mimeType'  => $mime,
-                'width'     => null,
-                'height'    => null,
-                'poster'    => null,
-                'srcSet'    => null,
+                'sourceUrl'    => wp_get_attachment_url($id) ?: null,
+                'mimeType'     => $mime,
+                'width'        => null,
+                'height'       => null,
+                'poster'       => null,
+                'posterSrcSet' => null,
+                'srcSet'       => null,
             ];
             if (! $item['sourceUrl']) {
                 continue; // adjunto borrado; lo saltamos
             }
+            // Dimensiones reales. WordPress las guarda igual para imágenes y
+            // para videos (de estos las saca con getID3 al subirlos), y el
+            // front las necesita en ambos casos: el masonry reserva el hueco
+            // con el aspecto exacto y así no da saltos al cargar.
+            $meta = wp_get_attachment_metadata($id);
+            if (is_array($meta)) {
+                $item['width']  = isset($meta['width'])  ? (int) $meta['width']  : null;
+                $item['height'] = isset($meta['height']) ? (int) $meta['height'] : null;
+            }
             if (strpos($mime, 'image/') === 0) {
-                $meta = wp_get_attachment_metadata($id);
-                if (is_array($meta)) {
-                    $item['width']  = isset($meta['width'])  ? (int) $meta['width']  : null;
-                    $item['height'] = isset($meta['height']) ? (int) $meta['height'] : null;
-                }
                 // Solo incluye las variantes que conservan el aspecto del
                 // original (WP descarta ahí los tamaños recortados).
                 $item['srcSet'] = wp_get_attachment_image_srcset($id, 'full') ?: null;
             } else {
-                $thumb_id = get_post_thumbnail_id($id);
+                // Póster del video, por este orden:
+                //   1. Imagen destacada del adjunto de video. La asigna
+                //      `scripts/wp-video-posters.py` (primer fotograma del
+                //      video) y también se puede poner a mano en Medios →
+                //      Editar. Lo habilita el soporte 'thumbnail' que añade
+                //      inc/media-optimization.php.
+                //   2. Convención de nombre: una imagen de la mediateca llamada
+                //      igual que el video con el sufijo `-poster`. Red de
+                //      seguridad para quien la suba sin asignar nada.
+                // Sin ninguna de las dos, el front saca el fotograma él mismo,
+                // que funciona pero descarga bastante más.
+                $thumb_id = (int) get_post_thumbnail_id($id);
+                if (! $thumb_id) {
+                    $slug  = sanitize_title(pathinfo(get_attached_file($id) ?: '', PATHINFO_FILENAME) . '-poster');
+                    $found = $slug ? get_page_by_path($slug, OBJECT, 'attachment') : null;
+                    if ($found) {
+                        $thumb_id = (int) $found->ID;
+                    }
+                }
                 if ($thumb_id) {
-                    $item['poster'] = wp_get_attachment_url($thumb_id) ?: null;
+                    $item['poster']       = wp_get_attachment_url($thumb_id) ?: null;
+                    $item['posterSrcSet'] = wp_get_attachment_image_srcset($thumb_id, 'full') ?: null;
                 }
             }
             $out[] = $item;

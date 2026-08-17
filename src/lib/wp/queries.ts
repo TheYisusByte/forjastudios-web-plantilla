@@ -20,9 +20,15 @@ export interface WpCapabilities {
   language: boolean;
   /** Campo `srcSet` en los items de `galeria` (plugin forja-headless). */
   galeriaSrcSet: boolean;
+  /** Campo `posterSrcSet` en los items de `galeria` (plugin forja-headless). */
+  galeriaPosterSrcSet: boolean;
 }
 
-export const ALL_CAPABILITIES: WpCapabilities = { language: true, galeriaSrcSet: true };
+export const ALL_CAPABILITIES: WpCapabilities = {
+  language: true,
+  galeriaSrcSet: true,
+  galeriaPosterSrcSet: true,
+};
 
 // `srcSet` trae las variantes que WordPress ya generó (245w, 768w, 1024w…) y que
 // el front sirve directamente en lugar de pasarlas por el optimizador de Vercel
@@ -38,8 +44,8 @@ export function siteContentQuery(caps: WpCapabilities): string {
   const localeVar = caps.language ? "($locale: LanguageCodeFilterEnum!)" : "";
   const langFilter = caps.language ? "language: $locale, " : "";
   const galeria = `galeria { sourceUrl mimeType width height poster${
-    caps.galeriaSrcSet ? " srcSet" : ""
-  } }`;
+    caps.galeriaPosterSrcSet ? " posterSrcSet" : ""
+  }${caps.galeriaSrcSet ? " srcSet" : ""} }`;
 
   return /* GraphQL */ `
     query SiteContent${localeVar} {

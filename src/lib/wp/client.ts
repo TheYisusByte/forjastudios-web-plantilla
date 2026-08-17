@@ -237,6 +237,10 @@ const CAPABILITY_HINTS: Record<keyof WpCapabilities, string> = {
     "El plugin forja-headless del servidor no expone `srcSet` en `galeria`: " +
     "actualízalo (wordpress/forja-headless.zip) para servir las imágenes de " +
     "galería en su tamaño responsivo.",
+  galeriaPosterSrcSet:
+    "El plugin forja-headless del servidor no expone `posterSrcSet` en `galeria`: " +
+    "actualízalo (wordpress/forja-headless.zip) para servir los pósters de video " +
+    "en su tamaño responsivo.",
 };
 
 /**
@@ -251,8 +255,38 @@ function detectMissingCapability(
   const unknown = /(not defined|Unknown argument|Cannot query field|doesn't exist)/i.test(msg);
   if (!unknown) return null;
   if (caps.language && /\blanguage\b/i.test(msg)) return "language";
+  // `posterSrcSet` primero: `\bsrcSet\b` no casa dentro de él (no hay frontera
+  // de palabra entre "poster" y "SrcSet"), pero el orden lo deja explícito.
+  if (caps.galeriaPosterSrcSet && /\bposterSrcSet\b/i.test(msg)) return "galeriaPosterSrcSet";
   if (caps.galeriaSrcSet && /\bsrcSet\b/i.test(msg)) return "galeriaSrcSet";
   return null;
+}
+
+/**
+ * Un item de `galeria` de WordPress → `MediaItem` del front.
+ *
+ * El póster de un video es SOLO el suyo (la imagen destacada de su adjunto, que
+ * pone `scripts/wp-video-posters.py` con el primer fotograma). Antes se caía a
+ * la portada del proyecto y todos los videos de una galería enseñaban la misma
+ * miniatura; sin póster propio, el front prefiere sacar el fotograma del video
+ * (ver `MediaCell` en DetailGalleryE).
+ */
+function toMediaItem(g: WpGaleriaItem & { sourceUrl: string }): MediaItem {
+  if ((g.mimeType ?? "").startsWith("video/")) {
+    return {
+      type: "video",
+      src: g.sourceUrl,
+      poster: withWpVariants(g.poster, g.posterSrcSet),
+      width: g.width,
+      height: g.height,
+    };
+  }
+  return {
+    type: "image",
+    src: withWpVariants(g.sourceUrl, g.srcSet)!,
+    width: g.width,
+    height: g.height,
+  };
 }
 
 function mapProject(node: WpProyecto, i: number): Project {
@@ -266,20 +300,10 @@ function mapProject(node: WpProyecto, i: number): Project {
   };
 
   // Galería real desde los medios adjuntos al proyecto (imágenes y videos, con
-  // dimensiones para el masonry). Detecta video por mimeType; poster del video
-  // o, en su defecto, el cover.
+  // dimensiones reales para el masonry).
   const wpGallery: MediaItem[] = (node.galeria ?? [])
     .filter((g): g is WpGaleriaItem & { sourceUrl: string } => Boolean(g.sourceUrl))
-    .map((g): MediaItem =>
-      (g.mimeType ?? "").startsWith("video/")
-        ? { type: "video", src: g.sourceUrl, poster: g.poster ?? cover, width: g.width, height: g.height }
-        : {
-            type: "image",
-            src: withWpVariants(g.sourceUrl, g.srcSet)!,
-            width: g.width,
-            height: g.height,
-          },
-    );
+    .map(toMediaItem);
 
   return {
     slug: node.slug,
@@ -302,19 +326,10 @@ function mapIp(node: WpIp, i: number): IP {
   const coverNode = node.camposIp?.cover?.node;
   const cover = withWpVariants(coverNode?.sourceUrl, coverNode?.srcSet);
   // Galería real desde los medios adjuntos a la IP (imágenes y videos), igual
-  // que los proyectos. Detecta video por mimeType; poster del video o el cover.
+  // que los proyectos.
   const gallery: MediaItem[] = (node.galeria ?? [])
     .filter((g): g is WpGaleriaItem & { sourceUrl: string } => Boolean(g.sourceUrl))
-    .map((g): MediaItem =>
-      (g.mimeType ?? "").startsWith("video/")
-        ? { type: "video", src: g.sourceUrl, poster: g.poster ?? cover, width: g.width, height: g.height }
-        : {
-            type: "image",
-            src: withWpVariants(g.sourceUrl, g.srcSet)!,
-            width: g.width,
-            height: g.height,
-          },
-    );
+    .map(toMediaItem);
 
   return {
     slug: node.slug,
@@ -449,7 +464,10 @@ interface WpGaleriaItem {
   mimeType?: string;
   width?: number;
   height?: number;
+  /** Póster del video: imagen destacada de su adjunto. */
   poster?: string;
+  /** Variantes del póster; ausente si el plugin del servidor es antiguo. */
+  posterSrcSet?: string;
 }
 interface WpProyecto {
   slug: string;
