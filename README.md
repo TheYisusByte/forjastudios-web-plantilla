@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+﻿<div align="center">
 
-## Getting Started
+# forjastudios-web-plantilla
 
-First, run the development server:
+**Plantilla web corporativa de alta gama.**
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+[![Estado](https://img.shields.io/badge/estado-activo-success.svg)]()
+[![Ecosistema](https://img.shields.io/badge/ecosistema-PinkyOS-blue.svg)]()
+[![Propietario](https://img.shields.io/badge/propietario-Jesus%20Adrian%20Anaya%20Sarria-purple.svg)]()
+[![Stack](https://img.shields.io/badge/stack-Next.js+16+%2B+React+19+%2B+WordPress-informational.svg)]()
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+</div>
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📌 Descripción General
 
-## Learn More
+Plantilla web corporativa de alta gama. Este proyecto forma parte del ecosistema de gestión de conocimiento personal y desarrollo **PinkyOS**, diseñado bajo estrictos estándares de ingeniería de software, arquitectura limpia y código idiomático en español.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🚀 Stack Tecnológico
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Tecnología Principal**: Next.js 16 + React 19 + WordPress
+- **Gestión / IA**: Integrado con el ecosistema opencode y flujos asistidos.
+- **Control de Versiones**: Git / GitHub (main).
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## ⚙️ Guía de Inicio Rápido
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Clonar el repositorio o acceder al directorio del proyecto:
+   `ash
+   cd forjastudios-web-plantilla
+   `
+2. Consultar las dependencias e instrucciones específicas de configuración en el vault de PinkyOS o en los archivos de configuración locales (package.json, equirements.txt, pubspec.yaml, etc.).
+
+---
+
+## 🛡️ Convenciones y Seguridad
+
+- **Commits**: Formato Conventional Commits en español (eat:, ix:, efactor:, chore:).
+- **Secretos**: Nunca se deben incluir credenciales o tokens en el código fuente; utilizar siempre variables de entorno (.env).
+
+---
+
+## 📄 Licencia
+
+Propietario © 2026 Jesus Adrian Anaya Sarria. Todos los derechos reservados.
